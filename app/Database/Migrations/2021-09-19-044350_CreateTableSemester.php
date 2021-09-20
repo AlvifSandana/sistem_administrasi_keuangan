@@ -21,9 +21,11 @@ class CreateTableSemester extends Migration
             ],
             'created_at' => [
                 'type'              => 'TIMESTAMP',
+                'null'              => true,
             ],
             'updated_at' => [
                 'type'              => 'TIMESTAMP',
+                'null'              => true,
             ],
         ]);
         $this->forge->addKey('id_semester', true);

@@ -31,12 +31,15 @@ class CreateTableUser extends Migration
             ],
             'password' => [
                 'type'              => 'VARCHAR',
+                'constraint'        => 50,
             ],
             'created_at' => [
                 'type'              => 'TIMESTAMP',
+                'null'              => true,
             ],
             'updated_at' => [
                 'type'              => 'TIMESTAMP',
+                'null'              => true,
             ],
         ]);
         $this->forge->addKey('id_user', true);
