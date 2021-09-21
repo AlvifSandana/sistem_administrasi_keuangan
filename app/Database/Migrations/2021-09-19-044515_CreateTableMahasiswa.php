@@ -29,10 +29,6 @@ class CreateTableMahasiswa extends Migration
                 'type'          => 'INT',
                 'unsigned'      => true,
             ],
-            'jurusan_id'     => [
-                'type'          => 'INT',
-                'unsigned'      => true,
-            ],
             'angkatan_id'     => [
                 'type'          => 'INT',
                 'unsigned'       => true,
@@ -49,7 +45,6 @@ class CreateTableMahasiswa extends Migration
         ]);
         $this->forge->addKey('id_mahasiswa', true);
         $this->forge->addForeignKey('progdi_id', 'progdi', 'id_progdi', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('jurusan_id', 'jurusan', 'id_jurusan', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('angkatan_id', 'angkatan', 'id_angkatan', 'CASCADE', 'CASCADE');
         $this->forge->createTable('mahasiswa');
         $this->db->enableForeignKeyChecks();
