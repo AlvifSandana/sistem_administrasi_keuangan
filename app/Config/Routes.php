@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'DashboardController::index');
 $routes->add('/dashboard', 'DashboardController::index');
+$routes->get('/tagihan', 'TagihanController::index');
 
 /*
  * --------------------------------------------------------------------
