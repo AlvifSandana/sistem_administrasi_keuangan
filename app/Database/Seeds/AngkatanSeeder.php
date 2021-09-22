@@ -22,7 +22,7 @@ class AngkatanSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
-                'nama_angkatan' => '2021',
+                'nama_angkatan' => '2022',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
