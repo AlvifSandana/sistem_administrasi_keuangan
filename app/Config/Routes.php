@@ -34,6 +34,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'DashboardController::index');
 $routes->add('/dashboard', 'DashboardController::index');
 $routes->get('/tagihan', 'TagihanController::index');
+$routes->add('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
 
 /*
  * --------------------------------------------------------------------
