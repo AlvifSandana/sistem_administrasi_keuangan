@@ -38,10 +38,13 @@ class CreateTableItemPaket extends Migration
                 'null'              => true,
             ],
         ]);
+        $this->forge->addKey('id_item', true);
+        $this->forge->addForeignKey('paket_id', 'paket', 'id_paket', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('item_paket');
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('item_paket', true, true);
     }
 }
