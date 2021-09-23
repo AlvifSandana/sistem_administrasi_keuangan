@@ -36,6 +36,8 @@ $routes->add('/dashboard', 'DashboardController::index');
 $routes->get('/tagihan', 'TagihanController::index');
 $routes->add('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
 
+$routes->add('/pembayaran', 'PembayaranController::index');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
