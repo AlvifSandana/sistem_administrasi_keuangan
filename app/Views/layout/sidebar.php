@@ -14,7 +14,7 @@
         <img src="assets/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">Administrator
+        <a href="<?php echo base_url() ?>" class="d-block">Administrator
         </a>
       </div>
     </div>
@@ -25,14 +25,14 @@
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
         <li class="nav-item">
-          <a href="#" class="nav-link active">
+          <a href="<?php echo base_url() ?>/dashboard" class="nav-link<?php if($uri_segment=="dashboard"){echo " active";} ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
             </p>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item<?php if($uri_segment=="tagihan" || $uri_segment=="pembayaran"){echo " menu-is-opening menu-open";} ?>">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-dollar-sign"></i>
             <p>
@@ -42,15 +42,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="<?php echo base_url() ?>/tagihan" class="nav-link<?php if($uri_segment=="tagihan"){echo " active";} ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Input Tagihan</p>
+                <p>Tagihan</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="<?php echo base_url() ?>/pembayaran" class="nav-link<?php if($uri_segment=="pembayaran"){echo " active";} ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Input Pembayaran</p>
+                <p>Pembayaran</p>
               </a>
             </li>
         </li>
