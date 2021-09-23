@@ -12,7 +12,9 @@ class TagihanController extends BaseController
 {
     public function index()
     {
-        return view('pages/tagihan/index');
+        $request = \Config\Services::request();
+        $data['uri_segment'] = $request->uri->getSegment(1);
+        return view('pages/tagihan/index', $data);
     }
 
     public function search_tagihan($nim)
@@ -34,7 +36,7 @@ class TagihanController extends BaseController
                         "nim" => $mahasiswa['nim'],
                         "nama_mahasiswa" => $mahasiswa['nama_mahasiswa'],
                         "detail_paket" => $m_paket->where('id_paket', $tagihan['paket_id'])->first(),
-                        "item_paket" => "",
+                        "item_paket" => $m_itempaket->where('paket_id', $tagihan['paket_id'])->findAll(),
                     ];
                 } else {
                     $result = null;
