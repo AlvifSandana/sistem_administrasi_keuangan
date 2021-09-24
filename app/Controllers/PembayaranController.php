@@ -72,4 +72,13 @@ class PembayaranController extends BaseController
             return json_encode($result);
         }
     }
+
+    public function add_pembayaran()
+    {
+        try {
+            // TODO: add pembayaran logic
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

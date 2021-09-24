@@ -42,7 +42,7 @@ class TagihanController extends BaseController
                     $result = null;
                 }
             }
-            echo json_encode($result);
+            return json_encode($result);
         } catch (\Throwable $th) {
             return json_encode($th);
         }
