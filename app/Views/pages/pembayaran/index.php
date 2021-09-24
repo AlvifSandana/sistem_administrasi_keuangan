@@ -23,11 +23,6 @@
 <?= $this->section('content-body') ?>
 <section class="content">
   <div class="container-fluid">
-    <div class="row mb-1">
-      <div class="col">
-        <button class="btn btn-success float-right"><i class="fas fa-add"></i> Tambah Pembayaran</button>
-      </div>
-    </div>
     <div class="row mb-2">
       <div class="col">
         <div class="card">
@@ -68,7 +63,7 @@
     </div>
     <div class="row mb-2">
       <div class="col">
-        <div class="card">
+        <div class="card" style="visibility: hidden;">
           <div class="card-body">
             <div class="row">
               <div class="col">
