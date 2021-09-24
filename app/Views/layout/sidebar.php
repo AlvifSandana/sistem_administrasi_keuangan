@@ -82,14 +82,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="pages/gallery.html" class="nav-link">
-          <i class="nav-icon fas fa-box"></i>
-          <p>
-            Data Paket
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
         <a href="pages/kanban.html" class="nav-link">
           <i class="nav-icon far fa-clock"></i>
           <p>
