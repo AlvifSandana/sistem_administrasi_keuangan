@@ -111,15 +111,16 @@
       type: "GET",
       dataType: "JSON",
       success: function(data) {
-        if (data == null || data.id_tagihan == undefined) {
+        if (data == null || data.status == "failed") {
           alert("Data tidak ditemukan");
         } else {
+          $("#list_tagihan").empty();
           // hasil pencarian, baris baru
           var row = `
           <tr class="">
-            <td>${data.id_tagihan}</td>
-            <td>${data.nim}</td>
-            <td>${data.nama_mahasiswa}</td>
+            <td>${data.data.id_tagihan}</td>
+            <td>${data.data.nim}</td>
+            <td>${data.data.nama_mahasiswa}</td>
             <td>
               <button class="btn btn-success btn-sm" id="btn_detail" data-toggle="modal" data-target="#modalDetailTagihan"><i class="fas fa-info"></i></button>
             </td>
@@ -128,18 +129,18 @@
           $("#search_result").css('visibility', 'visible');
           $("#list_tagihan").append(row);
           // hasil pencarian, detail tagihan mahasiswa
-          $("#detail_nim").val(data.nim);
-          $("#detail_nama_mhs").val(data.nama_mahasiswa);
-          $("#detail_nama_paket").val(data.detail_paket.nama_paket);
+          $("#detail_nim").val(data.data.nim);
+          $("#detail_nama_mhs").val(data.data.nama_mahasiswa);
+          $("#detail_nama_paket").val(data.data.detail_paket.nama_paket);
           // hasil pencarian, item tagihan
           var total_tagihan = 0;
-          for (let index = 0; index < data.item_paket.length; index++) {
-            total_tagihan += parseInt(data.item_paket[index].nominal_item);
+          for (let index = 0; index < data.data.item_paket.length; index++) {
+            total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
             var row1 = `<tr class="">
-            <td>${data.item_paket[index].id_item}</td>
-            <td>${data.item_paket[index].nama_item}</td>
-            <td>Rp ${data.item_paket[index].nominal_item}</td>
-            <td>${data.item_paket[index].keterangan_item}</td>
+            <td>${data.data.item_paket[index].id_item}</td>
+            <td>${data.data.item_paket[index].nama_item}</td>
+            <td>Rp ${data.data.item_paket[index].nominal_item}</td>
+            <td>${data.data.item_paket[index].keterangan_item}</td>
             </tr>`;
             $("#list_item").append(row1);
           }
