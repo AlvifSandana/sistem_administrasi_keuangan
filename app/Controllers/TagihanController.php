@@ -23,24 +23,38 @@ class TagihanController extends BaseController
         try {
             // model
             $m_tagihan = new TagihanModel();
-            $m_mahasiswa = new MahasiswaModel(); 
+            $m_mahasiswa = new MahasiswaModel();
             $m_paket = new PaketModel();
-            $m_itempaket = new ItemPaketModel(); 
+            $m_itempaket = new ItemPaketModel();
             // search tagihan by nim
             $mahasiswa = $m_mahasiswa->where('nim', $nim)->first();
             if ($mahasiswa) {
                 $tagihan = $m_tagihan->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->first();
                 if ($tagihan) {
                     $result = [
-                        "id_tagihan" => $tagihan['id_tagihan'],
-                        "nim" => $mahasiswa['nim'],
-                        "nama_mahasiswa" => $mahasiswa['nama_mahasiswa'],
-                        "detail_paket" => $m_paket->where('id_paket', $tagihan['paket_id'])->first(),
-                        "item_paket" => $m_itempaket->where('paket_id', $tagihan['paket_id'])->findAll(),
+                        "status" => "success",
+                        "message" => "data available",
+                        "data" => [
+                            "id_tagihan" => $tagihan['id_tagihan'],
+                            "nim" => $mahasiswa['nim'],
+                            "nama_mahasiswa" => $mahasiswa['nama_mahasiswa'],
+                            "detail_paket" => $m_paket->where('id_paket', $tagihan['paket_id'])->first(),
+                            "item_paket" => $m_itempaket->where('paket_id', $tagihan['paket_id'])->findAll(),
+                        ],
                     ];
                 } else {
-                    $result = null;
+                    $result = [
+                        "status" => "failed",
+                        "message" => "data not available",
+                        "data" => [],
+                    ];
                 }
+            } else {
+                $result = [
+                    "status" => "failed",
+                    "message" => "data not available",
+                    "data" => [],
+                ];
             }
             return json_encode($result);
         } catch (\Throwable $th) {
