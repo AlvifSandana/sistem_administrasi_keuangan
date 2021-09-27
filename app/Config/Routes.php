@@ -34,11 +34,14 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'DashboardController::index');
 $routes->add('/dashboard', 'DashboardController::index');
 
+// route for tagihan
 $routes->get('/tagihan', 'TagihanController::index');
 $routes->add('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
 
-$routes->add('/pembayaran', 'PembayaranController::index');
-$routes->add('/pembayaran/search/(:any)', 'PembayaranController::search_pembayaran/$1');
+// route for pembayaran
+$routes->get('/pembayaran', 'PembayaranController::index');
+$routes->get('/pembayaran/search/(:any)', 'PembayaranController::search_pembayaran/$1');
+$routes->get('/pembayaran/detail-item-pembayaran/(:any)', 'PembayaranController::get_detail_item_pembayaran_by_paket_id/$1');
 
 /*
  * --------------------------------------------------------------------
