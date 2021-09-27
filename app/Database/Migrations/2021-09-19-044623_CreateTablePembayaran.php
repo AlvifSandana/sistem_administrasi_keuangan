@@ -35,7 +35,7 @@ class CreateTablePembayaran extends Migration
                 'type'          => 'INT'
             ],
             'keterangan_pembayaran' => [
-                'type'          => 'INT',
+                'type'          => 'TEXT',
                 'null'          => true,
             ],
             'user_id' => [
