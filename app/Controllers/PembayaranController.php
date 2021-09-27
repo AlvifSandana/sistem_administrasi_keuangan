@@ -41,7 +41,10 @@ class PembayaranController extends BaseController
                     $result = [
                         "status"  => "success",
                         "message" => "available",
-                        "data" => [ $mahasiswa, $pembayaran ],
+                        "data" => [
+                            "mahasiswa" => $mahasiswa,
+                            "pembayaran"=> $pembayaran,
+                        ],
                     ];
                 } else {
                     $session->setFlashdata('error', 'Pembayaran kosong!');
@@ -68,6 +71,36 @@ class PembayaranController extends BaseController
             $result = [
                 "status"  => "error",
                 "message" => $th
+            ];
+            return json_encode($result);
+        }
+    }
+
+    public function get_detail_item_pembayaran_by_paket_id($id){
+        try {
+            // create model instance
+            $m_itempaket = new ItemPaketModel();
+            // get data from model
+            $item_paket = $m_itempaket->where("paket_id", $id)->findAll();
+            if (count($item_paket) > 0) {
+                $result = [
+                    "status" => "success", 
+                    "message"=> "data available",
+                    "data" => $item_paket,
+                ];
+            } else {
+                $result = [
+                    "status" => "failed", 
+                    "message" => "data not available",
+                    "data" => null,
+                ];
+            }
+            return json_encode($result);
+        } catch (\Throwable $th) {
+            $result = [
+                "status" => "failed", 
+                "message" => $th,
+                "data" => null,
             ];
             return json_encode($result);
         }
