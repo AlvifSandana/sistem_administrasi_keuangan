@@ -76,7 +76,7 @@ class PembayaranController extends BaseController
         }
     }
 
-    public function get_detail_item_pembayaran_by_paket_id($id){
+    public function get_detail_item_tagihan_by_paket_id($id){
         try {
             // create model instance
             $m_itempaket = new ItemPaketModel();
