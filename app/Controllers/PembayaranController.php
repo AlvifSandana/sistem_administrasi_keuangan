@@ -22,13 +22,13 @@ class PembayaranController extends BaseController
     }
 
     public function search_pembayaran($nim)
-    {  
+    {
         try {
             // session instance
             $session = session();
             // model
             $m_tagihan = new TagihanModel();
-            $m_mahasiswa = new MahasiswaModel(); 
+            $m_mahasiswa = new MahasiswaModel();
             $m_paket = new PaketModel();
             $m_itempaket = new ItemPaketModel();
             $m_pembayaran = new PembayaranModel();
@@ -43,7 +43,7 @@ class PembayaranController extends BaseController
                         "message" => "available",
                         "data" => [
                             "mahasiswa" => $mahasiswa,
-                            "pembayaran"=> $pembayaran,
+                            "pembayaran" => $pembayaran,
                         ],
                     ];
                 } else {
@@ -53,7 +53,7 @@ class PembayaranController extends BaseController
                         "message" => "data not available",
                         "data" => [
                             "mahasiswa" => $mahasiswa,
-                            "pembayaran"=> []
+                            "pembayaran" => []
                         ],
                     ];
                 }
@@ -76,7 +76,8 @@ class PembayaranController extends BaseController
         }
     }
 
-    public function get_detail_item_tagihan_by_paket_id($id){
+    public function get_detail_item_tagihan_by_paket_id($id)
+    {
         try {
             // create model instance
             $m_itempaket = new ItemPaketModel();
@@ -84,13 +85,13 @@ class PembayaranController extends BaseController
             $item_paket = $m_itempaket->where("paket_id", $id)->findAll();
             if (count($item_paket) > 0) {
                 $result = [
-                    "status" => "success", 
-                    "message"=> "data available",
+                    "status" => "success",
+                    "message" => "data available",
                     "data" => $item_paket,
                 ];
             } else {
                 $result = [
-                    "status" => "failed", 
+                    "status" => "failed",
                     "message" => "data not available",
                     "data" => null,
                 ];
@@ -98,7 +99,7 @@ class PembayaranController extends BaseController
             return json_encode($result);
         } catch (\Throwable $th) {
             $result = [
-                "status" => "failed", 
+                "status" => "failed",
                 "message" => $th,
                 "data" => null,
             ];
@@ -109,9 +110,50 @@ class PembayaranController extends BaseController
     public function add_pembayaran()
     {
         try {
-            // TODO: add pembayaran logic
+            // get data from request
+            // create vaidator
+            $validator = \Config\Services::validation();
+            $validator->setRules([
+                'paket_id' => 'required',
+                'item_id' => 'required',
+                'mahasiswa_id' => 'required',
+                'tanggal_pembayaran' => 'required',
+                'nominal_pembayaran' => 'required'
+            ]);
+            // validation check
+            $isDataValid = $validator->withRequest($this->request)->run();
+            if ($isDataValid) {
+                // create model
+                $m_pembayaran = new PembayaranModel();
+                // insert data 
+                $m_pembayaran->insert([
+                    'paket_id' => $this->request->getPost('paket_id'),
+                    'item_id' => $this->request->getPost('item_id'),
+                    'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
+                    'tanggal_pembayaran' => $this->request->getPost('tanggl_pembayaran'),
+                    'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
+                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran')
+                ]);
+                $result = [
+                    'status' => 'success',
+                    'message' => 'Berhasil menambahkan pembayaran.',
+                ];
+                // return JSON
+                return json_encode($result);
+            } else {
+                $result = [
+                    'status' => 'failed',
+                    'message' => 'Validasi gagal. Mohon isi form dengan lengkap.',
+                ];
+                // return JSON
+                return json_encode($result);
+            }
         } catch (\Throwable $th) {
-            //throw $th;
+            $result = [
+                'status' => 'error',
+                'message' => $th->getMessage(),
+            ];
+            return json_encode($result);
         }
     }
 }
