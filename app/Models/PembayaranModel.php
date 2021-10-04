@@ -14,7 +14,7 @@ class PembayaranModel extends Model
     protected $returnType           = 'array';
     protected $useSoftDeletes       = false;
     protected $protectFields        = true;
-    protected $allowedFields        = [];
+    protected $allowedFields        = ['item_id', 'paket_id', 'mahasiswa_id', 'tanggal_pembayaran', 'nominal_pembayaran', 'user_id'];
 
     // Dates
     protected $useTimestamps        = false;
