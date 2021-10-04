@@ -36,12 +36,17 @@ $routes->add('/dashboard', 'DashboardController::index');
 
 // route for tagihan
 $routes->get('/tagihan', 'TagihanController::index');
-$routes->add('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
+$routes->get('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
 
 // route for pembayaran
 $routes->get('/pembayaran', 'PembayaranController::index');
 $routes->get('/pembayaran/search/(:any)', 'PembayaranController::search_pembayaran/$1');
 $routes->get('/pembayaran/detail-item-tagihan/(:any)', 'PembayaranController::get_detail_item_tagihan_by_paket_id/$1');
+$routes->post('/pembayaran/create', 'PembayaranController::add_pembayaran');
+
+
+// route for paket
+$routes->get('/paket/all', 'PaketController::get_all_paket');
 
 /*
  * --------------------------------------------------------------------
