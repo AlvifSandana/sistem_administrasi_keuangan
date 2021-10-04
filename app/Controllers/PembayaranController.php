@@ -118,7 +118,8 @@ class PembayaranController extends BaseController
                 'item_id' => 'required',
                 'mahasiswa_id' => 'required',
                 'tanggal_pembayaran' => 'required',
-                'nominal_pembayaran' => 'required'
+                'nominal_pembayaran' => 'required',
+                'user_id' => 'required'
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
@@ -130,9 +131,10 @@ class PembayaranController extends BaseController
                     'paket_id' => $this->request->getPost('paket_id'),
                     'item_id' => $this->request->getPost('item_id'),
                     'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-                    'tanggal_pembayaran' => $this->request->getPost('tanggl_pembayaran'),
+                    'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
                     'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
-                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran')
+                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
+                    'user_id' => $this->request->getPost('user_id')
                 ]);
                 $result = [
                     'status' => 'success',
