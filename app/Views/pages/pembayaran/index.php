@@ -103,18 +103,64 @@
         </div>
       </div>
     </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalCreatePembayaran" aria-labelledby="modalCreatePembayaran" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Pembayaran</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="<?php base_url() ?>/pembayaran/create" method="post">
+              <input type="number" name="paket_id" id="paket_id" hidden>
+              <input type="number" name="mahasiswa_id" id="mahasiswa_id" hidden>
+              <div class="form-group">
+                <label for="itempembayaran">ITEM PAKET</label>
+                <select class="form-control" name="item_id" id="item_id"></select>
+              </div>
+              <div class="form-group">
+                <label for="tanggal_pembayaran">TANGGAL PEMBAYARAN</label>
+                <input type="date" class="form-control" name="tanggal_pembayaran" id="tanggal_pembayaran">
+              </div>
+              <div class="form-group">
+                <label for="">NOMINAL PEMBAYARAN</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Rp. </span>
+                  </div>
+                  <input type="number" class="form-control" name="nominal_pembayaran" id="nominal_pembayaran" aria-label="NOMINAL PEMBAYARAN">
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+              <p id="message"></p>
+              <button class="btn btn-success float-right" id="btn_tambah_pembayaran" style="width: 200px;" onclick="createPembayaran()">Tambah Pembayaran</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <?= $this->endSection() ?>
 
 <?= $this->section('custom-script') ?>
 <script>
+  /**
+   * search pembayaran by nim
+   * and show result table
+   */
   function searchPembayaran() {
     // change visibility
     $("#card_detail_tagihan").css("visibility", "hidden");
     $("#card_detail_pembayaran").css("visibility", "hidden");
     $("#tbl_detail_tagihan > tbody").empty();
     $("#tbl_detail_pembayaran > tbody").empty();
+    $("#mahasiswa_id").val(0);
+    $("#paket_id").val(0);
     var nim = $("#nim").val();
     var pembayaran_row = ``;
     $.ajax({
@@ -137,7 +183,7 @@
               <td>${data.data.mahasiswa.nama_mahasiswa}</td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="showDetail()" data-toggle="tooltip" data-placement="top" title="Lihat Detail"><i class="fas fa-info"></i></button>
-                <button class="btn btn-success btn-sm" onclick="createPembayaran()" data-toggle="tooltip" data-placement="top" title="Tambah Pembayaran"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalCreatePembayaran"><i class="fas fa-plus"></i></button>
               </td>
             </tr>
             </tr>
@@ -152,6 +198,8 @@
               </tr>
               `;
           }
+          // fill id_mahasiswa to modal create pembayaran
+          $("#mahasiswa_id").val(data.data.mahasiswa.id_mahasiswa);
           // show table with data row
           $("#search_result").css("visibility", "visible");
           $("#list_search_result").append(row);
@@ -165,6 +213,9 @@
     });
   }
 
+  /**
+   * fill detail of tagihan mahasiswa
+   */
   function fillDetail() {
     try {
       // declare data row
@@ -189,7 +240,10 @@
               </tr>
               `;
             total_tagihan += data.data.item_paket[index].nominal_item;
+            $("#item_id").append(`<option value="${data.data.item_paket[index].id_item}">${data.data.item_paket[index].nama_item} - Rp. ${data.data.item_paket[index].nominal_item}</option>`)
           }
+          // fill paket_id to modalCreatePembayaran
+          $("#paket_id").val(data.data.detail_paket.id_paket);
           // append table
           $("#tbl_detail_tagihan > tbody").append(tagihan_row);
         },
@@ -204,6 +258,51 @@
     }
   }
 
+  /**
+   * create a new pembayaran
+   */
+  function createPembayaran() {
+    $("#btn_tambah_pembayaran").prop('disabled', true);
+    $("#btn_tambah_pembayaran").html(`<div class="spinner-border text-light spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>`);
+    console.log(`
+    'item_id': ${$("#item_id").val()},
+    'paket_id': ${$("#paket_id").val()},
+    'mahasiswa_id': ${$("#mahasiswa_id").val()},
+    'tanggal_pembayaran': ${$("#tanggal_pembayaran").val()},
+    'nominal_pembayaran': ${$("#nominal_pembayaran").val()},
+    'user_id': 1
+    `);
+    $.ajax({
+      url: "<?php base_url() ?>/pembayaran/create",
+      method: 'POST',
+      type: "POST",
+      data: {
+        'item_id': $("#item_id").val(),
+        'paket_id': $("#paket_id").val(),
+        'mahasiswa_id': $("#mahasiswa_id").val(),
+        'tanggal_pembayaran': $("#tanggal_pembayaran").val(),
+        'nominal_pembayaran': $("#nominal_pembayaran").val(),
+        'user_id': 1
+      },
+      success: function(data) {
+        console.log(data)
+        $("#btn_tambah_pembayaran").prop('disabled', false);
+        $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
+        $("p").html(data.message);
+      },
+      error: function(jqXHR) {
+        console.log(jqXHR)
+        $("#btn_tambah_pembayaran").prop('disabled', false);
+        $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
+        $("p").html(jqXHR);
+
+      }
+    });
+  }
+
+  /**
+   * show detail card
+   */
   function showDetail() {
     // change visibility
     $("#card_detail_tagihan").css("visibility", "visible");
