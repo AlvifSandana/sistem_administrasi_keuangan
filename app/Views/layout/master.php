@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +18,12 @@
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- sweetalert2 -->
   <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.min.css">
+  <!-- datatable bs4 -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+  <!-- animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
   <!-- Wrapper -->
   <div class="wrapper">
@@ -35,4 +41,5 @@
   <?= $this->renderSection('custom-script') ?>
   <!-- ./Script -->
 </body>
+
 </html>
