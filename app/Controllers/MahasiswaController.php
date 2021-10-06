@@ -31,7 +31,6 @@ class MahasiswaController extends BaseController
 
     public function get_data_for_create_update_mahasiswa()
     {
-        // TODO - 2021/10/04 - create method for create and update mahasiswa
         try {
             // create model instance
             $m_progdi = new ProgdiModel();
