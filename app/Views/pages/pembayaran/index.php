@@ -202,6 +202,7 @@
           $("#mahasiswa_id").val(data.data.mahasiswa.id_mahasiswa);
           // show table with data row
           $("#search_result").css("visibility", "visible");
+          $("#search_result").addClass("animate__animated animate__fadeIn")
           $("#list_search_result").append(row);
           $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
         }
@@ -228,7 +229,7 @@
         dataType: "JSON",
         success: function(data) {
           console.log(data);
-          // iterate response data and fill to the tagihan_row
+          // iterate response data and fill to thecomposer require phpoffice/phpspreadsheet tagihan_row
           // count total_tagihan
           for (let index = 0; index < data.data.item_paket.length; index++) {
             tagihan_row += `
@@ -239,13 +240,18 @@
               <td>${data.data.item_paket[index].keterangan_item}</td>
               </tr>
               `;
-            total_tagihan += data.data.item_paket[index].nominal_item;
+            total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
             $("#item_id").append(`<option value="${data.data.item_paket[index].id_item}">${data.data.item_paket[index].nama_item} - Rp. ${data.data.item_paket[index].nominal_item}</option>`)
           }
+          var row_total = `<tr class="font-weight-bold">
+          <td colspan="3">Total Tagihan</td>
+          <td>Rp ${total_tagihan}</td>
+          `;
           // fill paket_id to modalCreatePembayaran
           $("#paket_id").val(data.data.detail_paket.id_paket);
           // append table
           $("#tbl_detail_tagihan > tbody").append(tagihan_row);
+          $("#tbl_detail_tagihan > tbody").append(row_total);
         },
         error: function(jqXHR) {
           alert('Error!');
