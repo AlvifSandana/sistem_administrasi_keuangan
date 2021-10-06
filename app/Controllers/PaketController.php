@@ -46,7 +46,6 @@ class PaketController extends BaseController
 
     public function get_data_for_create_update_paket()
     {
-        // TODO - 2021/10/04 - create method get data for create and updte paket
         try {
             // create model instance
             $m_semester = new SemesterModel();
