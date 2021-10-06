@@ -169,7 +169,7 @@
       dataType: "JSON",
       success: function(data) {
         if (data == null || data.data.mahasiswa == null) {
-          alert("Data tidak ditemukan")
+          showSWAL('error', 'Data tidak ditemukan!');
         } else {
           // call fillDetail() function 
           fillDetail();
@@ -208,7 +208,7 @@
       },
       error: function(jqXHR) {
         console.log(jqXHR);
-        alert("Data tidak ditemukan");
+        showSWAL('error', 'Data tidak ditemukan!');
       }
     });
   }
@@ -272,31 +272,41 @@
     'nominal_pembayaran': ${$("#nominal_pembayaran").val()},
     'user_id': 1
     `);
+    var mydata = {
+      item_id: $("#item_id").val(),
+      paket_id: $("#paket_id").val(),
+      mahasiswa_id: $("#mahasiswa_id").val(),
+      tanggal_pembayaran: $("#tanggal_pembayaran").val(),
+      nominal_pembayaran: $("#nominal_pembayaran").val(),
+      user_id: 1
+    }
     $.ajax({
       url: "<?php base_url() ?>/pembayaran/create",
-      method: 'POST',
       type: "POST",
-      data: {
-        'item_id': $("#item_id").val(),
-        'paket_id': $("#paket_id").val(),
-        'mahasiswa_id': $("#mahasiswa_id").val(),
-        'tanggal_pembayaran': $("#tanggal_pembayaran").val(),
-        'nominal_pembayaran': $("#nominal_pembayaran").val(),
-        'user_id': 1
-      },
-      success: function(data) {
-        console.log(data)
+      data: mydata,
+      success: function(res) {
+        var response = JSON.parse(res)
+        console.log(response);
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
-        $("p").html(data.message);
+        showSWAL(response.status, response.message);
       },
       error: function(jqXHR) {
         console.log(jqXHR)
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
-        $("p").html(jqXHR);
-
+        // $("p").html(jqXHR);
+        showSWAL('error', jqXHR);
       }
+    });
+  }
+
+  function showSWAL(type, message) {
+    Swal.fire({
+      title: type == 'error' || type == 'failed'? 'Error':'Success',
+      text: message,
+      icon: type == 'error' || type == 'failed'? 'error':'success',
+      confirmButtonText: 'OK'
     });
   }
 
