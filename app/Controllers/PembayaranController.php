@@ -137,23 +137,26 @@ class PembayaranController extends BaseController
                     'user_id' => $this->request->getPost('user_id')
                 ]);
                 $result = [
-                    'status' => 'success',
-                    'message' => 'Berhasil menambahkan pembayaran.',
+                    "status" => "success",
+                    "message" => "Berhasil menambahkan pembayaran.",
+                    "data" => []
                 ];
                 // return JSON
                 return json_encode($result);
             } else {
                 $result = [
-                    'status' => 'failed',
-                    'message' => 'Validasi gagal. Mohon isi form dengan lengkap.',
+                    "status" => "failed",
+                    "message" => "Validasi gagal. Mohon isi form dengan lengkap.",
+                    "data" => []
                 ];
                 // return JSON
                 return json_encode($result);
             }
         } catch (\Throwable $th) {
             $result = [
-                'status' => 'error',
-                'message' => $th->getMessage(),
+                "status" => "error",
+                "message" => $th->getMessage(),
+                "data" => []
             ];
             return json_encode($result);
         }
