@@ -12,3 +12,5 @@
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="assets/js/adminlte.js"></script>
+<!-- sweetalert2 -->
+<script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>

@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="assets/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- sweetalert2 -->
+  <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
   <!-- Wrapper -->
