@@ -58,23 +58,15 @@
       </li>
       <li class="nav-header">MASTER</li>
       <li class="nav-item">
-        <a href="pages/calendar.html" class="nav-link">
+        <a href="<?php echo base_url() ?>/master-keuangan" class="nav-link">
           <i class="nav-icon fas fa-file-invoice-dollar"></i>
           <p>
-            Data Tagihan
+            Keuangan
           </p>
         </a>
       </li>
       <li class="nav-item">
-        <a href="pages/calendar.html" class="nav-link">
-          <i class="nav-icon fas fa-receipt"></i>
-          <p>
-            Data Pembayaran
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="pages/calendar.html" class="nav-link">
+        <a href="<?php echo base_url() ?>/master-mahasiswa" class="nav-link">
           <i class="nav-icon fas fa-users"></i>
           <p>
             Data Mahasiswa
@@ -82,7 +74,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="pages/kanban.html" class="nav-link">
+        <a href="<?php echo base_url() ?>/master-angkatan" class="nav-link">
           <i class="nav-icon far fa-clock"></i>
           <p>
             Data Tahun Angkatan
@@ -90,18 +82,10 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="<?php echo base_url() ?>/master-progdi" class="nav-link">
           <i class="nav-icon fas fa-graduation-cap"></i>
           <p>
             Data Program Studi
-          </p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-book"></i>
-          <p>
-            Data Jurusan
           </p>
         </a>
       </li>
