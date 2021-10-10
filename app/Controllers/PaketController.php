@@ -10,12 +10,15 @@ class PaketController extends BaseController
 {
     public function index()
     {
+        // create model instance
+        $m_paket = new PaketModel();
         // create request instance
         $request = \Config\Services::request();
         // get uri segment for dynamic sidebar active menu
         $data['uri_segment'] = $request->uri->getSegment(1);
+        $data['data_paket'] = $m_paket->findAll();
         // return view
-        return view('pages/master/paket/index', $data);
+        return view('pages/master/keuangan/index', $data);
     }
 
     public function get_all_paket()
