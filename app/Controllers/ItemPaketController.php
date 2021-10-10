@@ -22,14 +22,14 @@ class ItemPaketController extends BaseController
 
             if (count($item_paket) > 0) {
                 $result = [
-                    'status' => 'success', 
-                    'message'=> 'data available', 
+                    'status' => 'success',
+                    'message' => 'data available',
                     'data' => $item_paket
                 ];
             } else {
                 $result = [
-                    'status' => 'failed', 
-                    'message'=> 'data not available', 
+                    'status' => 'failed',
+                    'message' => 'data not available',
                     'data' => []
                 ];
             }
@@ -38,10 +38,18 @@ class ItemPaketController extends BaseController
         } catch (\Throwable $th) {
             //throw $th;
             $result = [
-                'status' => 'error', 
-                'message'=> $th->getMessage(), 
+                'status' => 'error',
+                'message' => $th->getMessage(),
                 'data' => []
             ];
         }
+    }
+
+    public function update_item_paket($id)
+    {
+    }
+
+    public function delete_item_paket($id)
+    {
     }
 }
