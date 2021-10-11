@@ -64,6 +64,7 @@
     </div>
   </div>
 </section>
+<!-- modal detail tagihan -->
 <div class="modal fade bd-example-modal-lg" id="modalDetailTagihan" tabindex="-1" role="dialog" aria-labelledby="modalDetailTagihan" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
@@ -76,22 +77,23 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="detail_nim">NIM</label>
-          <input type="text" class="form-control" name="nim" id="detail_nim" disabled/>
+          <input type="text" class="form-control" name="nim" id="detail_nim" disabled />
         </div>
         <div class="form-group">
           <label for="detail_nim">NAMA MAHASISWA</label>
-          <input type="text" class="form-control" name="nama_mhs" id="detail_nama_mhs" disabled/>
+          <input type="text" class="form-control" name="nama_mhs" id="detail_nama_mhs" disabled />
         </div>
         <div class="form-group">
           <label for="detail_nim">PAKET</label>
-          <input type="text" class="form-control" name="paket" id="detail_nama_paket" disabled/>
+          <input type="text" class="form-control" name="paket" id="detail_nama_paket" disabled />
         </div>
         <label>ITEM PAKET</label>
         <table class="table table-hover table-bordered">
           <thead class="text-center">
             <th>ID</th>
             <th>Item Pembayaran</th>
-            <th>Nominal</th>
+            <th>Nominal Tagihan</th>
+            <th>Nominal Terbayar</th>
             <th>Keterangan</th>
           </thead>
           <tbody class="text-center" id="list_item"></tbody>
@@ -114,6 +116,7 @@
         if (data == null || data.status == "failed") {
           alert("Data tidak ditemukan");
         } else {
+          console.log(data);
           $("#list_tagihan").empty();
           // hasil pencarian, baris baru
           var row = `
@@ -134,19 +137,30 @@
           $("#detail_nama_paket").val(data.data.detail_paket.nama_paket);
           // hasil pencarian, item tagihan
           var total_tagihan = 0;
+          var total_terbayar = 0;
+          // number format
+          var numFormat = Intl.NumberFormat();
+          // generate baris detail item paket 
           for (let index = 0; index < data.data.item_paket.length; index++) {
             total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
-            var row1 = `<tr class="">
+            var row1 = `
             <td>${data.data.item_paket[index].id_item}</td>
             <td>${data.data.item_paket[index].nama_item}</td>
-            <td>Rp ${data.data.item_paket[index].nominal_item}</td>
-            <td>${data.data.item_paket[index].keterangan_item}</td>
-            </tr>`;
-            $("#list_item").append(row1);
+            <td class="text-left">Rp ${numFormat.format(parseInt(data.data.item_paket[index].nominal_item))}</td>`;
+            // iterasi item paket terbayar sesuai id_item tagihan
+            var total_nominal_item_terbayar = 0;
+            for (let index1 = 0; index1 < data.data.item_paket_terbayar.length; index1++) {
+              if (data.data.item_paket[index].id_item == data.data.item_paket_terbayar[index1].item_id) {
+                total_nominal_item_terbayar += parseInt(data.data.item_paket_terbayar[index1].nominal_pembayaran);
+              }
+            }
+            total_terbayar += total_nominal_item_terbayar;
+            $("#list_item").append(`<tr>${row1}<td>Rp. ${numFormat.format(total_nominal_item_terbayar)}</td><td>${data.data.item_paket[index].keterangan_item}</td></tr>`);
           }
           var row_total = `<tr class="font-weight-bold">
-          <td colspan="3">Total Tagihan</td>
-          <td>Rp ${total_tagihan}</td>
+          <td colspan="2">Total</td>
+          <td>Rp ${numFormat.format(total_tagihan)}</td>
+          <td>Rp ${numFormat.format(total_terbayar)}</td>
           `;
           $("#list_item").append(row_total);
         }
@@ -156,10 +170,6 @@
         alert("Data tidak ditemukan");
       }
     });
-  }
-
-  function detail() {
-
   }
 </script>
 <?= $this->endSection() ?>

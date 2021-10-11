@@ -14,6 +14,16 @@
 <script src="assets/js/adminlte.js"></script>
 <!-- sweetalert2 -->
 <script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
-<!-- datatable bs4 -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- datatable -->
+
+<!-- sweetalert2 custom -->
+<script>
+  function showSWAL(type, message) {
+    Swal.fire({
+      title: type == 'error' || type == 'failed' ? 'Error' : 'Success',
+      text: message,
+      icon: type == 'error' || type == 'failed' ? 'error' : 'success',
+      confirmButtonText: 'OK'
+    });
+  }
+</script>

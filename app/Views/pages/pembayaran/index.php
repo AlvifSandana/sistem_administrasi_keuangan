@@ -68,12 +68,12 @@
             <h5 class="h5">Tagihan</h5>
             <div class="row">
               <div class="col">
-                <table class="table table-hover" id="tbl_detail_tagihan">
+                <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
                   <thead class="text-center">
                     <th>ID</th>
                     <th>ITEM TAGIHAN</th>
-                    <th>NOMINAL</th>
                     <th>KETERANGAN</th>
+                    <th>NOMINAL</th>
                   </thead>
                   <tbody class="text-center"></tbody>
                 </table>
@@ -88,12 +88,11 @@
             <h5 class="h5">Pembayaran</h5>
             <div class="row">
               <div class="col">
-                <table class="table table-hover" id="tbl_detail_pembayaran">
+                <table class="table table-hover table-bordered" id="tbl_detail_pembayaran">
                   <thead class="text-center">
-                    <th>ID</th>
-                    <th>ID ITEM TAGIHAN</th>
-                    <th>NOMINAL</th>
-                    <th>TANGGAL PEMBAYARAN</th>
+                    <th>ITEM PEMBAYARAN</th>
+                    <th>TERBAYAR</th>
+                    <th>ACTION</th>
                   </thead>
                   <tbody class="text-center"></tbody>
                 </table>
@@ -103,6 +102,7 @@
         </div>
       </div>
     </div>
+    <!-- Modal Tambah Pembayaran -->
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalCreatePembayaran" aria-labelledby="modalCreatePembayaran" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -149,6 +149,8 @@
 
 <?= $this->section('custom-script') ?>
 <script>
+  // TODO - SPESIFIK PER ITEM TAGIHAN UNTUK KETERANGAN PEMBAYARAN - 2021/10/11
+  var num_format = Intl.NumberFormat();
   /**
    * search pembayaran by nim
    * and show result table
@@ -188,23 +190,12 @@
             </tr>
             </tr>
           `;
-          for (let index = 0; index < data.data.pembayaran.length; index++) {
-            pembayaran_row += `
-              <tr>
-                <td>${data.data.pembayaran[index].id_pembayaran}</td>
-                <td>${data.data.pembayaran[index].item_id}</td>
-                <td>${data.data.pembayaran[index].nominal_pembayaran}</td>
-                <td>${data.data.pembayaran[index].tanggal_pembayaran}</td>
-              </tr>
-              `;
-          }
           // fill id_mahasiswa to modal create pembayaran
           $("#mahasiswa_id").val(data.data.mahasiswa.id_mahasiswa);
           // show table with data row
           $("#search_result").css("visibility", "visible");
           $("#search_result").addClass("animate__animated animate__fadeIn")
           $("#list_search_result").append(row);
-          $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
         }
       },
       error: function(jqXHR) {
@@ -221,7 +212,9 @@
     try {
       // declare data row
       var tagihan_row = ``;
+      var pembayaran_row = ``;
       var total_tagihan = 0;
+      var total_pembayaran
       // get data tagihan by nim
       $.ajax({
         url: "<?php site_url() ?>" + "/tagihan/search/" + $("#nim").val(),
@@ -229,28 +222,37 @@
         dataType: "JSON",
         success: function(data) {
           console.log(data);
-          // iterate response data and fill to thecomposer require phpoffice/phpspreadsheet tagihan_row
+          // iterate response data and fill to the
           // count total_tagihan
           for (let index = 0; index < data.data.item_paket.length; index++) {
             tagihan_row += `
-              <tr>
+            <tr>
               <td>${data.data.item_paket[index].id_item}</td>
               <td>${data.data.item_paket[index].nama_item}</td>
-              <td>${data.data.item_paket[index].nominal_item}</td>
               <td>${data.data.item_paket[index].keterangan_item}</td>
-              </tr>
-              `;
+              <td class="text-left">Rp ${num_format.format(parseInt(data.data.item_paket[index].nominal_item))}</td>
+            </tr>`;
+            pembayaran_row += `<tr><td>${data.data.item_paket[index].nama_item}</td>`;
+            var nominal_item_terbayar = 0;
+            for (let index1 = 0; index1 < data.data.item_paket_terbayar.length; index1++) {
+              if (data.data.item_paket[index].id_item == data.data.item_paket_terbayar[index1].item_id) {
+                nominal_item_terbayar += parseInt(data.data.item_paket_terbayar[index1].nominal_pembayaran);
+              }
+            }
+            pembayaran_row += `<td>Rp ${num_format.format(nominal_item_terbayar)}</td><td><button class="btn btn-sm btn-primary"><i class="fas fa-info" ttile="Detail"></i></button></td></tr>`;
             total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
+            total_pembayaran += parseInt(nominal_item_terbayar);
             $("#item_id").append(`<option value="${data.data.item_paket[index].id_item}">${data.data.item_paket[index].nama_item} - Rp. ${data.data.item_paket[index].nominal_item}</option>`)
           }
           var row_total = `<tr class="font-weight-bold">
           <td colspan="3">Total Tagihan</td>
-          <td>Rp ${total_tagihan}</td>
+          <td>Rp ${num_format.format(total_tagihan)}</td>
           `;
           // fill paket_id to modalCreatePembayaran
           $("#paket_id").val(data.data.detail_paket.id_paket);
           // append table
           $("#tbl_detail_tagihan > tbody").append(tagihan_row);
+          $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
           $("#tbl_detail_tagihan > tbody").append(row_total);
         },
         error: function(jqXHR) {
@@ -295,6 +297,14 @@
         console.log(response);
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
+        var new_tagihan_row = `
+        <tr>
+          <td>${response.data}</td>
+          <td>${mydata.item_id}</td>
+          <td>Rp ${num_format.format(parseInt(mydata.nominal_pembayaran))}</td>
+          <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(mydata.tanggal_pembayaran))}</td>
+        </tr>`;
+        $("#tbl_detail_pembayaran > tbody").append(new_tagihan_row)
         showSWAL(response.status, response.message);
       },
       error: function(jqXHR) {
@@ -304,15 +314,6 @@
         // $("p").html(jqXHR);
         showSWAL('error', jqXHR);
       }
-    });
-  }
-
-  function showSWAL(type, message) {
-    Swal.fire({
-      title: type == 'error' || type == 'failed'? 'Error':'Success',
-      text: message,
-      icon: type == 'error' || type == 'failed'? 'error':'success',
-      confirmButtonText: 'OK'
     });
   }
 

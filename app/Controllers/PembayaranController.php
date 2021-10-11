@@ -127,19 +127,18 @@ class PembayaranController extends BaseController
                 // create model
                 $m_pembayaran = new PembayaranModel();
                 // insert data 
-                $m_pembayaran->insert([
-                    'paket_id' => $this->request->getPost('paket_id'),
-                    'item_id' => $this->request->getPost('item_id'),
-                    'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-                    'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
-                    'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
-                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
-                    'user_id' => $this->request->getPost('user_id')
-                ]);
                 $result = [
                     "status" => "success",
                     "message" => "Berhasil menambahkan pembayaran.",
-                    "data" => []
+                    "data" => $m_pembayaran->insert([
+                        'paket_id' => $this->request->getPost('paket_id'),
+                        'item_id' => $this->request->getPost('item_id'),
+                        'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
+                        'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
+                        'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
+                        'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
+                        'user_id' => $this->request->getPost('user_id')
+                    ])
                 ];
                 // return JSON
                 return json_encode($result);
@@ -158,6 +157,60 @@ class PembayaranController extends BaseController
                 "message" => $th->getMessage(),
                 "data" => []
             ];
+            return json_encode($result);
+        }
+    }
+
+    public function get_detail_pembayaran_by_nim($nim)
+    {
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null
+        ];
+
+        try {
+            $db = \Config\Database::connect();
+            // model instance
+            $m_mahasiswa = new MahasiswaModel();
+            $m_paket = new PaketModel();
+            $m_tagihan = new TagihanModel();
+            $m_itempaket = new ItemPaketModel();
+            $m_pembayaran = new PembayaranModel();
+            // array of sql query
+            $sql = 'SELECT * FROM pembayaran where paket_id = ? AND mahasiswa_id = ?';
+            $hasil = [];
+            // get data mahasiswa
+            $mahasiswa = $m_mahasiswa->where('nim', $nim)->first();
+            if ($mahasiswa) {
+                // get tagihan by mahasiswa_id
+                $tagihan = $m_tagihan->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->first();
+                if ($tagihan) {
+                    $paket = $m_paket->where('id_paket', $tagihan['paket_id'])->first();
+                    // get item paket
+                    $item_paket = $m_itempaket->where('paket_id', $paket['id_paket'])->findAll();
+                    // get pembayaran by item
+                    foreach ($item_paket as $i_p) {
+                        $hasil[$i_p['nama_item']] = $m_pembayaran->where(['paket_id' => $i_p['paket_id'], 'mahasiswa_id' => $mahasiswa['id_mahasiswa'], 'item_id' => $i_p['id_item']])->findAll();
+                        //array_push($hasil, $m_pembayaran->where(['paket_id' => $i_p['paket_id'], 'mahasiswa_id' => $mahasiswa['id_mahasiswa'], 'item_id' => $i_p['id_item']])->findAll());
+                    }
+                    // result
+                    $result['status'] = 'success';
+                    $result['message'] = 'data avalable';
+                    $result['data'] = $hasil;
+                } else {
+                    $result['status'] = 'failed';
+                    $result['message'] = 'paket not available';
+                }
+            } else {
+                $result['status'] = 'failed';
+                $result['message'] = 'mahasiswa not avalable';
+            }
+            // return 
+            return json_encode($result);
+        } catch (\Throwable $th) {
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
             return json_encode($result);
         }
     }

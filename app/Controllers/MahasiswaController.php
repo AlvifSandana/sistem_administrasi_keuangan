@@ -11,12 +11,7 @@ class MahasiswaController extends BaseController
 {
     public function index()
     {
-        // create request instance
-        $request = \Config\Services::request();
-        // get uri segment for dynamic sidebar active item
-        $data['uri_segment'] = $request->uri->getSegment(1);
-        // return view
-        return view('pages/master/mahasiswa/index', $data);
+        
     }
 
     public function import_data_mahasiswa()

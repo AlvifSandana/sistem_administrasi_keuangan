@@ -43,9 +43,10 @@ $routes->get('/pembayaran', 'PembayaranController::index');
 $routes->get('/pembayaran/search/(:any)', 'PembayaranController::search_pembayaran/$1');
 $routes->get('/pembayaran/detail-item-tagihan/(:any)', 'PembayaranController::get_detail_item_tagihan_by_paket_id/$1');
 $routes->post('/pembayaran/create', 'PembayaranController::add_pembayaran');
+$routes->get('/pembayaran/detail/(:any)', 'PembayaranController::get_detail_pembayaran_by_nim/$1');
 
 // route for master mahasiswa
-$routes->get('/master-mahasiswa', 'MahasiswaController::index');
+$routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index');
 
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');

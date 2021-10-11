@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\ItemPaketModel;
 use App\Models\MahasiswaModel;
 use App\Models\PaketModel;
+use App\Models\PembayaranModel;
 use App\Models\TagihanModel;
 
 class TagihanController extends BaseController
@@ -26,6 +27,7 @@ class TagihanController extends BaseController
             $m_mahasiswa = new MahasiswaModel();
             $m_paket = new PaketModel();
             $m_itempaket = new ItemPaketModel();
+            $m_pembayaran = new PembayaranModel();
             // search tagihan by nim
             $mahasiswa = $m_mahasiswa->where('nim', $nim)->first();
             if ($mahasiswa) {
@@ -40,6 +42,7 @@ class TagihanController extends BaseController
                             "nama_mahasiswa" => $mahasiswa['nama_mahasiswa'],
                             "detail_paket" => $m_paket->where('id_paket', $tagihan['paket_id'])->first(),
                             "item_paket" => $m_itempaket->where('paket_id', $tagihan['paket_id'])->findAll(),
+                            "item_paket_terbayar" => $m_pembayaran->where(['mahasiswa_id' => $mahasiswa['id_mahasiswa'], 'paket_id' => $tagihan['paket_id']])->findAll(),
                         ],
                     ];
                 } else {
