@@ -23,6 +23,7 @@
 <?= $this->section('content-body') ?>
 <section class="content">
   <div class="container-fluid">
+    <!-- card search input -->
     <div class="row mb-2">
       <div class="col">
         <div class="card">
@@ -39,6 +40,7 @@
         </div>
       </div>
     </div>
+    <!-- card search result -->
     <div class="row mb-2">
       <div class="col">
         <div class="card" id="search_result" style="visibility: hidden;">
@@ -61,6 +63,7 @@
         </div>
       </div>
     </div>
+    <!-- card Tagihan -->
     <div class="row mb-2">
       <div class="col-6">
         <div class="card" id="card_detail_tagihan" style="visibility: hidden;">
@@ -72,7 +75,6 @@
                   <thead class="text-center">
                     <th>ID</th>
                     <th>ITEM TAGIHAN</th>
-                    <th>KETERANGAN</th>
                     <th>NOMINAL</th>
                   </thead>
                   <tbody class="text-center"></tbody>
@@ -82,6 +84,7 @@
           </div>
         </div>
       </div>
+      <!-- card Pembayaran -->
       <div class="col-6">
         <div class="card" id="card_detail_pembayaran" style="visibility: hidden;">
           <div class="card-body">
@@ -143,6 +146,35 @@
         </div>
       </div>
     </div>
+    <!-- Modal Detail Pembayaran per item -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalDetailPembayaranPerItem" aria-labelledby="modalDetailPembayaranPerItem" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Detail Pembayaran</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="">
+              <div class="form-group">
+                <label for="dp_nama_item">NAMA ITEM</label>
+                <input type="text" name="dp_nama_item" id="dp_nama_item" class="form-control" disabled>
+              </div>
+              <table class="table" id="tbl_detail_pembayaran_per_item">
+                <thead class="text-center">
+                  <th>ID Pembayaran</th>
+                  <th>Tanggal Pembayaran</th>
+                  <th>Nominal Pembayaran</th>
+                </thead>
+                <tbody class="text-center"></tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <?= $this->endSection() ?>
@@ -151,6 +183,8 @@
 <script>
   // TODO - SPESIFIK PER ITEM TAGIHAN UNTUK KETERANGAN PEMBAYARAN - 2021/10/11
   var num_format = Intl.NumberFormat();
+  var item_tagihan_terbayar = [];
+  var nama_paket = "";
   /**
    * search pembayaran by nim
    * and show result table
@@ -214,14 +248,15 @@
       var tagihan_row = ``;
       var pembayaran_row = ``;
       var total_tagihan = 0;
-      var total_pembayaran
+      var total_pembayaran = 0;
       // get data tagihan by nim
       $.ajax({
         url: "<?php site_url() ?>" + "/tagihan/search/" + $("#nim").val(),
         type: "GET",
         dataType: "JSON",
         success: function(data) {
-          console.log(data);
+          // console.log(data);
+          item_tagihan_terbayar = data.data.item_paket_terbayar;
           // iterate response data and fill to the
           // count total_tagihan
           for (let index = 0; index < data.data.item_paket.length; index++) {
@@ -229,7 +264,6 @@
             <tr>
               <td>${data.data.item_paket[index].id_item}</td>
               <td>${data.data.item_paket[index].nama_item}</td>
-              <td>${data.data.item_paket[index].keterangan_item}</td>
               <td class="text-left">Rp ${num_format.format(parseInt(data.data.item_paket[index].nominal_item))}</td>
             </tr>`;
             pembayaran_row += `<tr><td>${data.data.item_paket[index].nama_item}</td>`;
@@ -239,21 +273,32 @@
                 nominal_item_terbayar += parseInt(data.data.item_paket_terbayar[index1].nominal_pembayaran);
               }
             }
-            pembayaran_row += `<td>Rp ${num_format.format(nominal_item_terbayar)}</td><td><button class="btn btn-sm btn-primary"><i class="fas fa-info" ttile="Detail"></i></button></td></tr>`;
+            pembayaran_row += `
+            <td>Rp ${num_format.format(nominal_item_terbayar)}</td>
+            <td>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${data.data.item_paket[index].id_item}, '${data.data.item_paket[index].nama_item}')">
+                <i class="fas fa-info" ttile="Detail"></i>
+              </button>
+            </td></tr>`;
             total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
             total_pembayaran += parseInt(nominal_item_terbayar);
             $("#item_id").append(`<option value="${data.data.item_paket[index].id_item}">${data.data.item_paket[index].nama_item} - Rp. ${data.data.item_paket[index].nominal_item}</option>`)
           }
           var row_total = `<tr class="font-weight-bold">
-          <td colspan="3">Total Tagihan</td>
+          <td colspan="2">Total Tagihan</td>
           <td>Rp ${num_format.format(total_tagihan)}</td>
+          `;
+          var row_total_pembayaran = `<tr class="font-weight-bold">
+          <td>Total Terbayar</td>
+          <td colspan="2">Rp ${num_format.format(total_pembayaran)}</td>
           `;
           // fill paket_id to modalCreatePembayaran
           $("#paket_id").val(data.data.detail_paket.id_paket);
           // append table
           $("#tbl_detail_tagihan > tbody").append(tagihan_row);
-          $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
           $("#tbl_detail_tagihan > tbody").append(row_total);
+          $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
+          $("#tbl_detail_pembayaran > tbody").append(row_total_pembayaran);
         },
         error: function(jqXHR) {
           alert('Error!');
@@ -262,7 +307,7 @@
       });
     } catch (error) {
       console.log(error);
-      alert(error);
+      showSWAL('error', error);
     }
   }
 
@@ -272,14 +317,6 @@
   function createPembayaran() {
     $("#btn_tambah_pembayaran").prop('disabled', true);
     $("#btn_tambah_pembayaran").html(`<div class="spinner-border text-light spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>`);
-    console.log(`
-    'item_id': ${$("#item_id").val()},
-    'paket_id': ${$("#paket_id").val()},
-    'mahasiswa_id': ${$("#mahasiswa_id").val()},
-    'tanggal_pembayaran': ${$("#tanggal_pembayaran").val()},
-    'nominal_pembayaran': ${$("#nominal_pembayaran").val()},
-    'user_id': 1
-    `);
     var mydata = {
       item_id: $("#item_id").val(),
       paket_id: $("#paket_id").val(),
@@ -292,26 +329,17 @@
       url: "<?php base_url() ?>/pembayaran/create",
       type: "POST",
       data: mydata,
+      dataType: 'JSON',
       success: function(res) {
-        var response = JSON.parse(res)
-        console.log(response);
+        var response = res;
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
-        var new_tagihan_row = `
-        <tr>
-          <td>${response.data}</td>
-          <td>${mydata.item_id}</td>
-          <td>Rp ${num_format.format(parseInt(mydata.nominal_pembayaran))}</td>
-          <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(mydata.tanggal_pembayaran))}</td>
-        </tr>`;
-        $("#tbl_detail_pembayaran > tbody").append(new_tagihan_row)
         showSWAL(response.status, response.message);
       },
       error: function(jqXHR) {
         console.log(jqXHR)
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
-        // $("p").html(jqXHR);
         showSWAL('error', jqXHR);
       }
     });
@@ -324,6 +352,26 @@
     // change visibility
     $("#card_detail_tagihan").css("visibility", "visible");
     $("#card_detail_pembayaran").css("visibility", "visible");
+  }
+
+  /**
+   * show modal detail pembayaran from item
+   */
+  function showDetailPembayaranItem(item_id, nama_item){
+    var row_pembayaran = ``;
+    $("#tbl_detail_pembayaran_per_item > tbody").empty();
+    $("#dp_nama_item").val(nama_item);
+    for (let index = 0; index < item_tagihan_terbayar.length; index++) {
+      if (item_tagihan_terbayar[index].item_id == item_id) {
+        row_pembayaran += `
+        <tr>
+        <td>${item_tagihan_terbayar[index].id_pembayaran}</td>
+        <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(item_tagihan_terbayar[index].tanggal_pembayaran))}</td>
+        <td>Rp ${num_format.format(parseInt(item_tagihan_terbayar[index].nominal_pembayaran))}</td>
+        </tr>`;
+      }
+    }
+    $("#tbl_detail_pembayaran_per_item > tbody").append(row_pembayaran);
   }
 </script>
 <?= $this->endSection() ?>
