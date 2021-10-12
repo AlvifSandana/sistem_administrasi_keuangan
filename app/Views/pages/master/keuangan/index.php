@@ -56,6 +56,40 @@
       </div>
     </div>
   </div>
+  <!-- Modal Add Paket -->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalAddPaket" aria-labelledby="modalAddPaket" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tambah Paket Tagihan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="nama_paket">NAMA PAKET</label>
+            <input type="text" name="add_nama_paket" id="add_nama_paket" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="semester">SEMESTER</label>
+            <select name="add_semester_id" id="add_semester_id" class="form-control">
+              <?php
+              foreach ($data_semester as $s) {
+                echo '<option value="' . $s['id_semester'] . '">' . $s['nama_semester'] . '</option>';
+              }
+              ?>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="keterangan_paket">KETERANGAN</label>
+            <textarea name="add_keterangan_paket" id="add_keterangan_paket" cols="30" rows="4" class="form-control"></textarea>
+          </div>
+          <button class="btn btn-success float-right" onclick="addPaket()">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Modal Add Pembayaran -->
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalAddItemPaket" aria-labelledby="modalAddItemPaket" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -140,7 +174,6 @@
 
 <?= $this->section('custom-script') ?>
 <script>
-  // TODO - jquery function: retrieve data, update, and delete paket tagihan & item tagihan - 2021/10/08
   // get data on selected paket tagihan
   function getItemPaket() {
     $("#tbl_master_paket > tbody").empty();
@@ -202,6 +235,9 @@
   }
   getPaket();
 
+  /** 
+   * get item paket berdasarkan id_item
+   */
   function getItemPaketById(id_item) {
     $.ajax({
       url: '<?php base_url() ?>' + '/itempaket/find/' + id_item,
@@ -227,6 +263,36 @@
       },
       error: function(jqXHR) {
         showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  /** 
+   * tambah paket tagihan
+   */
+  function addPaket() {
+    var data_paket = {
+      nama_paket: $('#add_nama_paket').val(),
+      keterangan_paket: $('#add_keterangan_paket').val(),
+      semester_id: parseInt($('#add_semester_id').val()),
+    };
+    $.ajax({
+      url: '<?php base_url() ?>' + '/paket/create',
+      type: 'POST',
+      data: data_paket,
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          showSWAL('success', data.message);
+          $('#add_nama_paket').val('');
+          $('#add_keterangan_paket').val('');
+          window.location.reload();
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR)
       }
     });
   }
