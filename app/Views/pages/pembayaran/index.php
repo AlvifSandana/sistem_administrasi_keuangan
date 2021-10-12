@@ -254,6 +254,7 @@
         type: "GET",
         dataType: "JSON",
         success: function(data) {
+          $("#item_id").empty();
           // console.log(data);
           item_tagihan_terbayar = data.data.item_paket_terbayar;
           // iterate response data and fill to the
