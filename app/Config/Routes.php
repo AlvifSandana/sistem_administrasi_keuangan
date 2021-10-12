@@ -48,9 +48,12 @@ $routes->get('/pembayaran/detail/(:any)', 'PembayaranController::get_detail_pemb
 // route for master mahasiswa
 $routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index');
 
+// route for master keuangan
+$routes->get('/master-keuangan', 'Master/MasterKeuanganController::index');
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
-$routes->get('/master-keuangan', 'PaketController::index');
+$routes->post('/paket/create', 'PaketController::create_paket');
 
 // route for item paket
 $routes->get('/itempaket/find/(:any)', 'ItemPaketController::get_item_paket_by_id/$1');

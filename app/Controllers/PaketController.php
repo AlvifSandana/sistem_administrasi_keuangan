@@ -10,15 +10,6 @@ class PaketController extends BaseController
 {
     public function index()
     {
-        // create model instance
-        $m_paket = new PaketModel();
-        // create request instance
-        $request = \Config\Services::request();
-        // get uri segment for dynamic sidebar active menu
-        $data['uri_segment'] = $request->uri->getSegment(1);
-        $data['data_paket'] = $m_paket->findAll();
-        // return view
-        return view('pages/master/keuangan/index', $data);
     }
 
     public function get_all_paket()
@@ -29,7 +20,7 @@ class PaketController extends BaseController
             // get all data from database
             $result = [
                 'status' => 'success',
-                'message'=> 'data available',
+                'message' => 'data available',
                 'data' => [
                     'paket' => $m_paket->findAll()
                 ]
@@ -39,7 +30,7 @@ class PaketController extends BaseController
         } catch (\Throwable $th) {
             //throw $th;
             $result = [
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => $th->getMessage(),
                 'data' => []
             ];
@@ -74,21 +65,50 @@ class PaketController extends BaseController
 
     public function create_paket()
     {
-        // TODO - 2021/10/04 - create method for create a new paket
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null,
+        ];
         try {
-            // create model instance
-            $m_paket = new PaketModel();
-            // get data from request
-            $data = [
-                'nama_paket' => $this->request->getPost('nama_paket'),
-                'keterangan_paket' => $this->request->getPost('keterangan_paket'),
-                'semester_id' => $this->request->getPost('semester_id')
-            ];
-            // insert data to database
-            $m_paket->insert($data);
-            // return result
-
+            // create validator
+            $validator = \Config\Services::validation();
+            // set validator rules
+            $validator->setRules([
+                'nama_paket' => 'required',
+                'semester_id' => 'required',
+            ]);
+            // validation check
+            $isDataValid = $validator->withRequest($this->request)->run();
+            if ($isDataValid) {
+                // create model instance
+                $m_paket = new PaketModel();
+                // get data from request
+                $data = [
+                    'nama_paket' => $this->request->getPost('nama_paket'),
+                    'keterangan_paket' => $this->request->getPost('keterangan_paket'),
+                    'semester_id' => $this->request->getPost('semester_id')
+                ];
+                // insert data to database
+                $paket = $m_paket->insert($data);
+                if ($paket) {
+                    $result['status'] = 'success';
+                    $result['message'] = 'Berhasil menambahkan paket baru.';
+                    $result['data'] = $paket;
+                    return json_encode($result);
+                } else {
+                    $result['status'] = 'failed';
+                    $result['message'] = 'Gagal menambahkan paket baru.';
+                    $result['data'] = $paket;
+                    return json_encode($result);
+                }
+            } else {
+            }
         } catch (\Throwable $th) {
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
+            $result['data'] = [];
+            return json_encode($result);
         }
     }
 
