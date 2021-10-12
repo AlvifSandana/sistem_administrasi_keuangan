@@ -27,19 +27,19 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <h5 class="h5">Data Paket Tagihan</h5>
+            <h5 class="h5 mb-4">Data Paket Tagihan <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddPaket"><i class="fas fa-plus"></i> Tambah Paket</button></h5>
             <select name="paket" class="form-control" id="select_paket" onchange="getItemPaket()" onload="getItemPaket()">
               <?php
               foreach ($data_paket as $p) {
                 if ($p['id_paket'] == 1) {
                   echo '<option value="' . $p['id_paket'] . '" selected>' . $p['nama_paket'] . '</option>';
-                }else{
+                } else {
                   echo '<option value="' . $p['id_paket'] . '">' . $p['nama_paket'] . '</option>';
                 }
               }
               ?>
             </select>
-            <h5 class="h5 mt-3">Detail Item Paket</h5>
+            <h5 class="h5 mt-3 mb-4">Detail Item Paket <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddItemPaket"><i class="fas fa-plus"></i> Tambah Item Tagihan</button></h5>
             <table class="table table-bordered tbl_master_paket" id="tbl_master_paket">
               <thead class="text-center">
                 <th>ID Item</th>
@@ -56,6 +56,85 @@
       </div>
     </div>
   </div>
+  <!-- Modal Add Pembayaran -->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalAddItemPaket" aria-labelledby="modalAddItemPaket" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tambah Item Tagihan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="paket_id">PAKET</label>
+            <select name="paket_id" id="paket_id" class="form-control">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="dp_nama_item">NAMA ITEM</label>
+            <input type="text" name="nama_item" id="nama_item" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="nominal_item">NOMINAL</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp. </span>
+              </div>
+              <input type="number" class="form-control" name="nominal_item" id="nominal_item" aria-label="NOMINAL ITEM">
+              <div class="input-group-append">
+                <span class="input-group-text">.00</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mb-4">
+            <label for="keterangan_item">KETERANGAN</label>
+            <textarea class="form-control" name="keterangan_item" id="keterangan_item" cols="30" rows="4"></textarea>
+          </div>
+          <button class="btn btn-success float-right mb-4" onclick="addItemPaket()">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Edit Pembayaran -->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalEditItemPaket" aria-labelledby="modalEditItemPaket" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tambah Item Tagihan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="number" name="edit_paket_id" id="edit_paket_id" hidden disabled>
+          <input type="number" name="edit_id_item" id="edit_id_item" hidden disabled>
+          <div class="form-group">
+            <label for="dp_nama_item">NAMA ITEM</label>
+            <input type="text" name="nama_item" id="edit_nama_item" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="nominal_item">NOMINAL</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp. </span>
+              </div>
+              <input type="number" class="form-control" name="edit_nominal_item" id="edit_nominal_item" aria-label="NOMINAL ITEM">
+              <div class="input-group-append">
+                <span class="input-group-text">.00</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mb-4">
+            <label for="keterangan_item">KETERANGAN</label>
+            <textarea class="form-control" name="keterangan_item" id="edit_keterangan_item" cols="30" rows="4"></textarea>
+          </div>
+          <button class="btn btn-warning float-right mb-4" onclick="updateItemPaket()">Perbarui</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <?= $this->endSection() ?>
 
@@ -68,12 +147,11 @@
     $.ajax({
       url: "<?php base_url() ?>" + "/itempaket/" + $('select#select_paket').children('option:selected').val(),
       type: "GET",
+      dataType: "JSON",
       success: function(data) {
-        var response = JSON.parse(data);
-        console.log(response);
-        console.log(response.status);
+        var response = data;
         if (response.status != "success") {
-          alert(data.message);
+          showSWAL('error', data.message);
         } else {
           var row_item_tagihan = "";
           var total_tagihan = 0;
@@ -85,11 +163,11 @@
               <td class="text-left">Rp. ${numformat.format(parseInt(response.data[index].nominal_item))}</td>
               <td>${response.data[index].keterangan_item}</td>
               <td>
-                <button class="btn btn-sm btn-warning"><i class="far fa-edit"></i></button>
-                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalEditItemPaket" onclick="getItemPaketById(${response.data[index].id_item})"><i class="far fa-edit"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItemPaket(${response.data[index].id_item})"><i class="fas fa-trash"></i></button>
               </td>
               </tr>`;
-              total_tagihan += parseInt(response.data[index].nominal_item);
+            total_tagihan += parseInt(response.data[index].nominal_item);
           }
           Intl
           $("#tbl_master_paket > tbody").append(row_item_tagihan);
@@ -97,7 +175,154 @@
         }
       },
       error: function(jqXHR) {
-        console.log(jqXHR)
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  /** 
+   * get paket
+   */
+  function getPaket() {
+    $.ajax({
+      url: '<?php base_url() ?>' + '/paket/all',
+      type: 'GET',
+      dataType: 'JSON',
+      success: function(data) {
+        var paket = ``;
+        for (let index = 0; index < data.data.paket.length; index++) {
+          paket += `<option value="${data.data.paket[index].id_paket}">${data.data.paket[index].nama_paket}</option>`;
+        }
+        $('#paket_id').append(paket);
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+  getPaket();
+
+  function getItemPaketById(id_item) {
+    $.ajax({
+      url: '<?php base_url() ?>' + '/itempaket/find/' + id_item,
+      type: 'GET',
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          // clean input
+          $('#edit_id_item').val(0);
+          $('#edit_paket_id').val(0);
+          $('#edit_nama_item').val('');
+          $('#edit_nominal_item').val(0);
+          $('#edit_keterangan_item').val('data.data.keterangan_item');
+          // fill with data
+          $('#edit_id_item').val(data.data.id_item);
+          $('#edit_paket_id').val(data.data.paket_id);
+          $('#edit_nama_item').val(data.data.nama_item);
+          $('#edit_nominal_item').val(parseInt(data.data.nominal_item));
+          $('#edit_keterangan_item').val(data.data.keterangan_item);
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  /** 
+   * tambah item paket
+   */
+  function addItemPaket() {
+    var data_item = {
+      paket_id: parseInt($('#paket_id').val()),
+      nama_item: $('#nama_item').val(),
+      nominal_item: parseInt($('#nominal_item').val()),
+      keterangan_item: $('#keterangan_item').val(),
+    };
+    $.ajax({
+      url: '<?php base_url() ?>' + '/itempaket/create',
+      type: 'POST',
+      data: data_item,
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          showSWAL('success', data.message);
+          $("#tbl_master_paket > tbody").empty();
+          getItemPaket();
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  /** 
+   * hapus item paket
+   */
+  function deleteItemPaket(id_item) {
+    Swal.fire({
+      title: 'Apakah Anda yakin ingin menghapus item ini?',
+      text: "Tindakan ini tidak dapat dikembalikan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Hapus'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '<?php base_url() ?>' + '/itempaket/delete/' + id_item,
+          type: 'DELETE',
+          dataType: 'JSON',
+          success: function(data) {
+            if (data.status != 'success') {
+              showSWAL('error', data.message);
+            } else {
+              showSWAL('success', data.message);
+              $("#tbl_master_paket > tbody").empty();
+              getItemPaket();
+            }
+          },
+          error: function(jqXHR) {
+            showSWAL('error', jqXHR);
+          }
+        });
+      }
+    });
+  }
+
+  /** 
+   * update item paket
+   */
+  function updateItemPaket() {
+    var data_item = {
+      id_item: parseInt($('#edit_id_item').val()),
+      paket_id: parseInt($('#edit_paket_id').val()),
+      nama_item: $('#edit_nama_item').val(),
+      nominal_item: parseInt($('#edit_nominal_item').val()),
+      keterangan_item: $('#edit_keterangan_item').val(),
+    };
+    $.ajax({
+      url: '<?php base_url() ?>' + '/itempaket/update/' + data_item.id_item,
+      type: 'POST',
+      data: data_item,
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          showSWAL('success', data.message);
+          $("#tbl_master_paket > tbody").empty();
+          getItemPaket();
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
       }
     });
   }

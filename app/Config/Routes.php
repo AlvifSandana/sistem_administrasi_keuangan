@@ -53,9 +53,11 @@ $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->get('/master-keuangan', 'PaketController::index');
 
 // route for item paket
-$routes->get('/itempaket/(:any)', 'ItemPaketController::get_all_item_by_id_paket/$1');
-$routes->put('itempaket/update/(:any)', 'ItemPaketController::update_item_paket/$1');
+$routes->get('/itempaket/find/(:any)', 'ItemPaketController::get_item_paket_by_id/$1');
+$routes->post('/itempaket/update/(:any)', 'ItemPaketController::update_item_paket/$1');
 $routes->delete('/itempaket/delete/(:any)', 'ItemPaketController::delete_item_paket/$1');
+$routes->post('/itempaket/create', 'ItemPaketController::add_item_paket');
+$routes->get('/itempaket/(:any)', 'ItemPaketController::get_all_item_by_id_paket/$1');
 
 /*
  * --------------------------------------------------------------------

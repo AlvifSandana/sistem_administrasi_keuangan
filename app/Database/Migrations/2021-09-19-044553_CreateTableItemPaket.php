@@ -39,7 +39,7 @@ class CreateTableItemPaket extends Migration
             ],
         ]);
         $this->forge->addKey('id_item', true);
-        $this->forge->addForeignKey('paket_id', 'paket', 'id_paket', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('paket_id', 'paket', 'id_paket', '','CASCADE');
         $this->forge->createTable('item_paket');
     }
 

@@ -23,7 +23,7 @@ class CreateTableTagihan extends Migration
                 'type'          => 'INT',
                 'unsigned'          => true,
             ],
-            'tangggal_tagihan' => [
+            'tanggal_tagihan' => [
                 'type'          => 'DATE',
             ],
             'keterangan_tagihan' => [

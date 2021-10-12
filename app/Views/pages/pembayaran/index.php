@@ -148,7 +148,7 @@
     </div>
     <!-- Modal Detail Pembayaran per item -->
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalDetailPembayaranPerItem" aria-labelledby="modalDetailPembayaranPerItem" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Detail Pembayaran</h5>
@@ -181,7 +181,6 @@
 
 <?= $this->section('custom-script') ?>
 <script>
-  // TODO - SPESIFIK PER ITEM TAGIHAN UNTUK KETERANGAN PEMBAYARAN - 2021/10/11
   var num_format = Intl.NumberFormat();
   var item_tagihan_terbayar = [];
   var nama_paket = "";
@@ -276,8 +275,8 @@
             pembayaran_row += `
             <td>Rp ${num_format.format(nominal_item_terbayar)}</td>
             <td>
-              <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${data.data.item_paket[index].id_item}, '${data.data.item_paket[index].nama_item}')">
-                <i class="fas fa-info" ttile="Detail"></i>
+              <button class="btn btn-sm btn-primary" ttile="Detail" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${data.data.item_paket[index].id_item}, '${data.data.item_paket[index].nama_item}')">
+                <i class="fas fa-info"></i>
               </button>
             </td></tr>`;
             total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
@@ -335,6 +334,7 @@
         $("#btn_tambah_pembayaran").prop('disabled', false);
         $("#btn_tambah_pembayaran").html('Tambah Pembayaran');
         showSWAL(response.status, response.message);
+        searchPembayaran();
       },
       error: function(jqXHR) {
         console.log(jqXHR)
@@ -357,7 +357,7 @@
   /**
    * show modal detail pembayaran from item
    */
-  function showDetailPembayaranItem(item_id, nama_item){
+  function showDetailPembayaranItem(item_id, nama_item) {
     var row_pembayaran = ``;
     $("#tbl_detail_pembayaran_per_item > tbody").empty();
     $("#dp_nama_item").val(nama_item);
