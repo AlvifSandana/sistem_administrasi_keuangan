@@ -28,7 +28,7 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <h5 class="h5">Data Mahasiswa <button class="btn btn-success float-right"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
+            <h5 class="h5">Data Mahasiswa <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddMahasiswa"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
             <table class="table mt-3" id="tbl_list_mhs">
               <thead class="text-center">
                 <th>ID</th>
@@ -38,7 +38,7 @@
               </thead>
               <tbody class="text-center">
                 <?php foreach ($data_mahasiswa as $m) {
-                  echo '<tr data-idmhs="'.$m['id_mahasiswa'].'"><td>'.$m['id_mahasiswa'].'</td><td>'.$m['nim'].'</td><td>'.$m['nama_mahasiswa'].'</td><td><button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger mx-1"><i class="fas fa-trash"></i></button></td></tr>';
+                  echo '<tr data-idmhs="' . $m['id_mahasiswa'] . '"><td>' . $m['id_mahasiswa'] . '</td><td>' . $m['nim'] . '</td><td>' . $m['nama_mahasiswa'] . '</td><td><button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdateMahasiswa" onclick="fillModalUpdateForm(' . $m["id_mahasiswa"] . ')"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger mx-1" onclick="deleteMahasiswa(' . $m['id_mahasiswa'] . ')"><i class="fas fa-trash"></i></button></td></tr>';
                 } ?>
               </tbody>
             </table>
@@ -58,51 +58,213 @@
     </div>
   </div>
 </section>
-<!-- Model Create new Data Mahasiswa -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalCreatePembayaran" aria-labelledby="modalCreatePembayaran" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Tambah Data Mahasiswa</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="<?php base_url() ?>/mahasiswa/create" method="post">
-              <input type="number" name="paket_id" id="paket_id" hidden>
-              <input type="number" name="mahasiswa_id" id="mahasiswa_id" hidden>
-              <div class="form-group">
-                <label for="itempembayaran">ITEM PAKET</label>
-                <select class="form-control" name="item_id" id="item_id"></select>
-              </div>
-              <div class="form-group">
-                <label for="tanggal_pembayaran">TANGGAL PEMBAYARAN</label>
-                <input type="date" class="form-control" name="tanggal_pembayaran" id="tanggal_pembayaran">
-              </div>
-              <div class="form-group">
-                <label for="">NOMINAL PEMBAYARAN</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">Rp. </span>
-                  </div>
-                  <input type="number" class="form-control" name="nominal_pembayaran" id="nominal_pembayaran" aria-label="NOMINAL PEMBAYARAN">
-                  <div class="input-group-append">
-                    <span class="input-group-text">.00</span>
-                  </div>
-                </div>
-              </div>
-              <p id="message"></p>
-              <button class="btn btn-success float-right" id="btn_tambah_pembayaran" style="width: 200px;" onclick="createPembayaran()">Tambah Pembayaran</button>
-            </form>
-          </div>
+<!-- Modal Create new Data Mahasiswa -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalAddMahasiswa" aria-labelledby="modalAddMahasiswa" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Tambah Data Mahasiswa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="nim">NIM</label>
+          <input type="text" name="nim" id="nim" class="form-control">
         </div>
+        <div class="form-group">
+          <label for="nama_mahasiswa">NAMA MAHASISWA</label>
+          <input type="text" name="nama_mahasiswa" id="nama_mahasiswa" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="progdi_id">PROGRAM STUDI</label>
+          <select name="progdi_id" id="progdi_id" class="form-control">
+            <?php
+            foreach ($data_progdi as $p) {
+              echo '<option value="' . $p['id_progdi'] . '">' . $p['nama_progdi'] . '</option>';
+            }
+            ?>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="angkatan_id">ANGKATAN</label>
+          <select name="angkatan_id" id="angkatan_id" class="form-control">
+            <?php
+            foreach ($data_angkatan as $a) {
+              echo '<option value="' . $a['id_angkatan'] . '">' . $a['nama_angkatan'] . '</option>';
+            }
+            ?>
+          </select>
+        </div>
+        <button class="btn btn-success float-right" onclick="createMahasiswa()">Tambah</button>
       </div>
     </div>
+  </div>
+</div>
+<!-- Modal Update Data Mahasiswa -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalUpdateMahasiswa" aria-labelledby="modalUpdateMahasiswa" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Data Mahasiswa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" name="id_mahasiswa" id="id_mahasiswa" disabled hidden>
+        <div class="form-group">
+          <label for="nim">NIM</label>
+          <input type="text" name="update_nim" id="update_nim" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="nama_mahasiswa">NAMA MAHASISWA</label>
+          <input type="text" name="nama_mahasiswa" id="update_nama_mahasiswa" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="progdi_id">PROGRAM STUDI</label>
+          <select name="progdi_id" id="update_progdi_id" class="form-control">
+            <?php
+            foreach ($data_progdi as $p) {
+              echo '<option value="' . $p['id_progdi'] . '">' . $p['nama_progdi'] . '</option>';
+            }
+            ?>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="angkatan_id">ANGKATAN</label>
+          <select name="angkatan_id" id="update_angkatan_id" class="form-control">
+            <?php
+            foreach ($data_angkatan as $a) {
+              echo '<option value="' . $a['id_angkatan'] . '">' . $a['nama_angkatan'] . '</option>';
+            }
+            ?>
+          </select>
+        </div>
+        <button class="btn btn-warning float-right" onclick="updateMahasiswa()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('custom-script') ?>
 <script>
-  // TODO - jquery script for show details, edit, retrieve data, and delete data mahasiswa - 2021/10/08
+  function createMahasiswa() {
+    var data_mahasiswa = {
+      nim: $('#nim').val(),
+      nama_mahasiswa: $('#nama_mahasiswa').val(),
+      progdi_id: parseInt($('#progdi_id').val()),
+      angkatan_id: parseInt($('#angkatan_id').val()),
+    };
+    console.log(data_mahasiswa);
+    $.ajax({
+      url: '<?php base_url() ?>' + '/master-mahasiswa/create',
+      type: 'POST',
+      data: data_mahasiswa,
+      dataType: 'JSON',
+      success: function(data) {
+        console.log(data);
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          showSWAL('success', data.message);
+          $('#nim').val('');
+          $('#nama_mahasiswa').val('');
+          window.location.reload();
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR.error);
+      }
+    });
+  }
+
+  function fillModalUpdateForm(id_mahasiswa) {
+    $.ajax({
+      url: '<?php base_url() ?>' + '/mahasiswa/get/' + id_mahasiswa,
+      type: 'GET',
+      dataType: 'JSON',
+      success: function(data) {
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          // clear form
+          $('#id_mahasiswa').val('');
+          $('#update_nim').val('');
+          $('#update_nama_mahasiswa').val('');
+          // fill data
+          $('#id_mahasiswa').val(data.data.id_mahasiswa);
+          $('#update_nim').val(data.data.nim);
+          $('#update_nama_mahasiswa').val(data.data.nama_mahasiswa);
+          $(`#update_progdi_id option[value="${data.data.progdi_id}"]`).prop('selected', true);
+          $(`#update_angkatan_id option[value="${data.data.angkatan_id}"]`).prop('selected', true);
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  function updateMahasiswa() {
+    var data_mahasiswa = {
+      nim: $('#update_nim').val(),
+      nama_mahasiswa: $('#update_nama_mahasiswa').val(),
+      progdi_id: parseInt($('#update_progdi_id').val()),
+      angkatan_id: parseInt($('#update_angkatan_id').val()),
+    };
+
+    console.log(data_mahasiswa);
+    $.ajax({
+      url: '<?php base_url() ?>' + '/mahasiswa/update/' + $('#id_mahasiswa').val(),
+      type: 'POST',
+      data: data_mahasiswa,
+      dataType: 'JSON',
+      success: function(data) {
+        console.log(data);
+        if (data.status != 'success') {
+          showSWAL('error', data.message);
+        } else {
+          showSWAL('success', data.message);
+        }
+      },
+      error: function(jqXHR) {
+        showSWAL('error', jqXHR);
+      }
+    });
+  }
+
+  function deleteMahasiswa(id_mahasiswa) {
+    Swal.fire({
+      title: 'Apakah Anda yakin ingin menghapus data ini?',
+      text: "Tindakan ini tidak dapat dikembalikan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Hapus'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '<?php base_url() ?>' + '/mahasiswa/delete/' + id_mahasiswa,
+          type: 'DELETE',
+          dataType: 'JSON',
+          success: function(data) {
+            if (data.status != 'success') {
+              showSWAL('error', data.message);
+            } else {
+              showSWAL('success', data.message);
+            }
+          },
+          error: function(jqXHR) {
+            showSWAL('error', jqXHR);
+          }
+        });
+      }
+    });
+  }
 </script>
 <?= $this->endSection() ?>

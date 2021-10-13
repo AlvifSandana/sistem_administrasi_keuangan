@@ -11,7 +11,6 @@ class MahasiswaController extends BaseController
 {
     public function index()
     {
-        
     }
 
     public function import_data_mahasiswa()
@@ -42,18 +41,49 @@ class MahasiswaController extends BaseController
             // return json
             return json_encode($result);
         } catch (\Throwable $th) {
-            $result= [
+            $result = [
                 'status' => 'error',
-                'message'=> $th->getMessage(),
+                'message' => $th->getMessage(),
                 'data' => []
             ];
             return json_encode($result);
         }
     }
 
+    public function get_mahasiswa_by_id($id_mahasiswa)
+    {
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null,
+        ];
+        try {
+            // create model instance
+            $m_mahasiswa = new MahasiswaModel();
+            // get data
+            $mahasiswa = $m_mahasiswa->find($id_mahasiswa);
+            if ($mahasiswa > 0) {
+                $result['status'] = 'success';
+                $result['message'] = 'Data available';
+                $result['data'] = $mahasiswa;
+                return json_encode($result);
+            } else {
+                $result['status'] = 'failed';
+                $result['message'] = 'Data not available';
+                $result['data'] = $mahasiswa;
+                return json_encode($result);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
+            $result['data'] = $th;
+            return json_encode($result);
+        }
+    }
+
     public function create_mahasiswa()
     {
-        // TODO - create method for mahasiswa
         try {
             // create model instance
             $m_mahasiswa = new MahasiswaModel();
@@ -72,37 +102,100 @@ class MahasiswaController extends BaseController
         }
     }
 
+    /**
+     * Update data mahasiswa by id
+     * 
+     * @return JSON
+     */
     public function update_mahasiswa($id)
     {
-        // TODO - create method for update mahasiswa by NIM
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null,
+        ];
         try {
-            // create model instance
-            $m_mahasiswa = new MahasiswaModel();
-            // get data from request
-            $data = [
-                'nim' => $this->request->getPost('nim'),
-                'nama_mahasiswa' => $this->request->getPost('nama_mahasiswa'),
-                'progdi_id' => $this->request->getPost('progdi_id'),
-                'angkatan_id' => $this->request->getPost('angkatan_id')
-            ];
-            // update data mahasiswa by nim
-            $m_mahasiswa->update($id, $data);
-            // return 
+            // create validator
+            $validator = \Config\Services::validation();
+            // set validation rules
+            $validator->setRules([
+                'nim' => 'required',
+                'nama_mahasiswa' => 'required',
+                'progdi_id' => 'required',
+                'angkatan_id' => 'required',
+            ]);
+            // validation chack 
+            $isDataValid = $validator->withRequest($this->request)->run();
+            if ($isDataValid) {
+                // create model instance
+                $m_mahasiswa = new MahasiswaModel();
+                // update data
+                $update_mahasiswa = $m_mahasiswa->update($id, [
+                    'nim' => $this->request->getPost('nim'),
+                    'nama_mahasiswa' => $this->request->getPost('nama_mahasiswa'),
+                    'progdi_id' => $this->request->getPost('progdi_id'),
+                    'angkatan_id' => $this->request->getPost('angkatan_id'),
+                ]);
+                if ($update_mahasiswa) {
+                    $result['status'] = 'success';
+                    $result['message'] = 'Berhasil memperbarui data mahasiswa dengan NIM ' . $this->request->getPost('nim');
+                    $result['data'] = $update_mahasiswa;
+                    return json_encode($result);
+                } else {
+                    $result['status'] = 'failed';
+                    $result['message'] = 'Gagal memperbarui data mahasiswa dengan NIM ' . $this->request->getPost('nim');
+                    $result['data'] = $update_mahasiswa;
+                    return json_encode($result);
+                }
+            } else {
+                $result['status'] = 'failed';
+                $result['message'] = 'Validasi gagal. Mohon isi form dengan lengkap!';
+                $result['data'] = $validator->getErrors();
+                return json_encode($result);
+            }
         } catch (\Throwable $th) {
             //throw $th;
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
+            $result['data'] = $th;
+            return json_encode($result);
         }
     }
 
+    /**
+     * Delete data mahasiswa by id
+     * 
+     * @return JSON
+     */
     public function delete_mahasiswa($id)
     {
-        // TODO - create method for delete mahasiswa by NIM
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null,
+        ];
         try {
             // craete model instance
             $m_mahasiswa = new MahasiswaModel();
             // delete data mahasiswa by nim
-            $m_mahasiswa->delete($id);
+            $delete_mahasiswa = $m_mahasiswa->delete($id);
+            if ($delete_mahasiswa) {
+                $result['status'] = 'success';
+                $result['message'] = 'Berhasil menghapus data mahasiswa dengan ID ' . $id;
+                $result['data'] = $delete_mahasiswa;
+                return json_encode($result);
+            } else {
+                $result['status'] = 'failed';
+                $result['message'] = 'Gagal menghapus data mahasiswa dengan ID ' . $id;
+                $result['data'] = $delete_mahasiswa;
+                return json_encode($result);
+            }
         } catch (\Throwable $th) {
             //throw $th;
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
+            $result['data'] = $th;
+            return json_encode($result);
         }
     }
 }

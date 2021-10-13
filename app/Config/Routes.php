@@ -45,8 +45,14 @@ $routes->get('/pembayaran/detail-item-tagihan/(:any)', 'PembayaranController::ge
 $routes->post('/pembayaran/create', 'PembayaranController::add_pembayaran');
 $routes->get('/pembayaran/detail/(:any)', 'PembayaranController::get_detail_pembayaran_by_nim/$1');
 
+// routes for mahasiswa
+$routes->get('/mahasiswa/get/(:any)', 'MahasiswaController::get_mahasiswa_by_id/$1');
+$routes->post('/mahasiswa/update/(:any)', 'MahasiswaController::update_mahasiswa/$1');
+$routes->delete('/mahasiswa/delete/(:any)', 'MahasiswaController::delete_mahasiswa/$1');
+
 // route for master mahasiswa
 $routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index');
+$routes->post('/master-mahasiswa/create', 'Master/MasterMahasiswaController::create_mahasiswa');
 
 // route for master keuangan
 $routes->get('/master-keuangan', 'Master/MasterKeuanganController::index');
