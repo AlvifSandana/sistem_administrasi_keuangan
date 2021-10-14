@@ -86,4 +86,62 @@ class MasterMahasiswaController extends BaseController
             return json_encode($result);
         }
     }
+
+    /**
+     * Import dari file excel (.xlsx)
+     */
+    public function import()
+    {
+        $result = [
+            'status' => '',
+            'message' => '',
+            'data' => null,
+        ];
+        try {
+            // get file from POST requst
+            $file = $this->request->getFile('file_import');
+            // dd($file->getTempName());
+            // validate uploaded file
+            if (!$file->isValid()) {
+                // throw error 
+                $result['status'] = 'error';
+                $result['message'] = $file->getErrorString() . '(' . $file->getError() . ')';
+                throw new \RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                return json_encode($result);
+            } else {
+                // random filename
+                $fn = $file->getRandomName();
+                // move file to uploaded folder
+                $path = $file->store('import/', $fn);
+                // create file reader
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                // load file
+                $reader->setLoadSheetsOnly(['DATA IMPORT']);
+                $sheet = $reader->load(WRITEPATH.'uploads/'.$path);
+                $active_sheet = $sheet->getActiveSheet()->toArray(null, true, true, true);
+                // processing data
+                $data_mahasiswa = [];
+                foreach ($active_sheet as $idx => $data) {
+                    // bypass first row
+                    if($idx ==  1){continue;}
+                    array_push($data_mahasiswa, [
+                        'nim' => $data['A'],
+                        'nama_mahasiswa' => $data['B'],
+                        'program_studi' => $data['C'],
+                        'angkatan' => $data['D'],
+                        'paket_tagihan' => $data['E'],
+                    ]);
+                }
+                // test data
+                $result['status'] = 'success';
+                $result['message'] = 'File berhasil diupload';
+                $result['data'] = $active_sheet;
+                return json_encode($result);
+            }
+        } catch (\Throwable $th) {
+            $result['status'] = 'error';
+            $result['message'] = $th->getMessage();
+            return json_encode($result);
+        }
+    }
 }

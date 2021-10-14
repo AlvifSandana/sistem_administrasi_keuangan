@@ -50,8 +50,18 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <h5 class="h5">Import dan Export Data</h5>
-            <!-- TODO - create 2 button input for import and export data -->
+            <h5 class="h5 mb-3">Import dan Export Data</h5>
+            <form action="<?php base_url() ?>/master-mahasiswa/import/upload" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="file_import" id="file_import" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`">
+                <label class="custom-file-label" for="file_import">Choose file (.xlsx)</label>
+              </div>
+              <div class="input-group-append">
+                <button class="btn btn-success" type="submit" >Import</button>
+              </div>
+            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -263,6 +273,26 @@
             showSWAL('error', jqXHR);
           }
         });
+      }
+    });
+  }
+
+  function uploadImportFile() {
+    var formData = new FormData();
+    formData.append('file', $('#file_import')[0].files[0]);
+
+    $.ajax({
+      url: '<?php base_url() ?>'+ '/master-mahasiswa/import/upload',
+      type: 'POST',
+      data: formData,
+      processData: false, // tell jQuery not to process the data
+      contentType: 'multipart/form-data',
+      dataType: 'JSON',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function(jqXHR){
+        console.log(jqXHR);
       }
     });
   }

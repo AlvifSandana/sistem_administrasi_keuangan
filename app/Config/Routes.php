@@ -53,6 +53,7 @@ $routes->delete('/mahasiswa/delete/(:any)', 'MahasiswaController::delete_mahasis
 // route for master mahasiswa
 $routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index');
 $routes->post('/master-mahasiswa/create', 'Master/MasterMahasiswaController::create_mahasiswa');
+$routes->post('/master-mahasiswa/import/upload', 'Master/MasterMahasiswaController::import');
 
 // route for master keuangan
 $routes->get('/master-keuangan', 'Master/MasterKeuanganController::index');

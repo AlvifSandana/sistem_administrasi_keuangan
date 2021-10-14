@@ -114,9 +114,8 @@
       dataType: "JSON",
       success: function(data) {
         if (data == null || data.status == "failed") {
-          alert("Data tidak ditemukan");
+          showSWAL('error', data.message);
         } else {
-          console.log(data);
           $("#list_tagihan").empty();
           // hasil pencarian, baris baru
           var row = `
@@ -167,7 +166,7 @@
       },
       error: function(jqXHR) {
         console.log(jqXHR);
-        alert("Data tidak ditemukan");
+        showSWAL('error', jqXHR);
       }
     });
   }
