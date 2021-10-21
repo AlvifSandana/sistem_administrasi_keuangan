@@ -16,6 +16,7 @@ class TagihanSeeder extends Seeder
                 'mahasiswa_id' => 1,
                 'tanggal_tagihan' => '2021-10-11',
                 'keterangan_tagihan' => 'Tagihan Paket A Semester 1',
+                'status_tagihan' => 'Belum Lunas',
                 'user_id' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
