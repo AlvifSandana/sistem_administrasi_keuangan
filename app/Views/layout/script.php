@@ -14,7 +14,8 @@
 <script src="assets/js/adminlte.js"></script>
 <!-- sweetalert2 -->
 <script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
-<!-- datatable -->
+<!-- select2 -->
+<script src="plugins/select2/js/select2.full.min.js"></script>
 
 <!-- sweetalert2 custom -->
 <script>
