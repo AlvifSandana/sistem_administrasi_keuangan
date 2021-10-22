@@ -14,7 +14,7 @@ class TagihanModel extends Model
     protected $returnType           = 'array';
     protected $useSoftDeletes       = false;
     protected $protectFields        = true;
-    protected $allowedFields        = ['paket_id', 'mahasiswa_id', 'tanggal_tagihan', 'keterangan_tagihan', 'user_id'];
+    protected $allowedFields        = ['paket_id', 'mahasiswa_id', 'tanggal_tagihan', 'keterangan_tagihan', 'status_tagihan', 'user_id'];
 
     // Dates
     protected $useTimestamps        = true;
