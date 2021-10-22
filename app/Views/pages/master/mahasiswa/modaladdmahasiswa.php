@@ -37,8 +37,17 @@
             ?>
           </select>
         </div>
+        <div class="form-group mb-3">
+          <label for="paket_tagihan">PAKET TAGIHAN</label><br>
+          <select class="form-control customselect" name="paket_tagihan" id="paket_tagihan" multiple="multiple" style="width: 100%;">
+            <?php foreach ($data_paket as $pt) {
+              echo '<option value="' . $pt['id_paket'] . '">' . $pt['nama_paket'] . '</option>';
+            } ?>
+          </select>
+        </div>
         <button class="btn btn-success float-right" onclick="createMahasiswa()">Tambah</button>
       </div>
     </div>
   </div>
+</div>
 </div>

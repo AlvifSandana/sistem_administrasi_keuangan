@@ -76,12 +76,19 @@
 
 <?= $this->section('custom-script') ?>
 <script>
+  $('.customselect').select2({
+    width: 'resolve',
+  });
+
   function createMahasiswa() {
+    var today = new Date();
     var data_mahasiswa = {
       nim: $('#nim').val(),
       nama_mahasiswa: $('#nama_mahasiswa').val(),
       progdi_id: parseInt($('#progdi_id').val()),
       angkatan_id: parseInt($('#angkatan_id').val()),
+      paket_tagihan: $('#paket_tagihan').val(),
+      tanggal_tagihan: `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`,
     };
     console.log(data_mahasiswa);
     $.ajax({
