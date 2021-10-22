@@ -7,6 +7,7 @@ use App\Models\AngkatanModel;
 use App\Models\MahasiswaModel;
 use App\Models\PaketModel;
 use App\Models\ProgdiModel;
+use App\Models\TagihanModel;
 
 class MasterMahasiswaController extends BaseController
 {
@@ -16,6 +17,7 @@ class MasterMahasiswaController extends BaseController
         $m_mahasiswa = new MahasiswaModel();
         $m_angkatan = new AngkatanModel();
         $m_progdi = new ProgdiModel();
+        $m_paket = new PaketModel();
         // create request instance
         $request = \Config\Services::request();
         // get uri segment for dynamic sidebar active item
@@ -24,6 +26,7 @@ class MasterMahasiswaController extends BaseController
         $data['data_mahasiswa'] = $m_mahasiswa->findAll();
         $data['data_angkatan'] = $m_angkatan->findAll();
         $data['data_progdi'] = $m_progdi->findAll();
+        $data['data_paket'] = $m_paket->findAll();
         // return view
         return view('pages/master/mahasiswa/index', $data);
     }
@@ -49,12 +52,14 @@ class MasterMahasiswaController extends BaseController
                 'nama_mahasiswa' => 'required',
                 'progdi_id' => 'required',
                 'angkatan_id' => 'required',
+                'paket_tagihan' => 'required',
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
             if ($isDataValid) {
                 // create model instance
                 $m_mahasiswa = new MahasiswaModel();
+                $m_tagihan = new TagihanModel();
                 // insert data
                 $mahasiswa = $m_mahasiswa->insert([
                     'nim' => $this->request->getPost('nim'),
@@ -63,6 +68,22 @@ class MasterMahasiswaController extends BaseController
                     'angkatan_id' => $this->request->getPost('angkatan_id'),
                 ]);
                 if ($mahasiswa) {
+                    // get id_mahasiswa
+                    $id_mahasiswa = $mahasiswa;
+                    // get paket_tagihan id and tanggal_tagihan
+                    $paket_tagihan = $this->request->getPost('paket_tagihan');
+                    $tanggal_tagihan = $this->request->getPost('tanggal_tagihan');
+                    // iterate and insert 
+                    for ($i = 0; $i < count($paket_tagihan); $i++) {
+                        $m_tagihan->insert([
+                            'paket_id' => (int) $paket_tagihan[$i],
+                            'mahasiswa_id' => $id_mahasiswa,
+                            'tanggal_tagihan' => $tanggal_tagihan,
+                            'keterangan_tagihan' => '-',
+                            'status_tagihan' => 'belum_lunas',
+                            'user_id' => 1,
+                        ]);
+                    }
                     $result['status'] = 'success';
                     $result['message'] = 'Berhasil menambahkan data mahasiswa.';
                     $result['data'] = $mahasiswa;
@@ -117,13 +138,15 @@ class MasterMahasiswaController extends BaseController
                 $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
                 // load file
                 $reader->setLoadSheetsOnly(['DATA IMPORT']);
-                $sheet = $reader->load(WRITEPATH.'uploads/'.$path);
+                $sheet = $reader->load(WRITEPATH . 'uploads/' . $path);
                 $active_sheet = $sheet->getActiveSheet()->toArray(null, true, true, true);
                 // processing data
                 $data_mahasiswa = [];
                 foreach ($active_sheet as $idx => $data) {
                     // bypass first row
-                    if($idx ==  1){continue;}
+                    if ($idx ==  1) {
+                        continue;
+                    }
                     array_push($data_mahasiswa, [
                         'nim' => $data['A'],
                         'nama_mahasiswa' => $data['B'],
