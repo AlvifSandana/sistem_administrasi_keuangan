@@ -13,16 +13,6 @@ class MahasiswaController extends BaseController
     {
     }
 
-    public function import_data_mahasiswa()
-    {
-        // TODO - create method for import data mahasiswa
-    }
-
-    public function export_data_mahasiswa()
-    {
-        // TODO - create method for export data mahasiswa
-    }
-
     public function get_data_for_create_update_mahasiswa()
     {
         try {

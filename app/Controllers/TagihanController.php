@@ -48,14 +48,14 @@ class TagihanController extends BaseController
                 } else {
                     $result = [
                         "status" => "failed",
-                        "message" => "data not available",
+                        "message" => "Data not available",
                         "data" => [],
                     ];
                 }
             } else {
                 $result = [
                     "status" => "failed",
-                    "message" => "data not available",
+                    "message" => "Data not available",
                     "data" => [],
                 ];
             }
