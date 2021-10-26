@@ -62,6 +62,26 @@
         </div>
       </div>
     </div>
+    <div class="row mb-2">
+      <div class="col">
+        <div class="card" style="visibility: hidden;">
+          <div class="card-body detail-tagihan">
+            <div class="tagihan-1 mb-2">
+              <h5 class="h5">Tagihan nama_paket <span class="badge badge-warning">status_tagihan</span></h5>
+              <table class="table table-hover">
+                <thead>
+                  <th>ITEM TAGIHAN</th>
+                  <th>NOMINAL</th>
+                  <th>TERBAYAR</th>
+                  <th>ACTION</th>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <!-- modal detail tagihan -->
@@ -115,53 +135,44 @@
       success: function(data) {
         if (data == null || data.status == "failed") {
           showSWAL('error', data.message);
-        } else {
-          $("#list_tagihan").empty();
-          // hasil pencarian, baris baru
-          var row = `
-          <tr class="">
-            <td>${data.data.id_tagihan}</td>
-            <td>${data.data.nim}</td>
-            <td>${data.data.nama_mahasiswa}</td>
-            <td>
-              <button class="btn btn-success btn-sm" id="btn_detail" data-toggle="modal" data-target="#modalDetailTagihan"><i class="fas fa-info"></i></button>
-            </td>
-          </tr>`;
-          // tampilkan hasil pencarian
-          $("#search_result").css('visibility', 'visible');
-          $("#list_tagihan").append(row);
-          // hasil pencarian, detail tagihan mahasiswa
-          $("#detail_nim").val(data.data.nim);
-          $("#detail_nama_mhs").val(data.data.nama_mahasiswa);
-          $("#detail_nama_paket").val(data.data.detail_paket.nama_paket);
-          // hasil pencarian, item tagihan
+        } else {          
+          var detail_tagihan = data.detail_tagihan;
+          // total tagihan & total terbayar
           var total_tagihan = 0;
           var total_terbayar = 0;
+          var new_tagihan = ``;
+          var new_row = ``;
           // number format
           var numFormat = Intl.NumberFormat();
-          // generate baris detail item paket 
-          for (let index = 0; index < data.data.item_paket.length; index++) {
-            total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
-            var row1 = `
-            <td>${data.data.item_paket[index].id_item}</td>
-            <td>${data.data.item_paket[index].nama_item}</td>
-            <td class="text-left">Rp ${numFormat.format(parseInt(data.data.item_paket[index].nominal_item))}</td>`;
-            // iterasi item paket terbayar sesuai id_item tagihan
-            var total_nominal_item_terbayar = 0;
-            for (let index1 = 0; index1 < data.data.item_paket_terbayar.length; index1++) {
-              if (data.data.item_paket[index].id_item == data.data.item_paket_terbayar[index1].item_id) {
-                total_nominal_item_terbayar += parseInt(data.data.item_paket_terbayar[index1].nominal_pembayaran);
-              }
+          // iterate data.detail_tagihan
+          for (let index = 0; index < detail_tagihan.length; index++) {
+            for (let i = 0; i < detail_tagihan[index].detail_item_paket.length; i++) {
+              const element = detail_tagihan[index].detail_item_paket[i];
+              new_row += `
+              <tr>
+                <td>${detail_tagihan[index].detail_item_paket[i].nama_item}</td>
+                <td>${detail_tagihan[index].detail_item_paket[i].nominal_item}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              `;
             }
-            total_terbayar += total_nominal_item_terbayar;
-            $("#list_item").append(`<tr>${row1}<td>Rp. ${numFormat.format(total_nominal_item_terbayar)}</td><td>${data.data.item_paket[index].keterangan_item}</td></tr>`);
+            new_tagihan += `
+            <div class="tagihan-${index} mb-2">
+              <h5 class="h5">Tagihan ${detail_tagihan[index].data_paket[0].nama_paket} <span class="badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
+              <table class="table table-hover">
+                <thead>
+                  <th>ITEM TAGIHAN</th>
+                  <th>NOMINAL</th>
+                  <th>TERBAYAR</th>
+                  <th>ACTION</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>`;
           }
-          var row_total = `<tr class="font-weight-bold">
-          <td colspan="2">Total</td>
-          <td>Rp ${numFormat.format(total_tagihan)}</td>
-          <td>Rp ${numFormat.format(total_terbayar)}</td>
-          `;
-          $("#list_item").append(row_total);
         }
       },
       error: function(jqXHR) {

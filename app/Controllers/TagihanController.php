@@ -47,7 +47,7 @@ class TagihanController extends BaseController
                         $tmp_tagihan[$i]['detail_paket'] = $paket;
                         $tmp_tagihan[$i]['detail_item_paket'] = $tmp_item_paket;
                     }
-
+                    // result
                     $result = [
                         'status' => 'success',
                         'message' => 'Data available',
@@ -56,18 +56,6 @@ class TagihanController extends BaseController
                             'detail_tagihan' => $tmp_tagihan,
                         ],
                     ];
-                    // $result = [
-                    //     "status" => "success",
-                    //     "message" => "data available",
-                    //     "data" => [
-                    //         "id_tagihan" => $tagihan['id_tagihan'],
-                    //         "nim" => $mahasiswa['nim'],
-                    //         "nama_mahasiswa" => $mahasiswa['nama_mahasiswa'],
-                    //         "detail_paket" => $m_paket->where('id_paket', $tagihan['paket_id'])->first(),
-                    //         "item_paket" => $m_itempaket->where('paket_id', $tagihan['paket_id'])->findAll(),
-                    //         "item_paket_terbayar" => $m_pembayaran->where(['mahasiswa_id' => $mahasiswa['id_mahasiswa'], 'paket_id' => $tagihan['paket_id']])->findAll(),
-                    //     ],
-                    // ];
                 } else {
                     $result = [
                         "status" => "failed",
