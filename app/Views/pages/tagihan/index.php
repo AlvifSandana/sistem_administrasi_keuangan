@@ -64,20 +64,8 @@
     </div>
     <div class="row mb-2">
       <div class="col">
-        <div class="card" style="visibility: hidden;">
+        <div class="card hasil" style="visibility: hidden;">
           <div class="card-body detail-tagihan">
-            <div class="tagihan-1 mb-2">
-              <h5 class="h5">Tagihan nama_paket <span class="badge badge-warning">status_tagihan</span></h5>
-              <table class="table table-hover">
-                <thead>
-                  <th>ITEM TAGIHAN</th>
-                  <th>NOMINAL</th>
-                  <th>TERBAYAR</th>
-                  <th>ACTION</th>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
@@ -135,8 +123,13 @@
       success: function(data) {
         if (data == null || data.status == "failed") {
           showSWAL('error', data.message);
-        } else {          
-          var detail_tagihan = data.detail_tagihan;
+        } else {   
+          $('.detail-tagihan').empty();
+          $('.hasil').css('visibility', 'hidden');
+          showAfterSearch( data.data.detail_mahasiswa.id_mahasiswa, data.data.detail_mahasiswa.nim, data.data.detail_mahasiswa.nama_mahasiswa);   
+          // data detail_tagihan    
+          var detail_tagihan = data.data.detail_tagihan;
+          console.log(detail_tagihan);
           // total tagihan & total terbayar
           var total_tagihan = 0;
           var total_terbayar = 0;
@@ -151,7 +144,7 @@
               new_row += `
               <tr>
                 <td>${detail_tagihan[index].detail_item_paket[i].nama_item}</td>
-                <td>${detail_tagihan[index].detail_item_paket[i].nominal_item}</td>
+                <td>Rp ${numFormat.format(parseInt(detail_tagihan[index].detail_item_paket[i].nominal_item))}</td>
                 <td></td>
                 <td></td>
               </tr>
@@ -159,8 +152,8 @@
             }
             new_tagihan += `
             <div class="tagihan-${index} mb-2">
-              <h5 class="h5">Tagihan ${detail_tagihan[index].data_paket[0].nama_paket} <span class="badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
-              <table class="table table-hover">
+              <h5 class="h5">Tagihan ${detail_tagihan[index].detail_paket[0].nama_paket} <span class="float-right badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
+              <table class="table table-hover table-bordered">
                 <thead>
                   <th>ITEM TAGIHAN</th>
                   <th>NOMINAL</th>
@@ -168,10 +161,13 @@
                   <th>ACTION</th>
                 </thead>
                 <tbody>
-
+                  ${new_row}
                 </tbody>
               </table>
             </div>`;
+            $('.detail-tagihan').append(new_tagihan);
+            new_row = ``;
+            new_tagihan = ``;
           }
         }
       },
@@ -180,6 +176,19 @@
         showSWAL('error', jqXHR);
       }
     });
+  }
+
+  function showAfterSearch(id, nim, nama){
+    $('#list_tagihan').empty();    
+    var new_row = `
+    <tr>
+      <td>${id}</td>
+      <td>${nim}</td>
+      <td>${nama}</td>
+      <td><button class="btn btn-primary btn-sm" onclick="$('.hasil').css('visibility', 'visible')"><i class="fas fa-info"></i></button></td>
+    </tr>`;
+    $('#list_tagihan').append(new_row);    
+    $('#search_result').css('visibility', 'visible');    
   }
 </script>
 <?= $this->endSection() ?>
