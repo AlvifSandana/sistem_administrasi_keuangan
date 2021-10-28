@@ -17,7 +17,7 @@ class ProgdiSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
-                'nama_progdi' => 'Keperawatan',
+                'nama_progdi' => 'Kebidanan',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
