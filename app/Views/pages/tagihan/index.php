@@ -95,16 +95,18 @@
           <label for="detail_nim">PAKET</label>
           <input type="text" class="form-control" name="paket" id="detail_nama_paket" disabled />
         </div>
-        <label>ITEM PAKET</label>
+        <div class="form-group">
+          <label for="detail_nim">NAMA ITEM PAKET</label>
+          <input type="text" class="form-control" name="paket" id="detail_nama_item_paket" disabled />
+        </div>
+        <label>DETAIL PEMBAYARAN</label>
         <table class="table table-hover table-bordered">
           <thead class="text-center">
-            <th>ID</th>
-            <th>Item Pembayaran</th>
-            <th>Nominal Tagihan</th>
-            <th>Nominal Terbayar</th>
+            <th>Tanggal Pembayaran</th>
+            <th>Nominal Pembayaran</th>
             <th>Keterangan</th>
           </thead>
-          <tbody class="text-center" id="list_item"></tbody>
+          <tbody class="text-center" id="list_item_pembayaran"></tbody>
         </table>
       </div>
     </div>
@@ -114,6 +116,16 @@
 
 <?= $this->section('custom-script') ?>
 <script>
+  // global data
+  let data_mhs;
+  let data_tagihan;
+  // number format
+  var numFormat = Intl.NumberFormat();
+
+  /** 
+   * function pencarian data tagihan mahasiswa
+   * berdasarkan NIM
+   */
   function searchMhs() {
     var nim = $("#nim").val();
     $.ajax({
@@ -123,38 +135,44 @@
       success: function(data) {
         if (data == null || data.status == "failed") {
           showSWAL('error', data.message);
-        } else {   
+        } else {
           $('.detail-tagihan').empty();
           $('.hasil').css('visibility', 'hidden');
-          showAfterSearch( data.data.detail_mahasiswa.id_mahasiswa, data.data.detail_mahasiswa.nim, data.data.detail_mahasiswa.nama_mahasiswa);   
+          showAfterSearch(data.data.detail_mahasiswa.id_mahasiswa, data.data.detail_mahasiswa.nim, data.data.detail_mahasiswa.nama_mahasiswa);
           // data detail_tagihan    
           var detail_tagihan = data.data.detail_tagihan;
-          console.log(detail_tagihan);
+          data_tagihan = detail_tagihan;
+          data_mhs = data.data.detail_mahasiswa;
           // total tagihan & total terbayar
           var total_tagihan = 0;
           var total_terbayar = 0;
+          var tmp_terbayar = 0;
           var new_tagihan = ``;
           var new_row = ``;
-          // number format
-          var numFormat = Intl.NumberFormat();
           // iterate data.detail_tagihan
           for (let index = 0; index < detail_tagihan.length; index++) {
+            // iterate item_paket tagihan
             for (let i = 0; i < detail_tagihan[index].detail_item_paket.length; i++) {
-              const element = detail_tagihan[index].detail_item_paket[i];
+              // iterate detail pembayaran per item_paket
+              for (let j = 0; j < detail_tagihan[index].detail_item_paket[i].detail_pembayaran.length; j++) {
+                tmp_terbayar += parseInt(detail_tagihan[index].detail_item_paket[i].detail_pembayaran[j].nominal_pembayaran);
+              }
               new_row += `
               <tr>
                 <td>${detail_tagihan[index].detail_item_paket[i].nama_item}</td>
                 <td>Rp ${numFormat.format(parseInt(detail_tagihan[index].detail_item_paket[i].nominal_item))}</td>
-                <td></td>
-                <td></td>
+                <td>RP ${numFormat.format(tmp_terbayar)}</td>
+                <td class="text-center"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalDetailTagihan" onclick="showDetailPembayaran(${index}, ${i})"><i class="fas fa-info"></i></button></td>
               </tr>
               `;
+              total_terbayar += tmp_terbayar;
+              tmp_terbayar = 0;
             }
             new_tagihan += `
-            <div class="tagihan-${index} mb-2">
+            <div class="tagihan-${index} mb-3">
               <h5 class="h5">Tagihan ${detail_tagihan[index].detail_paket[0].nama_paket} <span class="float-right badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
               <table class="table table-hover table-bordered">
-                <thead>
+                <thead class="text-center">
                   <th>ITEM TAGIHAN</th>
                   <th>NOMINAL</th>
                   <th>TERBAYAR</th>
@@ -178,8 +196,12 @@
     });
   }
 
-  function showAfterSearch(id, nim, nama){
-    $('#list_tagihan').empty();    
+  /** 
+   * function untuk menampilkan card hasil 
+   * pencarian data mahasiswa
+   */
+  function showAfterSearch(id, nim, nama) {
+    $('#list_tagihan').empty();
     var new_row = `
     <tr>
       <td>${id}</td>
@@ -187,8 +209,37 @@
       <td>${nama}</td>
       <td><button class="btn btn-primary btn-sm" onclick="$('.hasil').css('visibility', 'visible')"><i class="fas fa-info"></i></button></td>
     </tr>`;
-    $('#list_tagihan').append(new_row);    
-    $('#search_result').css('visibility', 'visible');    
+    $('#list_tagihan').append(new_row);
+    $('#search_result').css('visibility', 'visible');
+  }
+
+  /** 
+   * function untuk menampilkan 
+   * modal detail tagihan per item paket
+   */
+  function showDetailPembayaran(idx_detail_tagihan, idx_detail_item_paket) {
+    var pembayaran_row = ``;
+    // clear field
+    $('#detail_nim').val('');
+    $('#detail_nama_mhs').val('');
+    $('#detail_nama_paket').val('');
+    $('#list_item_pembayaran').empty();
+    // set field value
+    $('#detail_nim').val(data_mhs.nim);
+    $('#detail_nama_mhs').val(data_mhs.nama_mahasiswa);
+    $('#detail_nama_paket').val(data_tagihan[idx_detail_tagihan].detail_paket[0].nama_paket);
+    $('#detail_nama_item_paket').val(data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].nama_item);
+    // iterate pembayaran
+    for (let i = 0; i < data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran.length; i++) {
+      pembayaran_row += `
+      <tr>
+        <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].tanggal_pembayaran}</td>
+        <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].nominal_pembayaran}</td>
+        <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].keterangan_pembayaran}</td>
+      </tr>
+      `;
+    }
+    $('#list_item_pembayaran').append(pembayaran_row);
   }
 </script>
 <?= $this->endSection() ?>
