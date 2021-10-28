@@ -231,9 +231,10 @@
     $('#detail_nama_item_paket').val(data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].nama_item);
     // iterate pembayaran
     for (let i = 0; i < data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran.length; i++) {
+      var tanggal_pembayaran = data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].tanggal_pembayaran;
       pembayaran_row += `
       <tr>
-        <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].tanggal_pembayaran}</td>
+        <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(tanggal_pembayaran))}</td>
         <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].nominal_pembayaran}</td>
         <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].keterangan_pembayaran}</td>
       </tr>
