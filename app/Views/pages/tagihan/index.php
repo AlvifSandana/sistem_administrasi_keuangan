@@ -73,45 +73,8 @@
   </div>
 </section>
 <!-- modal detail tagihan -->
-<div class="modal fade bd-example-modal-lg" id="modalDetailTagihan" tabindex="-1" role="dialog" aria-labelledby="modalDetailTagihan" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Detail Tagihan</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="detail_nim">NIM</label>
-          <input type="text" class="form-control" name="nim" id="detail_nim" disabled />
-        </div>
-        <div class="form-group">
-          <label for="detail_nim">NAMA MAHASISWA</label>
-          <input type="text" class="form-control" name="nama_mhs" id="detail_nama_mhs" disabled />
-        </div>
-        <div class="form-group">
-          <label for="detail_nim">PAKET</label>
-          <input type="text" class="form-control" name="paket" id="detail_nama_paket" disabled />
-        </div>
-        <div class="form-group">
-          <label for="detail_nim">NAMA ITEM PAKET</label>
-          <input type="text" class="form-control" name="paket" id="detail_nama_item_paket" disabled />
-        </div>
-        <label>DETAIL PEMBAYARAN</label>
-        <table class="table table-hover table-bordered">
-          <thead class="text-center">
-            <th>Tanggal Pembayaran</th>
-            <th>Nominal Pembayaran</th>
-            <th>Keterangan</th>
-          </thead>
-          <tbody class="text-center" id="list_item_pembayaran"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<?= $this->include('pages/tagihan/modaldetailtagihan') ?>
+<!-- /modal detail tagihan -->
 <?= $this->endSection() ?>
 
 <?= $this->section('custom-script') ?>
@@ -144,6 +107,8 @@
           data_tagihan = detail_tagihan;
           data_mhs = data.data.detail_mahasiswa;
           // total tagihan & total terbayar
+          var global_tagihan = 0;
+          var global_terbayar = 0;
           var total_tagihan = 0;
           var total_terbayar = 0;
           var tmp_terbayar = 0;
@@ -153,6 +118,7 @@
           for (let index = 0; index < detail_tagihan.length; index++) {
             // iterate item_paket tagihan
             for (let i = 0; i < detail_tagihan[index].detail_item_paket.length; i++) {
+              total_tagihan += parseInt(detail_tagihan[index].detail_item_paket[i].nominal_item);
               // iterate detail pembayaran per item_paket
               for (let j = 0; j < detail_tagihan[index].detail_item_paket[i].detail_pembayaran.length; j++) {
                 tmp_terbayar += parseInt(detail_tagihan[index].detail_item_paket[i].detail_pembayaran[j].nominal_pembayaran);
@@ -180,12 +146,22 @@
                 </thead>
                 <tbody>
                   ${new_row}
+                  <tr class="font-weight-bold">
+                    <td>TOTAL</td>
+                    <td>Rp ${numFormat.format(total_tagihan)}</td>
+                    <td>Rp ${numFormat.format(total_terbayar)}</td>
+                  </tr>
                 </tbody>
               </table>
-            </div>`;
+            </div>
+            <hr/>`;
             $('.detail-tagihan').append(new_tagihan);
             new_row = ``;
             new_tagihan = ``;
+            global_tagihan += total_tagihan;
+            global_terbayar += total_terbayar;
+            total_tagihan = 0;
+            total_terbayar = 0;
           }
         }
       },
