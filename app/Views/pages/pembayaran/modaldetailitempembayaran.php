@@ -10,10 +10,14 @@
       <div class="modal-body">
         <form action="">
           <div class="form-group">
+            <label for="dp_nama_item">NAMA PEMBAYARAN</label>
+            <input type="text" name="dp_nama_pembayaran" id="dp_nama_pembayaran" class="form-control" disabled>
+          </div>
+          <div class="form-group">
             <label for="dp_nama_item">NAMA ITEM</label>
             <input type="text" name="dp_nama_item" id="dp_nama_item" class="form-control" disabled>
           </div>
-          <table class="table" id="tbl_detail_pembayaran_per_item">
+          <table class="table table-hover table-bordered" id="tbl_detail_pembayaran_per_item">
             <thead class="text-center">
               <th>ID Pembayaran</th>
               <th>Tanggal Pembayaran</th>
