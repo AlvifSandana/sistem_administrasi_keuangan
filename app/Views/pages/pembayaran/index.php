@@ -9,7 +9,7 @@
         <h1 class="m-0">Pembayaran</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
+        <o l class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
           <li class="breadcrumb-item active">Pembayaran</li>
         </ol>
@@ -22,7 +22,7 @@
 
 <?= $this->section('content-body') ?>
 <section class="content">
-  <div class="container-fluid">
+  <div class="container-fluid container-pembayaran">
     <!-- card search input -->
     <div class="row mb-2">
       <div class="col">
@@ -56,48 +56,6 @@
                     <th>ACTION</th>
                   </thead>
                   <tbody class="text-center" id="list_search_result"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- card Tagihan -->
-    <div class="row mb-2">
-      <div class="col-6">
-        <div class="card" id="card_detail_tagihan" style="visibility: hidden;">
-          <div class="card-body">
-            <h5 class="h5">Tagihan</h5>
-            <div class="row">
-              <div class="col">
-                <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
-                  <thead class="text-center">
-                    <th>ID</th>
-                    <th>ITEM TAGIHAN</th>
-                    <th>NOMINAL</th>
-                  </thead>
-                  <tbody class="text-center"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- card Pembayaran -->
-      <div class="col-6">
-        <div class="card" id="card_detail_pembayaran" style="visibility: hidden;">
-          <div class="card-body">
-            <h5 class="h5">Pembayaran</h5>
-            <div class="row">
-              <div class="col">
-                <table class="table table-hover table-bordered" id="tbl_detail_pembayaran">
-                  <thead class="text-center">
-                    <th>ITEM PEMBAYARAN</th>
-                    <th>TERBAYAR</th>
-                    <th>ACTION</th>
-                  </thead>
-                  <tbody class="text-center"></tbody>
                 </table>
               </div>
             </div>
