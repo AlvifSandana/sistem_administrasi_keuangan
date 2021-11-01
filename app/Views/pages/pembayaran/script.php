@@ -2,14 +2,18 @@
   var num_format = Intl.NumberFormat();
   var item_tagihan_terbayar = [];
   var nama_paket = "";
+  var global_data_tagihan;
+  var global_tagihan = 0;
+  var global_pembayaran = 0;
+
   /**
    * search pembayaran by nim
    * and show result table
    */
   function searchPembayaran() {
     // change visibility
-    $("#card_detail_tagihan").css("visibility", "hidden");
-    $("#card_detail_pembayaran").css("visibility", "hidden");
+    $(".card_detail_tagihan").css("visibility", "hidden");
+    $(".card_detail_pembayaran").css("visibility", "hidden");
     $("#tbl_detail_tagihan > tbody").empty();
     $("#tbl_detail_pembayaran > tbody").empty();
     $("#mahasiswa_id").val(0);
@@ -24,6 +28,7 @@
         if (data == null || data.data.mahasiswa == null) {
           showSWAL('error', 'Data tidak ditemukan!');
         } else {
+          $('.pembayaran').remove();
           // call fillDetail() function 
           fillDetail();
           // kosongkan tbody
@@ -36,7 +41,6 @@
               <td>${data.data.mahasiswa.nama_mahasiswa}</td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="showDetail()" data-toggle="tooltip" data-placement="top" title="Lihat Detail"><i class="fas fa-info"></i></button>
-                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalCreatePembayaran"><i class="fas fa-plus"></i></button>
               </td>
             </tr>
             </tr>
@@ -64,62 +68,135 @@
       // declare data row
       var tagihan_row = ``;
       var pembayaran_row = ``;
-      var total_tagihan = 0;
-      var total_pembayaran = 0;
       // get data tagihan by nim
       $.ajax({
         url: "<?php site_url() ?>" + "/tagihan/search/" + $("#nim").val(),
         type: "GET",
         dataType: "JSON",
         success: function(data) {
-          $("#item_id").empty();
-          // console.log(data);
-          item_tagihan_terbayar = data.data.item_paket_terbayar;
-          // iterate response data and fill to the
-          // count total_tagihan
-          for (let index = 0; index < data.data.item_paket.length; index++) {
-            tagihan_row += `
-            <tr>
-              <td>${data.data.item_paket[index].id_item}</td>
-              <td>${data.data.item_paket[index].nama_item}</td>
-              <td class="text-left">Rp ${num_format.format(parseInt(data.data.item_paket[index].nominal_item))}</td>
-            </tr>`;
-            pembayaran_row += `<tr><td>${data.data.item_paket[index].nama_item}</td>`;
-            var nominal_item_terbayar = 0;
-            for (let index1 = 0; index1 < data.data.item_paket_terbayar.length; index1++) {
-              if (data.data.item_paket[index].id_item == data.data.item_paket_terbayar[index1].item_id) {
-                nominal_item_terbayar += parseInt(data.data.item_paket_terbayar[index1].nominal_pembayaran);
+          // if data available
+          if (data.status == 'success' && data.message == 'Data available') {
+            // get data mahasiswa and tagihan
+            var mahasiswa = data.data.detail_mahasiswa;
+            var tagihan = data.data.detail_tagihan;
+            // set value for global_data_tagihan
+            global_data_tagihan = tagihan;
+            // total tagihan & total pembayaran
+            var total_tagihan = 0;
+            var total_pembayaran = 0;
+            // variable for new HTML Elements
+            var new_div_row = ``;
+            var new_div_col_tagihan = ``;
+            var new_div_col_pembayaran = ``;
+            var new_tbl_row_tagihan = ``;
+            var new_tbl_row_pembayaran = ``;
+            // iterate tagihan
+            for (let i = 0; i < tagihan.length; i++) {
+              new_div_col_tagihan = ``;
+              new_div_col_pembayaran = ``;
+              new_tbl_row_tagihan = ``;
+              new_tbl_row_pembayaran = ``;
+              total_tagihan = 0;
+              total_pembayaran = 0;
+              // iterate item tagihan
+              for (let j = 0; j < tagihan[i].detail_item_paket.length; j++) {
+                // create table row from detail item tagihan
+                new_tbl_row_tagihan += `
+                <tr>
+                  <td>${tagihan[i].detail_item_paket[j].id_item}</td>
+                  <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
+                  <td>Rp ${num_format.format(parseInt(tagihan[i].detail_item_paket[j].nominal_item))}</td>
+                </tr>`;
+                // add total tagihan
+                total_tagihan += parseInt(tagihan[i].detail_item_paket[j].nominal_item);
+                // iterate pembayaran per item tagihan
+                var tmp_nominal_pembayaran = 0;
+                for (let k = 0; k < tagihan[i].detail_item_paket[j].detail_pembayaran.length; k++) {
+                  tmp_nominal_pembayaran += parseInt(tagihan[i].detail_item_paket[j].detail_pembayaran[k].nominal_pembayaran);
+                }
+                // add total pembayaran
+                total_pembayaran += tmp_nominal_pembayaran;
+                // create table row from detail pembayaran per item paket
+                new_tbl_row_pembayaran += `
+                <tr>
+                  <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
+                  <td>Rp ${num_format.format(tmp_nominal_pembayaran)}</td>
+                  <td class="text-center"><span class="badge badge-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${i}, ${j})"><i class="fas fa-info"></i></button></td>
+                </tr>`;
               }
+              // create new div column element for current tagihan 
+              new_div_col_tagihan += `
+              <div class="col-6">
+                <div class="card card_detail_tagihan" id="" style="visibility: hidden;">
+                  <div class="card-body">
+                    <h5 class="h5 pb-2">Tagihan ${tagihan[i].detail_paket[0].nama_paket} <span class="float-right badge badge-${tagihan[i].status_tagihan == 'lunas' ? 'success' : 'danger'}">${tagihan[i].status_tagihan} </span></h5>
+                    <div class="row">
+                      <div class="col">
+                        <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
+                          <thead class="text-center">
+                            <th>ID</th>
+                            <th>ITEM TAGIHAN</th>
+                            <th>NOMINAL</th>
+                          </thead>
+                          <tbody class="">
+                            ${new_tbl_row_tagihan}
+                            <tr class="font-weight-bold">
+                              <td class="text-center" colspan="2">TOTAL TAGIHAN</td>
+                              <td>Rp ${num_format.format(total_tagihan)}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+              // create new div column element for current tagihan
+              new_div_col_pembayaran += `
+              <div class="col-6">
+                <div class="card card_detail_pembayaran" id="" style="visibility: hidden;">
+                  <div class="card-body">
+                    <h5 class="h5 pb-2">Pembayaran ${tagihan[i].detail_paket[0].nama_paket} <button class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modalCreatePembayaran"><i class="fas fa-plus"></i></button></h5>
+                    <div class="row">
+                      <div class="col">
+                        <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
+                          <thead class="text-center">
+                            <th>ITEM PEMBAYARAN</th>
+                            <th>TERBAYAR</th>
+                            <th>ACTION</th>
+                          </thead>
+                          <tbody>
+                            ${new_tbl_row_pembayaran}
+                            <tr class="font-weight-bold">
+                              <td class="text-center">TOTAL PEMBAYARAN</td>
+                              <td colspan="2">Rp ${num_format.format(total_pembayaran)}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+              // add total tagihan & pembayaran to global
+              global_tagihan += total_tagihan;
+              global_pembayaran += total_pembayaran;
+              // create new div row for current tagihan
+              new_div_row += `
+              <div class="row mb-2 pembayaran">
+                ${new_div_col_tagihan}
+                ${new_div_col_pembayaran}
+              </div>`;
             }
-            pembayaran_row += `
-            <td>Rp ${num_format.format(nominal_item_terbayar)}</td>
-            <td>
-              <button class="btn btn-sm btn-primary" ttile="Detail" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${data.data.item_paket[index].id_item}, '${data.data.item_paket[index].nama_item}')">
-                <i class="fas fa-info"></i>
-              </button>
-            </td></tr>`;
-            total_tagihan += parseInt(data.data.item_paket[index].nominal_item);
-            total_pembayaran += parseInt(nominal_item_terbayar);
-            $("#item_id").append(`<option value="${data.data.item_paket[index].id_item}">${data.data.item_paket[index].nama_item} - Rp. ${data.data.item_paket[index].nominal_item}</option>`)
+            // append to parent div container
+            $('.container-pembayaran').append(new_div_row);
+          } else {
+            // get error 
+            showSWAL('error', data.message);
           }
-          var row_total = `<tr class="font-weight-bold">
-          <td colspan="2">Total Tagihan</td>
-          <td>Rp ${num_format.format(total_tagihan)}</td>
-          `;
-          var row_total_pembayaran = `<tr class="font-weight-bold">
-          <td>Total Terbayar</td>
-          <td colspan="2">Rp ${num_format.format(total_pembayaran)}</td>
-          `;
-          // fill paket_id to modalCreatePembayaran
-          $("#paket_id").val(data.data.detail_paket.id_paket);
-          // append table
-          $("#tbl_detail_tagihan > tbody").append(tagihan_row);
-          $("#tbl_detail_tagihan > tbody").append(row_total);
-          $("#tbl_detail_pembayaran > tbody").append(pembayaran_row);
-          $("#tbl_detail_pembayaran > tbody").append(row_total_pembayaran);
         },
         error: function(jqXHR) {
-          alert('Error!');
+          showSWAL('error', jqXHR);
           console.log(jqXHR);
         }
       });
@@ -169,26 +246,40 @@
    */
   function showDetail() {
     // change visibility
-    $("#card_detail_tagihan").css("visibility", "visible");
-    $("#card_detail_pembayaran").css("visibility", "visible");
+    $(".card_detail_tagihan").css("visibility", "visible");
+    $(".card_detail_pembayaran").css("visibility", "visible");
+    $(".pembayaran").addClass("animate__animated animate__fadeIn");
   }
 
   /**
    * show modal detail pembayaran from item
    */
-  function showDetailPembayaranItem(item_id, nama_item) {
+  function showDetailPembayaranItem(id_tagihan, id_item) {
+    // set data tagihan
+    var data_tagihan = global_data_tagihan;
+    // create row_pembayaran
     var row_pembayaran = ``;
+    // set tabel detail pembayaran per item to empty
     $("#tbl_detail_pembayaran_per_item > tbody").empty();
-    $("#dp_nama_item").val(nama_item);
-    for (let index = 0; index < item_tagihan_terbayar.length; index++) {
-      if (item_tagihan_terbayar[index].item_id == item_id) {
-        row_pembayaran += `
+    // set nama item pembayaran
+    $("#dp_nama_pembayaran").val(data_tagihan[id_tagihan].detail_paket[0].nama_paket);
+    $("#dp_nama_item").val(data_tagihan[id_tagihan].detail_item_paket[id_item].nama_item);
+    // check data pembayaran
+    if (data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran.length == 0) {
+      row_pembayaran = `
+      <tr>
+        <td class="text-warning font-weight-bold" colspan="3">Data Pembayaran Kosong.</td>
+      </tr>`;
+    } else {
+      
+    }
+    for (let index = 0; index < data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran.length; index++) {
+      row_pembayaran += `
         <tr>
-        <td>${item_tagihan_terbayar[index].id_pembayaran}</td>
-        <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(item_tagihan_terbayar[index].tanggal_pembayaran))}</td>
-        <td>Rp ${num_format.format(parseInt(item_tagihan_terbayar[index].nominal_pembayaran))}</td>
+        <td>${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}</td>
+        <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].tanggal_pembayaran))}</td>
+        <td>Rp ${num_format.format(parseInt(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].nominal_pembayaran))}</td>
         </tr>`;
-      }
     }
     $("#tbl_detail_pembayaran_per_item > tbody").append(row_pembayaran);
   }
