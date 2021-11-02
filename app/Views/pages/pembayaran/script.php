@@ -31,6 +31,7 @@
           $('.pembayaran').remove();
           // call fillDetail() function 
           fillDetail();
+          $('#add_mahasiswa_id').val(data.data.mahasiswa.id_mahasiswa);
           // kosongkan tbody
           $("#list_search_result").empty();
           // create new data row
@@ -156,7 +157,7 @@
               <div class="col-6">
                 <div class="card card_detail_pembayaran" id="" style="visibility: hidden;">
                   <div class="card-body">
-                    <h5 class="h5 pb-2">Pembayaran ${tagihan[i].detail_paket[0].nama_paket} <button class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modalCreatePembayaran"><i class="fas fa-plus"></i></button></h5>
+                    <h5 class="h5 pb-2">Pembayaran ${tagihan[i].detail_paket[0].nama_paket} <button class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modalCreatePembayaran" onclick="showModalCreatePembayaran(${tagihan[i].paket_id}, ${i})"><i class="fas fa-plus"></i></button></h5>
                     <div class="row">
                       <div class="col">
                         <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
@@ -213,11 +214,11 @@
     $("#btn_tambah_pembayaran").prop('disabled', true);
     $("#btn_tambah_pembayaran").html(`<div class="spinner-border text-light spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>`);
     var mydata = {
-      item_id: $("#item_id").val(),
-      paket_id: $("#paket_id").val(),
-      mahasiswa_id: $("#mahasiswa_id").val(),
-      tanggal_pembayaran: $("#tanggal_pembayaran").val(),
-      nominal_pembayaran: $("#nominal_pembayaran").val(),
+      item_id: $("#add_item_id").val(),
+      paket_id: $("#add_paket_id").val(),
+      mahasiswa_id: $("#add_mahasiswa_id").val(),
+      tanggal_pembayaran: $("#add_tanggal_pembayaran").val(),
+      nominal_pembayaran: $("#add_nominal_pembayaran").val(),
       user_id: 1
     }
     $.ajax({
@@ -239,6 +240,24 @@
         showSWAL('error', jqXHR);
       }
     });
+  }
+
+  /** 
+   * show modal create pembayaran
+   * 
+   * @param id_paket
+   * @param idx_tagihan(array index)
+   */
+  function showModalCreatePembayaran(id_paket, idx_tagihan) {
+    $('#add_paket_id').val('');
+    $('#add_item_id').empty();
+    // set value paket_id & item_id
+    $('#add_paket_id').val(id_paket);
+    for (let i = 0; i < global_data_tagihan[idx_tagihan].detail_item_paket.length; i++) {
+      $('#add_item_id').append($('<option></option>')
+        .attr('value', global_data_tagihan[idx_tagihan].detail_item_paket[i].id_item)
+        .text(global_data_tagihan[idx_tagihan].detail_item_paket[i].nama_item));
+    }
   }
 
   /**
@@ -271,7 +290,7 @@
         <td class="text-warning font-weight-bold" colspan="3">Data Pembayaran Kosong.</td>
       </tr>`;
     } else {
-      
+
     }
     for (let index = 0; index < data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran.length; index++) {
       row_pembayaran += `

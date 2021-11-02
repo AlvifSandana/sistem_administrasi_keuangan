@@ -9,15 +9,15 @@
       </div>
       <div class="modal-body">
         <form action="<?php base_url() ?>/pembayaran/create" method="post">
-          <input type="number" name="paket_id" id="paket_id" hidden>
-          <input type="number" name="mahasiswa_id" id="mahasiswa_id" hidden>
+          <input type="number" name="paket_id" id="add_paket_id" hidden>
+          <input type="number" name="mahasiswa_id" id="add_mahasiswa_id" hidden>
           <div class="form-group">
             <label for="itempembayaran">ITEM PAKET</label>
-            <select class="form-control" name="item_id" id="item_id"></select>
+            <select class="form-control" name="item_id" id="add_item_id"></select>
           </div>
           <div class="form-group">
             <label for="tanggal_pembayaran">TANGGAL PEMBAYARAN</label>
-            <input type="date" class="form-control" name="tanggal_pembayaran" id="tanggal_pembayaran">
+            <input type="date" class="form-control" name="tanggal_pembayaran" id="add_tanggal_pembayaran">
           </div>
           <div class="form-group">
             <label for="">NOMINAL PEMBAYARAN</label>
@@ -25,7 +25,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Rp. </span>
               </div>
-              <input type="number" class="form-control" name="nominal_pembayaran" id="nominal_pembayaran" aria-label="NOMINAL PEMBAYARAN">
+              <input type="number" class="form-control" name="nominal_pembayaran" id="add_nominal_pembayaran" aria-label="NOMINAL PEMBAYARAN">
               <div class="input-group-append">
                 <span class="input-group-text">.00</span>
               </div>
