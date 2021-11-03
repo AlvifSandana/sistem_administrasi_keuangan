@@ -3,6 +3,8 @@
         width: 'resolve',
     });
 
+    $('#tbl_list_mhs').DataTable();
+
     function createMahasiswa() {
         var today = new Date();
         var data_mahasiswa = {

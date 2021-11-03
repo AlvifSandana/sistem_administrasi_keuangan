@@ -28,8 +28,8 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <h5 class="h5">Data Mahasiswa <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddMahasiswa"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
-            <table class="table table-hover table-bordered mt-3" id="tbl_list_mhs">
+            <h5 class="h5 mb-4">Data Mahasiswa <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddMahasiswa"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
+            <table class="table table-hover table-bordered" id="tbl_list_mhs">
               <thead class="text-center">
                 <th>ID</th>
                 <th>NIM</th>

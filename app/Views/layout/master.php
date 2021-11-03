@@ -19,7 +19,9 @@
     <!-- sweetalert2 -->
     <link rel="stylesheet" href="plugins/sweetalert2/sweetalert2.min.css">
     <!-- datatable -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> -->
+    <!-- datatable -->
+    <link rel="stylesheet" href="plugins/datatables/datatables.min.css">
     <!-- animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- select2 -->

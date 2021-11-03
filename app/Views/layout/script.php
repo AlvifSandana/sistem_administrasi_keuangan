@@ -16,6 +16,8 @@
 <script src="plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <!-- select2 -->
 <script src="plugins/select2/js/select2.full.min.js"></script>
+<!-- DataTable -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
 
 <!-- sweetalert2 custom -->
 <script>
