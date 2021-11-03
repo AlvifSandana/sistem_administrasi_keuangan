@@ -26,6 +26,11 @@ class ProgdiSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
+            [
+                'nama_progdi' => 'Keperawatan',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ];
         for ($i=0; $i < count($data); $i++) { 
             $this->db->table('progdi')->insert($data[$i]);

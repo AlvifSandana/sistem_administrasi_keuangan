@@ -14,7 +14,7 @@ class MahasiswaSeeder extends Seeder
             [
                 'nim' => '1119101710',
                 'nama_mahasiswa' => static::faker()->name(),
-                'progdi_id' => 1,
+                'progdi_id' => 2,
                 'angkatan_id' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
