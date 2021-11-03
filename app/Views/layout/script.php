@@ -4,9 +4,9 @@
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $(function() {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -19,12 +19,12 @@
 
 <!-- sweetalert2 custom -->
 <script>
-  function showSWAL(type, message) {
-    Swal.fire({
-      title: type == 'error' || type == 'failed' ? 'Error' : 'Success',
-      text: message,
-      icon: type == 'error' || type == 'failed' ? 'error' : 'success',
-      confirmButtonText: 'OK'
-    });
-  }
+    function showSWAL(type, message) {
+        Swal.fire({
+            title: type == 'error' || type == 'failed' ? 'Error' : 'Success',
+            text: message,
+            icon: type == 'error' || type == 'failed' ? 'error' : 'success',
+            confirmButtonText: 'OK'
+        });
+    }
 </script>

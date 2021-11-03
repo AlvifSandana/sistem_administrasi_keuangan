@@ -136,9 +136,10 @@ class MasterMahasiswaController extends BaseController
                 $path = $file->store('import/', $fn);
                 // create file reader
                 $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-                // load file
+                // load file (only data sheet)
                 $reader->setLoadSheetsOnly(['DATA IMPORT']);
                 $sheet = $reader->load(WRITEPATH . 'uploads/' . $path);
+                // get data, convert to array
                 $active_sheet = $sheet->getActiveSheet()->toArray(null, true, true, true);
                 // processing data
                 $data_mahasiswa = [];
@@ -158,7 +159,7 @@ class MasterMahasiswaController extends BaseController
                 // test data
                 $result['status'] = 'success';
                 $result['message'] = 'File berhasil diupload';
-                $result['data'] = $active_sheet;
+                $result['data'] = $data_mahasiswa;
                 return json_encode($result);
             }
         } catch (\Throwable $th) {
