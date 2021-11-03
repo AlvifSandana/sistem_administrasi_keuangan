@@ -12,22 +12,22 @@ class ProgdiSeeder extends Seeder
         $now = Time::now('Asia/Jakarta', 'en_US');
         $data = [
             [
-                'nama_progdi' => 'Gizi',
+                'nama_progdi' => 'D3 GIZI',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'nama_progdi' => 'Kebidanan',
+                'nama_progdi' => 'D3 KEBIDANAN',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'nama_progdi' => 'Farmasi',
+                'nama_progdi' => 'S1 FARMASI',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'nama_progdi' => 'Keperawatan',
+                'nama_progdi' => 'S1 KEPERAWATAN',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
