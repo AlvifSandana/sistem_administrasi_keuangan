@@ -39,4 +39,18 @@ class ProgdiModel extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    /**
+     * search progdi by keyword
+     */
+    public function searchProgdi($keyword){
+        $result = 'No record found!';
+        $this->like('nama_progdi', $keyword);
+        $this->orderBy('nama_progdi', 'ASC');
+        $query = $this->get();
+        if ($query->getResultArray()) {
+            $result = $query->getResultArray();
+        }
+        return $result;
+    }
 }

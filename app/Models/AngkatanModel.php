@@ -39,4 +39,19 @@ class AngkatanModel extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    /**
+     * search angkatan by keyword
+     */
+    public function searchAngkatan($keyword)
+    {
+        $result = 'No result found!';
+        $this->like('nama_angkatan', $keyword);
+        $this->orderBy('nama_angkatan', 'ASC');
+        $query = $this->get();
+        if ($query->getResultArray()) {
+            $result = $query->getResultArray();
+        }
+        return $result;
+    }
 }

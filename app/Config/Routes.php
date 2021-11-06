@@ -51,7 +51,7 @@ $routes->post('/mahasiswa/update/(:any)', 'MahasiswaController::update_mahasiswa
 $routes->delete('/mahasiswa/delete/(:any)', 'MahasiswaController::delete_mahasiswa/$1');
 
 // route for master mahasiswa
-$routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index');
+$routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index', ['as' => 'admin.master_mahasiswa']);
 $routes->post('/master-mahasiswa/create', 'Master/MasterMahasiswaController::create_mahasiswa');
 $routes->post('/master-mahasiswa/import/upload', 'Master/MasterMahasiswaController::import');
 

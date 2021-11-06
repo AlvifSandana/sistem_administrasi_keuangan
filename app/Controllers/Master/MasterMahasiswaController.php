@@ -8,6 +8,7 @@ use App\Models\MahasiswaModel;
 use App\Models\PaketModel;
 use App\Models\ProgdiModel;
 use App\Models\TagihanModel;
+use CodeIgniter\I18n\Time;
 
 class MasterMahasiswaController extends BaseController
 {
@@ -27,6 +28,8 @@ class MasterMahasiswaController extends BaseController
         $data['data_angkatan'] = $m_angkatan->findAll();
         $data['data_progdi'] = $m_progdi->findAll();
         $data['data_paket'] = $m_paket->findAll();
+        $data['status'] = '';
+        $data['message'] = '';
         // return view
         return view('pages/master/mahasiswa/index', $data);
     }
@@ -124,10 +127,9 @@ class MasterMahasiswaController extends BaseController
             // validate uploaded file
             if (!$file->isValid()) {
                 // throw error 
-                $result['status'] = 'error';
-                $result['message'] = $file->getErrorString() . '(' . $file->getError() . ')';
                 throw new \RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
-                return json_encode($result);
+                return redirect()->to(base_url().'/master-mahasiswa')
+                    ->with('error', $file->getErrorString() . '(' . $file->getError() . ')');
             } else {
                 // random filename
                 $fn = $file->getRandomName();
@@ -141,40 +143,58 @@ class MasterMahasiswaController extends BaseController
                 // get data, convert to array
                 $active_sheet = $sheet->getActiveSheet()->toArray(null, true, true, true);
                 // processing data
-                $data_mahasiswa = [];
                 foreach ($active_sheet as $idx => $data) {
                     // bypass first row (title row)
                     if ($idx ==  1) {
                         continue;
                     }
                     // instantiate model
+                    $db = \Config\Database::connect();
                     $m_progdi = new ProgdiModel();
                     $m_angkatan = new AngkatanModel();
                     $m_mahasiswa = new MahasiswaModel();
-                    // get id_progdi and id_angkatan
-                    
-
-                    $mahasiswa = $m_mahasiswa->insert([
-
-                    ]);
-                    array_push($data_mahasiswa, [
-                        'nim' => $data['A'],
-                        'nama_mahasiswa' => $data['B'],
-                        'program_studi' => $data['C'],
-                        'angkatan' => $data['D'],
-                        'paket_tagihan' => $data['E'],
-                    ]);
+                    $m_tagihan = new TagihanModel();
+                    // get progdi, angkatan, and paket tagihan
+                    $progdi = $m_progdi->where('nama_progdi', $data['C'])->first();
+                    $angkatan = $m_angkatan->where('nama_angkatan', $data['D'])->first();
+                    $query_paket = $db->table('paket')
+                        ->like('nama_paket', $data['C'])
+                        ->get();
+                    $paket = $query_paket->getResultArray();
+                    // validate query result
+                    if ($progdi != null && $angkatan != null) {
+                        // insert new mahasiswa
+                        $mahasiswa = $m_mahasiswa->insert([
+                            'nim' => $data['A'],
+                            'nama_mahasiswa' => $data['B'],
+                            'progdi_id' => $progdi['id_progdi'],
+                            'angkatan_id' => $angkatan['id_angkatan'],
+                        ]);
+                        // validate query result
+                        if ($mahasiswa != null) {
+                            foreach ($paket as $p) {
+                                // insert new tagihan 
+                                $tagihan = $m_tagihan->insert([
+                                    'paket_id' => $p['id_paket'],
+                                    'mahasiswa_id' => $mahasiswa,
+                                    'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                    'keterangan_tagihan' => $p['nama_paket'],
+                                    'status_tagihan' => 'belum_lunas',
+                                    'user_id' => 1
+                                ]);
+                                if ($tagihan != null) {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
                 }
-                // test data
-                $result['status'] = 'success';
-                $result['message'] = 'File berhasil diupload';
-                $result['data'] = $data_mahasiswa;
-                return json_encode($result);
+                // return view
+                return redirect()->to(base_url() . '/master-mahasiswa')
+                    ->with('success', 'File berhasil diupload, data berhasil diimport!');
             }
         } catch (\Throwable $th) {
-            $result['status'] = 'error';
-            $result['message'] = $th->getMessage();
-            return json_encode($result);
+            return redirect()->to(base_url().'/master-mahasiswa')->with('error', $th->getMessage());
         }
     }
 }
