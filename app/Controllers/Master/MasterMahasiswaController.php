@@ -121,7 +121,6 @@ class MasterMahasiswaController extends BaseController
         try {
             // get file from POST requst
             $file = $this->request->getFile('file_import');
-            // dd($file->getTempName());
             // validate uploaded file
             if (!$file->isValid()) {
                 // throw error 
@@ -144,10 +143,20 @@ class MasterMahasiswaController extends BaseController
                 // processing data
                 $data_mahasiswa = [];
                 foreach ($active_sheet as $idx => $data) {
-                    // bypass first row
+                    // bypass first row (title row)
                     if ($idx ==  1) {
                         continue;
                     }
+                    // instantiate model
+                    $m_progdi = new ProgdiModel();
+                    $m_angkatan = new AngkatanModel();
+                    $m_mahasiswa = new MahasiswaModel();
+                    // get id_progdi and id_angkatan
+                    
+
+                    $mahasiswa = $m_mahasiswa->insert([
+
+                    ]);
                     array_push($data_mahasiswa, [
                         'nim' => $data['A'],
                         'nama_mahasiswa' => $data['B'],
