@@ -31,7 +31,7 @@ class CreateTableUser extends Migration
             ],
             'password' => [
                 'type'              => 'VARCHAR',
-                'constraint'        => 50,
+                'constraint'        => 60,
             ],
             'created_at' => [
                 'type'              => 'TIMESTAMP',

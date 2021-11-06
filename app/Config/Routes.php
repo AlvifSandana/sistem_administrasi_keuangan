@@ -31,15 +31,22 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'DashboardController::index');
-$routes->add('/dashboard', 'DashboardController::index');
+
+// route for login
+$routes->get('/login', 'LoginController::index');
+$routes->post('/auth', 'LoginController::auth');
+$routes->get('/logout', 'LoginController::logout');
+
+// route for dashboard
+$routes->get('/', 'DashboardController::index', ['filter' => 'auth']);
+$routes->add('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
 
 // route for tagihan
-$routes->get('/tagihan', 'TagihanController::index');
+$routes->get('/tagihan', 'TagihanController::index', ['filter' => 'auth']);
 $routes->get('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
 
 // route for pembayaran
-$routes->get('/pembayaran', 'PembayaranController::index');
+$routes->get('/pembayaran', 'PembayaranController::index', ['filter' => 'auth']);
 $routes->get('/pembayaran/search/(:any)', 'PembayaranController::search_pembayaran/$1');
 $routes->get('/pembayaran/detail-item-tagihan/(:any)', 'PembayaranController::get_detail_item_tagihan_by_paket_id/$1');
 $routes->post('/pembayaran/create', 'PembayaranController::add_pembayaran');
@@ -51,12 +58,12 @@ $routes->post('/mahasiswa/update/(:any)', 'MahasiswaController::update_mahasiswa
 $routes->delete('/mahasiswa/delete/(:any)', 'MahasiswaController::delete_mahasiswa/$1');
 
 // route for master mahasiswa
-$routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index', ['as' => 'admin.master_mahasiswa']);
+$routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index', ['as' => 'admin.master_mahasiswa', 'filter' => 'auth']);
 $routes->post('/master-mahasiswa/create', 'Master/MasterMahasiswaController::create_mahasiswa');
 $routes->post('/master-mahasiswa/import/upload', 'Master/MasterMahasiswaController::import');
 
 // route for master keuangan
-$routes->get('/master-keuangan', 'Master/MasterKeuanganController::index');
+$routes->get('/master-keuangan', 'Master/MasterKeuanganController::index', ['filter' => 'auth']);
 
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');

@@ -1,4 +1,4 @@
-<?php if (session()->getFlashData('success')) { ?>
+<?php if (session()->getFlashdata('success')) { ?>
     <div class="row mb-2">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -11,7 +11,7 @@
     </div>
 <?php } ?>
 
-<?php if (session()->getFlashData('error')) { ?>
+<?php if (session()->getFlashdata('error')) { ?>
     <div class="row mb-2">
         <div class="col">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
