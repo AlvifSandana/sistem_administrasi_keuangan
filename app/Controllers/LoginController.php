@@ -33,6 +33,7 @@ class LoginController extends BaseController
             if ($login_data) {
                 $pass = $login_data['password'];
                 $verify_pass = password_verify($password, $pass);
+                // dd([$verify_pass, $pass, $password]);
                 // dd($password, $pass);
                 if ($verify_pass) {
                     $session_data = [

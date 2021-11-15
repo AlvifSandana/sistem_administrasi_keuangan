@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\SemesterModel;
+use App\Models\ProgdiModel;
 
-class SemesterController extends BaseController
+class ProgdiController extends BaseController
 {
     public function index()
     {
@@ -13,33 +13,33 @@ class SemesterController extends BaseController
     }
 
     /**
-     * Create a new data semester
+     * Create a new progdi
      * 
      * @return JSON
      */
-    public function createSemester()
+    public function createProgdi()
     {
         try {
             // create validator
             $validator = \Config\Services::validation();
             // set validator rules
             $validator->setRules([
-                'nama_semester' => 'required',
+                'nama_progdi' => 'required',
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
             if ($isDataValid) {
                 // create model instance
-                $m_semester = new SemesterModel();
+                $m_progdi = new ProgdiModel();
                 // insert data
-                $semester = $m_semester->insert([
-                    'nama_semester' => $this->request->getPost('nama_semester'),
+                $progdi = $m_progdi->insert([
+                    'nama_progdi' => strtoupper($this->request->getPost('nama_progdi'))
                 ]);
-                // check insert result
-                if ($semester) {
+                // result check
+                if ($progdi) {
                     $result['status'] = 'success';
                     $result['message'] = 'Data berhasil ditambahkan.';
-                    $result['data'] = $semester;
+                    $result['data'] = $progdi;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
@@ -60,40 +60,40 @@ class SemesterController extends BaseController
             return json_encode($result);
         }
     }
-
+    
     /**
-     * Update data semester by id
+     * Update data progdi by id
      * 
-     * @param int @id
+     * @param int $id
      * @return JSON
      */
-    public function updateSemester($id)
+    public function updateProgdi($id)
     {
         try {
             // create validator
             $validator = \Config\Services::validation();
             // set validator rules
             $validator->setRules([
-                'nama_semester' => 'required',
+                'nama_progdi' => 'required',
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
             if ($isDataValid && $id != null) {
                 // create model instance
-                $m_semester = new SemesterModel();
+                $m_progdi = new ProgdiModel();
                 // insert data
-                $semester = $m_semester->update($id, [
-                    'nama_semester' => $this->request->getPost('nama_semester'),
+                $progdi = $m_progdi->update($id, [
+                    'nama_progdi' => strtoupper($this->request->getPost('nama_progdi'))
                 ]);
-                // check insert result
-                if ($semester) {
+                // result check
+                if ($progdi) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Data berhasil diperbarui dengan nilai.' . $this->request->getPost('nama_semester');
-                    $result['data'] = $semester;
+                    $result['message'] = 'Berhasil memperbarui data program studi dengan ID '.$id;
+                    $result['data'] = $progdi;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
-                    $result['message'] = 'Gagal memperbarui data.';
+                    $result['message'] = 'Gagal memperbarui data program studi dengan ID '.$id;
                     $result['data'] = [];
                     return json_encode($result);
                 }
@@ -110,28 +110,29 @@ class SemesterController extends BaseController
             return json_encode($result);
         }
     }
-
     /**
-     * Delete data semester by id
+     * Delete data progdi by id
      * 
+     * @param int $id
      * @return JSON
      */
-    public function deleteSemester($id)
+    public function deleteProgdi($id)
     {
         try {
             if ($id != null) {
-                $m_semester = new SemesterModel();
+                // create model instance
+                $m_progdi = new ProgdiModel();
                 // insert data
-                $semester = $m_semester->delete($id);
-                // check insert result
-                if ($semester) {
+                $progdi = $m_progdi->delete($id);
+                // result check
+                if ($progdi) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Berhasil menghapus data semester dengan ID ' . $id;
-                    $result['data'] = $semester;
+                    $result['message'] = 'Berhasil menghapus data program studi dengan ID '.$id;
+                    $result['data'] = $progdi;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
-                    $result['message'] = 'Gagal menghapus data semester dengan ID ' . $id;
+                    $result['message'] = 'Gagal menghapus data program studi dengan ID '.$id;
                     $result['data'] = [];
                     return json_encode($result);
                 }
@@ -148,4 +149,5 @@ class SemesterController extends BaseController
             return json_encode($result);
         }
     }
+
 }

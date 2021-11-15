@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\SemesterModel;
+use App\Models\AngkatanModel;
 
-class SemesterController extends BaseController
+class AngkatanController extends BaseController
 {
     public function index()
     {
@@ -13,37 +13,37 @@ class SemesterController extends BaseController
     }
 
     /**
-     * Create a new data semester
+     * Create a new data tahun angkatan
      * 
      * @return JSON
      */
-    public function createSemester()
+    public function createAngkatan()
     {
         try {
             // create validator
             $validator = \Config\Services::validation();
-            // set validator rules
+            // set validation rules
             $validator->setRules([
-                'nama_semester' => 'required',
+                'nama_angkatan' => 'required',
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
             if ($isDataValid) {
                 // create model instance
-                $m_semester = new SemesterModel();
+                $m_angkatan = new AngkatanModel();
                 // insert data
-                $semester = $m_semester->insert([
-                    'nama_semester' => $this->request->getPost('nama_semester'),
+                $angkatan = $m_angkatan->insert([
+                    'nama_angkatan' => $this->request->getPost('nama_angkatan')
                 ]);
-                // check insert result
-                if ($semester) {
+                // result check
+                if ($angkatan) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Data berhasil ditambahkan.';
-                    $result['data'] = $semester;
+                    $result['message'] = 'Berhasil menambahkan data tahun angkatan baru.';
+                    $result['data'] = $angkatan;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
-                    $result['message'] = 'Gagal menambahkan data.';
+                    $result['message'] = 'Gagal menambahkan data tahun angkatan.';
                     $result['data'] = [];
                     return json_encode($result);
                 }
@@ -62,38 +62,38 @@ class SemesterController extends BaseController
     }
 
     /**
-     * Update data semester by id
+     * Update data tahun angkatan by id
      * 
-     * @param int @id
+     * @param int $id
      * @return JSON
      */
-    public function updateSemester($id)
+    public function updateAngkatan($id)
     {
         try {
             // create validator
             $validator = \Config\Services::validation();
-            // set validator rules
+            // set validation rules
             $validator->setRules([
-                'nama_semester' => 'required',
+                'nama_angkatan' => 'required',
             ]);
             // validation check
             $isDataValid = $validator->withRequest($this->request)->run();
             if ($isDataValid && $id != null) {
                 // create model instance
-                $m_semester = new SemesterModel();
+                $m_angkatan = new AngkatanModel();
                 // insert data
-                $semester = $m_semester->update($id, [
-                    'nama_semester' => $this->request->getPost('nama_semester'),
+                $angkatan = $m_angkatan->update($id, [
+                    'nama_angkatan' => $this->request->getPost('nama_angkatan')
                 ]);
-                // check insert result
-                if ($semester) {
+                // result check
+                if ($angkatan) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Data berhasil diperbarui dengan nilai.' . $this->request->getPost('nama_semester');
-                    $result['data'] = $semester;
+                    $result['message'] = 'Berhasil memperbarui data tahun angkatan dengan ID ' . $id;
+                    $result['data'] = $angkatan;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
-                    $result['message'] = 'Gagal memperbarui data.';
+                    $result['message'] = 'Gagal memperbarui data tahun angkatan dengan ID ' . $id;
                     $result['data'] = [];
                     return json_encode($result);
                 }
@@ -112,26 +112,28 @@ class SemesterController extends BaseController
     }
 
     /**
-     * Delete data semester by id
+     * Delete data tahun angkatan by id
      * 
+     * @param int $id
      * @return JSON
      */
-    public function deleteSemester($id)
+    public function deleteAngkatan($id)
     {
         try {
-            if ($id != null) {
-                $m_semester = new SemesterModel();
+            if ($id) {
+                // create model instance
+                $m_angkatan = new AngkatanModel();
                 // insert data
-                $semester = $m_semester->delete($id);
-                // check insert result
-                if ($semester) {
+                $angkatan = $m_angkatan->delete($id);
+                // result check
+                if ($angkatan) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Berhasil menghapus data semester dengan ID ' . $id;
-                    $result['data'] = $semester;
+                    $result['message'] = 'Berhasil menghapus data tahun angkatan dengan ID ' . $id;
+                    $result['data'] = $angkatan;
                     return json_encode($result);
                 } else {
                     $result['status'] = 'failed';
-                    $result['message'] = 'Gagal menghapus data semester dengan ID ' . $id;
+                    $result['message'] = 'Gagal menghapus data tahun angkatan dengan ID ' . $id;
                     $result['data'] = [];
                     return json_encode($result);
                 }

@@ -65,6 +65,9 @@ $routes->post('/master-mahasiswa/import/upload', 'Master/MasterMahasiswaControll
 // route for master keuangan
 $routes->get('/master-keuangan', 'Master/MasterKeuanganController::index', ['filter' => 'auth']);
 
+// route for master data pendukung
+$routes->get('/master-pendukung', 'Master/DataPendukungController::index', ['filter' => 'auth']);
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->post('/paket/create', 'PaketController::create_paket');
