@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Master Keuangan</h1>
+                <h1 class="m-0">Master Data Pendukung</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -25,16 +25,31 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="h5">Data Semester</h5>
-                    </div>
-                </div>
+                <?= $this->include('pages/master/datapendukung/card_progdi') ?>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <?= $this->include('pages/master/datapendukung/card_semester') ?>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <?= $this->include('pages/master/datapendukung/card_angkatan') ?>
             </div>
         </div>
     </div>
 </section>
+<!-- Modals -->
+<?= $this->include('pages/master/datapendukung/modal/modal_create_angkatan') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_create_progdi') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_create_semester') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_update_angkatan') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_update_progdi') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_update_semester') ?>
+<!-- /Modals -->
 <?= $this->endSection() ?>
 
 <?= $this->section('custom-script') ?>
+    <?= $this->include('pages/master/datapendukung/script') ?>
 <?= $this->endSection() ?>

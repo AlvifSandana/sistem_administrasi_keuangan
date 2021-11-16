@@ -14,7 +14,7 @@ class SemesterModel extends Model
     protected $returnType           = 'array';
     protected $useSoftDeletes       = false;
     protected $protectFields        = true;
-    protected $allowedFields        = [];
+    protected $allowedFields        = ['nama_semester'];
 
     // Dates
     protected $useTimestamps        = true;

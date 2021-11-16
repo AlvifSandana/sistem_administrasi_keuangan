@@ -88,7 +88,7 @@ class SemesterController extends BaseController
                 // check insert result
                 if ($semester) {
                     $result['status'] = 'success';
-                    $result['message'] = 'Data berhasil diperbarui dengan nilai.' . $this->request->getPost('nama_semester');
+                    $result['message'] = 'Data berhasil diperbarui dengan nilai ' . $this->request->getPost('nama_semester');
                     $result['data'] = $semester;
                     return json_encode($result);
                 } else {
