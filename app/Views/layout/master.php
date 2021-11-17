@@ -11,7 +11,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="plugins/ionicons/ionicons.min.css">
+    <!-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="assets/css/adminlte.min.css">
     <!-- overlayScrollbars -->
@@ -23,7 +24,7 @@
     <!-- datatable -->
     <link rel="stylesheet" href="plugins/datatables/datatables.min.css">
     <!-- animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="plugins/animatecss/animate.min.css" />
     <!-- select2 -->
     <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
 </head>
