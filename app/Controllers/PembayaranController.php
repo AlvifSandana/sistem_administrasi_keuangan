@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\AngkatanModel;
 use App\Models\ItemPaketModel;
 use App\Models\MahasiswaModel;
 use App\Models\PaketModel;
 use App\Models\PembayaranModel;
+use App\Models\ProgdiModel;
 use App\Models\TagihanModel;
 
 class PembayaranController extends BaseController
@@ -27,15 +29,21 @@ class PembayaranController extends BaseController
             // session instance
             $session = session();
             // model
-            $m_tagihan = new TagihanModel();
+            // $m_tagihan = new TagihanModel();            
+            // $m_paket = new PaketModel();
+            // $m_itempaket = new ItemPaketModel();
             $m_mahasiswa = new MahasiswaModel();
-            $m_paket = new PaketModel();
-            $m_itempaket = new ItemPaketModel();
             $m_pembayaran = new PembayaranModel();
+            $m_progdi = new ProgdiModel();
+            $m_angkatan = new AngkatanModel();
             // search tagihan & pembayaran by nim
             $mahasiswa = $m_mahasiswa->where('nim', $nim)->first();
             if ($mahasiswa) {
+                $progdi = $m_progdi->where('id_progdi', $mahasiswa['progdi_id'])->first();
+                $angkatan = $m_angkatan->where('id_angkatan', $mahasiswa['angkatan_id'])->first();
                 $pembayaran = $m_pembayaran->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->findAll();
+                $mahasiswa['progdi'] = $progdi['nama_progdi'];
+                $mahasiswa['angkatan'] = $angkatan['nama_angkatan'];
                 if ($pembayaran) {
                     $session->setFlashdata('success', 'Data ditemukan!');
                     $result = [
