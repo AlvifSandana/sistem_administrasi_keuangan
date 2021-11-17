@@ -6,6 +6,16 @@
     var global_tagihan = 0;
     var global_pembayaran = 0;
 
+    /** 
+     * event onkeypress enter untuk pencarian
+     * data pembayaran mahasiswa
+     */
+    $('#nim').on('keypress', function(e) {
+        if (e.which == 13) {
+            searchPembayaran();
+        }
+    });
+
     /**
      * search pembayaran by nim
      * and show result table
@@ -40,6 +50,8 @@
               <td>${data.data.mahasiswa.id_mahasiswa}</td>
               <td>${data.data.mahasiswa.nim}</td>
               <td>${data.data.mahasiswa.nama_mahasiswa}</td>
+              <td>${data.data.mahasiswa.progdi}</td>
+              <td>${data.data.mahasiswa.angkatan}</td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="showDetail()" data-toggle="tooltip" data-placement="top" title="Lihat Detail"><i class="fas fa-info"></i></button>
               </td>

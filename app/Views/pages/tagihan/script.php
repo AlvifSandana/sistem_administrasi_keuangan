@@ -2,8 +2,20 @@
     // global data
     let data_mhs;
     let data_tagihan;
+    var global_tagihan = 0;
+    var global_terbayar = 0;
     // number format
     var numFormat = Intl.NumberFormat();
+
+    /** 
+     * event onkeypress enter untuk pencarian
+     * data tagihan mahasiswa
+     */
+    $('#nim').on('keypress', function(e) {
+        if (e.which == 13) {
+            searchMhs();
+        }
+    });
 
     /** 
      * function pencarian data tagihan mahasiswa
@@ -21,14 +33,14 @@
                 } else {
                     $('.detail-tagihan').empty();
                     $('.hasil').css('visibility', 'hidden');
-                    showAfterSearch(data.data.detail_mahasiswa.id_mahasiswa, data.data.detail_mahasiswa.nim, data.data.detail_mahasiswa.nama_mahasiswa);
+                    showAfterSearch(data.data.detail_mahasiswa.id_mahasiswa, data.data.detail_mahasiswa.nim, data.data.detail_mahasiswa.nama_mahasiswa, data.data.detail_mahasiswa.progdi, data.data.detail_mahasiswa.angkatan);
                     // data detail_tagihan    
                     var detail_tagihan = data.data.detail_tagihan;
                     data_tagihan = detail_tagihan;
                     data_mhs = data.data.detail_mahasiswa;
                     // total tagihan & total terbayar
-                    var global_tagihan = 0;
-                    var global_terbayar = 0;
+                    global_tagihan = 0;
+                    global_terbayar = 0;
                     var total_tagihan = 0;
                     var total_terbayar = 0;
                     var tmp_terbayar = 0;
@@ -44,37 +56,37 @@
                                 tmp_terbayar += parseInt(detail_tagihan[index].detail_item_paket[i].detail_pembayaran[j].nominal_pembayaran);
                             }
                             new_row += `
-              <tr>
-                <td>${detail_tagihan[index].detail_item_paket[i].nama_item}</td>
-                <td>Rp ${numFormat.format(parseInt(detail_tagihan[index].detail_item_paket[i].nominal_item))}</td>
-                <td>RP ${numFormat.format(tmp_terbayar)}</td>
-                <td class="text-center"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalDetailTagihan" onclick="showDetailPembayaran(${index}, ${i})"><i class="fas fa-info"></i></button></td>
-              </tr>
-              `;
+                                        <tr>
+                                            <td>${detail_tagihan[index].detail_item_paket[i].nama_item}</td>
+                                            <td>Rp ${numFormat.format(parseInt(detail_tagihan[index].detail_item_paket[i].nominal_item))}</td>
+                                            <td>Rp ${numFormat.format(tmp_terbayar)}</td>
+                                            <td class="text-center"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalDetailTagihan" onclick="showDetailPembayaran(${index}, ${i})"><i class="fas fa-info"></i></button></td>
+                                        </tr>
+                                        `;
                             total_terbayar += tmp_terbayar;
                             tmp_terbayar = 0;
                         }
                         new_tagihan += `
-            <div class="tagihan-${index} mb-3">
-              <h5 class="h5">Tagihan ${detail_tagihan[index].detail_paket[0].nama_paket} <span class="float-right badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
-              <table class="table table-hover table-bordered">
-                <thead class="text-center">
-                  <th>ITEM TAGIHAN</th>
-                  <th>NOMINAL</th>
-                  <th>TERBAYAR</th>
-                  <th>ACTION</th>
-                </thead>
-                <tbody>
-                  ${new_row}
-                  <tr class="font-weight-bold">
-                    <td>TOTAL</td>
-                    <td>Rp ${numFormat.format(total_tagihan)}</td>
-                    <td>Rp ${numFormat.format(total_terbayar)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <hr/>`;
+                                        <div class="tagihan-${index} mb-3">
+                                        <h5 class="h5">Tagihan ${detail_tagihan[index].detail_paket[0].nama_paket} <span class="float-right badge badge-${detail_tagihan[index].status_tagihan.toLowerCase() == 'lunas' ? 'success' : 'warning'}">${detail_tagihan[index].status_tagihan}</span></h5>
+                                        <table class="table table-hover table-bordered">
+                                            <thead class="text-center">
+                                            <th>ITEM TAGIHAN</th>
+                                            <th>NOMINAL</th>
+                                            <th>TERBAYAR</th>
+                                            <th>ACTION</th>
+                                            </thead>
+                                            <tbody>
+                                            ${new_row}
+                                            <tr class="font-weight-bold">
+                                                <td>TOTAL</td>
+                                                <td>Rp ${numFormat.format(total_tagihan)}</td>
+                                                <td>Rp ${numFormat.format(total_terbayar)}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                        <hr/>`;
                         $('.detail-tagihan').append(new_tagihan);
                         new_row = ``;
                         new_tagihan = ``;
@@ -96,13 +108,15 @@
      * function untuk menampilkan card hasil 
      * pencarian data mahasiswa
      */
-    function showAfterSearch(id, nim, nama) {
+    function showAfterSearch(id, nim, nama, progdi, angkatan) {
         $('#list_tagihan').empty();
         var new_row = `
     <tr>
       <td>${id}</td>
       <td>${nim}</td>
       <td>${nama}</td>
+      <td>${progdi}</td>
+      <td>${angkatan}</td>
       <td><button class="btn btn-primary btn-sm" onclick="$('.hasil').css('visibility', 'visible')"><i class="fas fa-info"></i></button></td>
     </tr>`;
         $('#list_tagihan').append(new_row);
