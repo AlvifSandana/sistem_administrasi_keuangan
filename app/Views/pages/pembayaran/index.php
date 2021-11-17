@@ -59,6 +59,21 @@
                                     </thead>
                                     <tbody class="text-center" id="list_search_result"></tbody>
                                 </table>
+                                <table>
+                                    <tr>
+                                        <td><b>Summary</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total tagihan</td>
+                                        <td>&emsp;=&emsp;</td>
+                                        <td>Rp <span id="global-tagihan"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Terbayar</td>
+                                        <td>&emsp;=&emsp;</td>
+                                        <td>Rp <span id="global-pembayaran"></span></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>

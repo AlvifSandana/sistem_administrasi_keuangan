@@ -8,7 +8,7 @@
 - [ ] Mengerjakan fitur export data ke **.sql** dan **.xlsx**
 - [ ] Halaman settings (konsep)
 - [x] Modul Master data pendukung
-- [ ] Event onKeyPress enter untuk pencarian tagihan dan pembayaran
-- [ ] Show total tagihan dari semua semester
+- [x] Event onKeyPress enter untuk pencarian tagihan dan pembayaran
+- [x] Show total tagihan dari semua semester
 - [ ] Fix pembayaran (jika pembayaran melebihi nominal item tagihan, pembayaran ditolak)
 - [ ] Fix pembayaran (jika total pembayaran yang telah direcord >= total tagihan, set status tagihan menjadi lunas)

@@ -95,6 +95,8 @@
                         total_tagihan = 0;
                         total_terbayar = 0;
                     }
+                    $('#global-tagihan').text(numFormat.format(global_tagihan).toString());
+                    $('#global-pembayaran').text(numFormat.format(global_terbayar).toString());
                 }
             },
             error: function(jqXHR) {
@@ -111,16 +113,31 @@
     function showAfterSearch(id, nim, nama, progdi, angkatan) {
         $('#list_tagihan').empty();
         var new_row = `
-    <tr>
-      <td>${id}</td>
-      <td>${nim}</td>
-      <td>${nama}</td>
-      <td>${progdi}</td>
-      <td>${angkatan}</td>
-      <td><button class="btn btn-primary btn-sm" onclick="$('.hasil').css('visibility', 'visible')"><i class="fas fa-info"></i></button></td>
-    </tr>`;
+                        <tr>
+                        <td>${id}</td>
+                        <td>${nim}</td>
+                        <td>${nama}</td>
+                        <td>${progdi}</td>
+                        <td>${angkatan}</td>
+                        <td><button class="btn btn-primary btn-sm" onclick="showDetailTagihan()"><i class="fas fa-info"></i></button></td>
+                        </tr>`;
         $('#list_tagihan').append(new_row);
         $('#search_result').css('visibility', 'visible');
+        $('#search_result').addClass("animate__animated animate__fadeIn");
+    }
+
+    function showDetailTagihan() {
+        if ($('.hasil').css('visibility') == 'hidden') {
+            $('.hasil').removeClass('animate__animated animate__fadeOut');
+            $('.hasil').css('visibility', 'visible');
+            $('.hasil').addClass('animate__animated animate__fadeIn');
+        } else {
+            $('.hasil').removeClass('animate__animated animate__fadeIn');
+            $('.hasil').addClass('animate__animated animate__fadeOut');
+            setTimeout(()=> {
+                $('.hasil').css('visibility', 'hidden');
+            }, 1000);
+        }
     }
 
     /** 

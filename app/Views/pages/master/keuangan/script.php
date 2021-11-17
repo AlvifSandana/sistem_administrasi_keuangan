@@ -1,4 +1,8 @@
 <script>
+    $('.custom-select').select2({
+        width: 'resolve'
+    });
+
     // get data on selected paket tagihan
     function getItemPaket() {
         $("#tbl_master_paket > tbody").empty();

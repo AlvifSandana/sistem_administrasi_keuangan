@@ -97,6 +97,8 @@
                         // total tagihan & total pembayaran
                         var total_tagihan = 0;
                         var total_pembayaran = 0;
+                        global_tagihan = 0;
+                        global_pembayaran = 0;
                         // variable for new HTML Elements
                         var new_div_row = ``;
                         var new_div_col_tagihan = ``;
@@ -115,11 +117,11 @@
                             for (let j = 0; j < tagihan[i].detail_item_paket.length; j++) {
                                 // create table row from detail item tagihan
                                 new_tbl_row_tagihan += `
-                <tr>
-                  <td>${tagihan[i].detail_item_paket[j].id_item}</td>
-                  <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
-                  <td>Rp ${num_format.format(parseInt(tagihan[i].detail_item_paket[j].nominal_item))}</td>
-                </tr>`;
+                                                        <tr>
+                                                        <td>${tagihan[i].detail_item_paket[j].id_item}</td>
+                                                        <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
+                                                        <td>Rp ${num_format.format(parseInt(tagihan[i].detail_item_paket[j].nominal_item))}</td>
+                                                        </tr>`;
                                 // add total tagihan
                                 total_tagihan += parseInt(tagihan[i].detail_item_paket[j].nominal_item);
                                 // iterate pembayaran per item tagihan
@@ -131,78 +133,80 @@
                                 total_pembayaran += tmp_nominal_pembayaran;
                                 // create table row from detail pembayaran per item paket
                                 new_tbl_row_pembayaran += `
-                <tr>
-                  <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
-                  <td>Rp ${num_format.format(tmp_nominal_pembayaran)}</td>
-                  <td class="text-center"><span class="badge badge-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${i}, ${j})"><i class="fas fa-info"></i></button></td>
-                </tr>`;
+                                                            <tr>
+                                                            <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
+                                                            <td>Rp ${num_format.format(tmp_nominal_pembayaran)}</td>
+                                                            <td class="text-center"><span class="badge badge-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${i}, ${j})"><i class="fas fa-info"></i></button></td>
+                                                            </tr>`;
                             }
                             // create new div column element for current tagihan 
                             new_div_col_tagihan += `
-              <div class="col-6">
-                <div class="card card_detail_tagihan" id="" style="visibility: hidden;">
-                  <div class="card-body">
-                    <h5 class="h5 pb-2">Tagihan ${tagihan[i].detail_paket[0].nama_paket} <span class="float-right badge badge-${tagihan[i].status_tagihan == 'lunas' ? 'success' : 'danger'}">${tagihan[i].status_tagihan} </span></h5>
-                    <div class="row">
-                      <div class="col">
-                        <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
-                          <thead class="text-center">
-                            <th>ID</th>
-                            <th>ITEM TAGIHAN</th>
-                            <th>NOMINAL</th>
-                          </thead>
-                          <tbody class="">
-                            ${new_tbl_row_tagihan}
-                            <tr class="font-weight-bold">
-                              <td class="text-center" colspan="2">TOTAL TAGIHAN</td>
-                              <td>Rp ${num_format.format(total_tagihan)}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>`;
+                                                        <div class="col-6">
+                                                            <div class="card card_detail_tagihan" id="" style="visibility: hidden;">
+                                                            <div class="card-body">
+                                                                <h5 class="h5 pb-2">Tagihan ${tagihan[i].detail_paket[0].nama_paket} <span class="float-right badge badge-${tagihan[i].status_tagihan == 'lunas' ? 'success' : 'danger'}">${tagihan[i].status_tagihan} </span></h5>
+                                                                <div class="row">
+                                                                <div class="col">
+                                                                    <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
+                                                                    <thead class="text-center">
+                                                                        <th>ID</th>
+                                                                        <th>ITEM TAGIHAN</th>
+                                                                        <th>NOMINAL</th>
+                                                                    </thead>
+                                                                    <tbody class="">
+                                                                        ${new_tbl_row_tagihan}
+                                                                        <tr class="font-weight-bold">
+                                                                        <td class="text-center" colspan="2">TOTAL TAGIHAN</td>
+                                                                        <td>Rp ${num_format.format(total_tagihan)}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                        </div>`;
                             // create new div column element for current tagihan
                             new_div_col_pembayaran += `
-              <div class="col-6">
-                <div class="card card_detail_pembayaran" id="" style="visibility: hidden;">
-                  <div class="card-body">
-                    <h5 class="h5 pb-2">Pembayaran ${tagihan[i].detail_paket[0].nama_paket} <button class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modalCreatePembayaran" onclick="showModalCreatePembayaran(${tagihan[i].paket_id}, ${i})"><i class="fas fa-plus"></i></button></h5>
-                    <div class="row">
-                      <div class="col">
-                        <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
-                          <thead class="text-center">
-                            <th>ITEM PEMBAYARAN</th>
-                            <th>TERBAYAR</th>
-                            <th>ACTION</th>
-                          </thead>
-                          <tbody>
-                            ${new_tbl_row_pembayaran}
-                            <tr class="font-weight-bold">
-                              <td class="text-center">TOTAL PEMBAYARAN</td>
-                              <td colspan="2">Rp ${num_format.format(total_pembayaran)}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>`;
+                                                        <div class="col-6">
+                                                            <div class="card card_detail_pembayaran" id="" style="visibility: hidden;">
+                                                            <div class="card-body">
+                                                                <h5 class="h5 pb-2">Pembayaran ${tagihan[i].detail_paket[0].nama_paket} <button class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#modalCreatePembayaran" onclick="showModalCreatePembayaran(${tagihan[i].paket_id}, ${i})"><i class="fas fa-plus"></i></button></h5>
+                                                                <div class="row">
+                                                                <div class="col">
+                                                                    <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
+                                                                    <thead class="text-center">
+                                                                        <th>ITEM PEMBAYARAN</th>
+                                                                        <th>TERBAYAR</th>
+                                                                        <th>ACTION</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        ${new_tbl_row_pembayaran}
+                                                                        <tr class="font-weight-bold">
+                                                                        <td class="text-center">TOTAL PEMBAYARAN</td>
+                                                                        <td colspan="2">Rp ${num_format.format(total_pembayaran)}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                        </div>`;
                             // add total tagihan & pembayaran to global
                             global_tagihan += total_tagihan;
                             global_pembayaran += total_pembayaran;
                             // create new div row for current tagihan
                             new_div_row += `
-              <div class="row mb-2 pembayaran">
-                ${new_div_col_tagihan}
-                ${new_div_col_pembayaran}
-              </div>`;
+                                            <div class="row mb-2 pembayaran">
+                                                ${new_div_col_tagihan}
+                                                ${new_div_col_pembayaran}
+                                            </div>`;
                         }
                         // append to parent div container
                         $('.container-pembayaran').append(new_div_row);
+                        $('#global-tagihan').text(num_format.format(global_tagihan).toString());
+                        $('#global-pembayaran').text(num_format.format(global_pembayaran).toString());
                     } else {
                         // get error 
                         showSWAL('error', data.message);
@@ -277,9 +281,19 @@
      */
     function showDetail() {
         // change visibility
-        $(".card_detail_tagihan").css("visibility", "visible");
-        $(".card_detail_pembayaran").css("visibility", "visible");
-        $(".pembayaran").addClass("animate__animated animate__fadeIn");
+        if ($('.card_detail_tagihan').css('visibility') == 'hidden') {
+            $('.pembayaran').removeClass('animate__animated animate__fadeOut');
+            $('.card_detail_tagihan').css('visibility', 'visible');
+            $('.card_detail_pembayaran').css('visibility', 'visible');
+            $('.pembayaran').addClass('animate__animated animate__fadeIn');
+        } else {
+            $('.pembayaran').removeClass('animate__animated animate__fadeIn');
+            $('.pembayaran').addClass('animate__animated animate__fadeOut');
+            setTimeout(() => {
+                $('.card_detail_tagihan').css('visibility', 'hidden');
+                $('.card_detail_pembayaran').css('visibility', 'hidden');
+            }, 1000);
+        }
     }
 
     /**

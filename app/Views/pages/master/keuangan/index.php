@@ -1,5 +1,21 @@
 <?= $this->extend('layout/master') ?>
 
+<?= $this->section('custom-styles') ?>
+<style>
+    .select2-selection__rendered {
+        line-height: 30px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 40px !important;
+    }
+
+    .select2-selection__arrow {
+        height: 35px !important;
+    }
+</style>
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -28,14 +44,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="h5 mb-4">Data Paket Tagihan <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddPaket"><i class="fas fa-plus"></i> Tambah Paket</button></h5>
-                        <select name="paket" class="form-control" id="select_paket" onchange="getItemPaket()" onload="getItemPaket()">
+                        <select name="paket" class="form-control custom-select" id="select_paket" onchange="getItemPaket()" style="width: 100%;">
+                            <option value=""></option>
                             <?php
                             foreach ($data_paket as $p) {
-                                if ($p['id_paket'] == 1) {
-                                    echo '<option value="' . $p['id_paket'] . '" selected>' . $p['nama_paket'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $p['id_paket'] . '">' . $p['nama_paket'] . '</option>';
-                                }
+                                echo '<option value="' . $p['id_paket'] . '">' . $p['nama_paket'] . '</option>';
                             }
                             ?>
                         </select>
