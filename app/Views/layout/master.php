@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="plugins/animatecss/animate.min.css" />
     <!-- select2 -->
     <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <?= $this->renderSection('custom-styles') ?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
