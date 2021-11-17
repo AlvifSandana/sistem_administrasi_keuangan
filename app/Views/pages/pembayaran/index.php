@@ -53,6 +53,8 @@
                                         <th>ID</th>
                                         <th>NIM</th>
                                         <th>NAMA MAHASISWA</th>
+                                        <th>PROGRAM STUDI</th>
+                                        <th>ANGKATAN</th>
                                         <th>ACTION</th>
                                     </thead>
                                     <tbody class="text-center" id="list_search_result"></tbody>
