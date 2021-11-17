@@ -172,6 +172,7 @@ class MasterMahasiswaController extends BaseController
                         ]);
                         // validate query result
                         if ($mahasiswa != null) {
+                            // iterate by paket
                             foreach ($paket as $p) {
                                 // insert new tagihan 
                                 $tagihan = $m_tagihan->insert([
