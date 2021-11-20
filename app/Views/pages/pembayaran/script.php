@@ -144,7 +144,7 @@
                                                         <div class="col-6">
                                                             <div class="card card_detail_tagihan" id="" style="visibility: hidden;">
                                                             <div class="card-body">
-                                                                <h5 class="h5 pb-2">Tagihan ${tagihan[i].detail_paket[0].nama_paket} <span class="float-right badge badge-${tagihan[i].status_tagihan == 'lunas' ? 'success' : 'danger'}">${tagihan[i].status_tagihan} </span></h5>
+                                                                <h5 class="h5 pb-2">Tagihan ${tagihan[i].detail_paket[0].nama_paket} <span class="float-right badge badge-${tagihan[i].status_tagihan == 'Lunas' ? 'success' : 'danger'}">${tagihan[i].status_tagihan} </span></h5>
                                                                 <div class="row">
                                                                 <div class="col">
                                                                     <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
