@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-        <img src="assets/img/bill.png" class="brand-image elevation-2" alt="Brand" style="opacity: .8;"/>
+        <img src="assets/img/bill.png" class="brand-image elevation-2" alt="Brand" style="opacity: .8;" />
         <span class="brand-text font-weight-light">Sistem Keuangan</span>
     </a>
 
@@ -46,17 +46,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?php echo base_url() ?>/tagihan" class="nav-link<?php if ($uri_segment == "tagihan") {
-                                                                                            echo " active";
-                                                                                        } ?>">
+                            <a href="<?php echo base_url() ?>/tagihan" class="nav-link<?php $uri_segment == "tagihan" ? print(" active") : print("") ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tagihan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?php echo base_url() ?>/pembayaran" class="nav-link<?php if ($uri_segment == "pembayaran") {
-                                                                                                echo " active";
-                                                                                            } ?>">
+                            <a href="<?php echo base_url() ?>/pembayaran" class="nav-link<?php $uri_segment == "pembayaran" ? print(" active") : print("") ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pembayaran</p>
                             </a>
@@ -66,7 +62,7 @@
             </li>
             <li class="nav-header">MASTER</li>
             <li class="nav-item">
-                <a href="<?php echo base_url() ?>/master-keuangan" class="nav-link">
+                <a href="<?php echo base_url() ?>/master-keuangan" class="nav-link<?php $uri_segment == "master-keuangan" ? print(" active") : print("") ?>">
                     <i class="nav-icon fas fa-file-invoice-dollar"></i>
                     <p>
                         Keuangan
@@ -74,18 +70,26 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?php echo base_url() ?>/master-mahasiswa" class="nav-link">
+                <a href="<?php echo base_url() ?>/master-mahasiswa" class="nav-link<?php $uri_segment == "master-mahasiswa" ? print(" active") : print("") ?>">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
-                        Data Mahasiswa
+                        Mahasiswa
                     </p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?php echo base_url() ?>/master-pendukung" class="nav-link">
+                <a href="<?php echo base_url() ?>/master-pendukung" class="nav-link<?php $uri_segment == "master-pendukung" ? print(" active") : print("") ?>">
                     <i class="nav-icon far fa-plus-square"></i>
                     <p>
-                        Data Pendukung
+                        Pendukung
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?php echo base_url() ?>/backup-restore" class="nav-link<?php $uri_segment == "backup-restore" ? print(" active") : print("") ?>">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>
+                        Backup / Restore
                     </p>
                 </a>
             </li>
