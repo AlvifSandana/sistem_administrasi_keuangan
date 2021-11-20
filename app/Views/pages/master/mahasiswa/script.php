@@ -1,10 +1,25 @@
 <script>
+    // set select2 
     $('.customselect').select2({
         width: 'resolve',
     });
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
 
+    // enable DataTable
     $('#tbl_list_mhs').DataTable();
 
+    // show upload filename
+    $('#file_import').on('change', function() {
+        var filename = $(this).val();
+        $(this).next('.custom-file-label').html(filename);
+    })
+
+    /** 
+     * create new data mahasiswa
+     * with tagihan included.
+     */
     function createMahasiswa() {
         var today = new Date();
         var data_mahasiswa = {
@@ -38,6 +53,9 @@
         });
     }
 
+    /** 
+     * fill the modal update field
+     */
     function fillModalUpdateForm(id_mahasiswa) {
         $.ajax({
             url: '<?php base_url() ?>' + '/mahasiswa/get/' + id_mahasiswa,
@@ -65,6 +83,9 @@
         });
     }
 
+    /** 
+     * update data mahasiswa
+     */
     function updateMahasiswa() {
         var data_mahasiswa = {
             nim: $('#update_nim').val(),
@@ -93,6 +114,9 @@
         });
     }
 
+    /** 
+     * delete data mahasiswa by id
+     */
     function deleteMahasiswa(id_mahasiswa) {
         Swal.fire({
             title: 'Apakah Anda yakin ingin menghapus data ini?',
@@ -123,6 +147,9 @@
         });
     }
 
+    /** 
+     * upload .xlsx data mahasiswa
+     */
     function uploadImportFile() {
         var formData = new FormData();
         formData.append('file', $('#file_import')[0].files[0]);
