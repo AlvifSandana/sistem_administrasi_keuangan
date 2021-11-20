@@ -29,6 +29,26 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="h5 mb-3">Import Data Mahasiswa</h5>
+                        <form action="<?php base_url() ?>/master-mahasiswa/import/upload" method="post" enctype="multipart/form-data">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="file_import" id="file_import" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`">
+                                    <label class="custom-file-label" for="file_import">Choose file (.xlsx)</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="submit">Import</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="h5 mb-4">Data Mahasiswa <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddMahasiswa"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
                         <table class="table table-hover table-bordered" id="tbl_list_mhs">
                             <thead class="text-center">
@@ -43,26 +63,6 @@
                                 } ?>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="h5 mb-3">Import Data Mahasiswa</h5>
-                        <form action="<?php base_url() ?>/master-mahasiswa/import/upload" method="post" enctype="multipart/form-data">
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="file_import" id="file_import" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`">
-                                    <label class="custom-file-label" for="file_import">Choose file (.xlsx)</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="submit">Import</button>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
