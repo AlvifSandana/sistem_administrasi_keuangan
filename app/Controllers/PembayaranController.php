@@ -134,20 +134,82 @@ class PembayaranController extends BaseController
             if ($isDataValid) {
                 // create model
                 $m_pembayaran = new PembayaranModel();
-                // insert data 
-                $result = [
-                    "status" => "success",
-                    "message" => "Berhasil menambahkan pembayaran.",
-                    "data" => $m_pembayaran->insert([
-                        'paket_id' => $this->request->getPost('paket_id'),
-                        'item_id' => $this->request->getPost('item_id'),
-                        'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-                        'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
-                        'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
-                        'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
-                        'user_id' => $this->request->getPost('user_id')
-                    ])
-                ];
+                $m_itempaket = new ItemPaketModel();
+                $m_tagihan = new TagihanModel();
+                /**
+                 * validating pembayaran:
+                 * 
+                 * nominal pembayaran > nominal item tagihan ? pembayaran failed : pembayaran success 
+                 * nominal pembayaran >= sisa tagihan ? pembayaran failed : pembayaran success
+                 */
+                $item_tagihan = $m_itempaket->find($this->request->getPost('item_id'));
+                $pembayaran = $m_pembayaran->where('item_id', $this->request->getPost('item_id'))->findAll();
+                $all_item_tagihan = $m_itempaket->where('paket_id', $this->request->getPost('paket_id'))->findAll();
+                $all_item_pembayaran = $m_pembayaran->where('paket_id', $this->request->getPost('paket_id'))->where('mahasiswa_id', $this->request->getPost('mahasiswa_id'))->findAll();
+                if ($item_tagihan != null) {
+                    if ($this->request->getPost('nominal_pembayaran') > $item_tagihan['nominal_item']) {
+                        $result = [
+                            "status" => "failed",
+                            "message" => "Validasi gagal. Mohon isi nominal pembayaran yang sesuai!",
+                            "data" => []
+                        ];
+                    } else {
+                        $total_terbayar = 0;
+                        if ($pembayaran != null) {
+                            // get total pembayaran
+                            foreach ($pembayaran as $p) {
+                                $total_terbayar += $p['nominal_pembayaran'];
+                            }
+                        }
+                        $total_terbayar += $this->request->getPost('nominal_pembayaran');
+                        if ($total_terbayar > $item_tagihan['nominal_item']) {
+                            $result = [
+                                "status" => "failed",
+                                "message" => "Validasi gagal. Total pembayaran melebihi sisa tagihan. Mohon isi nominal pembayaran yang sesuai!",
+                                "data" => []
+                            ];
+                        } else {
+                            // change status tagihan when sisa tagihan = 0
+                            $total_tagihan = 0;
+                            $total_pembayaran = 0;
+                            foreach ($all_item_tagihan as $ait) {
+                                $total_tagihan += $ait['nominal_item'];
+                            }
+                            foreach ($all_item_pembayaran as $aip) {
+                                $total_pembayaran += $aip['nominal_pembayaran'];
+                            }
+                            $sisa_tagihan = $total_tagihan - ($total_terbayar + $total_pembayaran);
+                            if ($sisa_tagihan == 0) {
+                                $paket_id = $this->request->getPost('paket_id');
+                                $mahasiswa_id = $this->request->getPost('mahasiswa_id');
+                                $find_tagihan = $m_tagihan->where('paket_id', $paket_id)->where('mahasiswa_id', $mahasiswa_id)->first();
+                                $m_tagihan->update($find_tagihan['id_tagihan'], [
+                                    'status_tagihan' => 'Lunas'
+                                ]);
+                            }
+                            // insert data 
+                            $result = [
+                                "status" => "success",
+                                "message" => "Berhasil menambahkan pembayaran.",
+                                "data" => $m_pembayaran->insert([
+                                    'paket_id' => $this->request->getPost('paket_id'),
+                                    'item_id' => $this->request->getPost('item_id'),
+                                    'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
+                                    'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
+                                    'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
+                                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
+                                    'user_id' => $this->request->getPost('user_id')
+                                ])
+                            ];
+                        }
+                    }
+                } else {
+                    $result = [
+                        "status" => "error",
+                        "message" => "Item tidak ditemukan!",
+                        "data" => []
+                    ];
+                }
                 // return JSON
                 return json_encode($result);
             } else {
