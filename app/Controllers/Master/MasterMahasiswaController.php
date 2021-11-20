@@ -128,7 +128,7 @@ class MasterMahasiswaController extends BaseController
             if (!$file->isValid()) {
                 // throw error 
                 throw new \RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
-                return redirect()->to(base_url().'/master-mahasiswa')
+                return redirect()->to(base_url() . '/master-mahasiswa')
                     ->with('error', $file->getErrorString() . '(' . $file->getError() . ')');
             } else {
                 // random filename
@@ -172,21 +172,73 @@ class MasterMahasiswaController extends BaseController
                         ]);
                         // validate query result
                         if ($mahasiswa != null) {
-                            // iterate by paket
-                            foreach ($paket as $p) {
-                                // insert new tagihan 
-                                $tagihan = $m_tagihan->insert([
-                                    'paket_id' => $p['id_paket'],
-                                    'mahasiswa_id' => $mahasiswa,
-                                    'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
-                                    'keterangan_tagihan' => $p['nama_paket'],
-                                    'status_tagihan' => 'belum_lunas',
-                                    'user_id' => 1
-                                ]);
-                                if ($tagihan != null) {
-                                    continue;
+                            /**
+                             * create new tagihan by paket name
+                             * 
+                             * if paket name contains 'D3' or 'D-III',
+                             * iterate 6x (D3 = 6 semester, etc.)
+                             */
+                            if (strpos($paket[0]['nama_paket'], 'D3') !== false || strpos($paket[0]['nama_paket'], 'D-III') !== false) {
+                                for ($i = 0; $i < 6; $i++) {
+                                    // insert new tagihan 
+                                    $tagihan = $m_tagihan->insert([
+                                        'paket_id' => $paket[$i]['id_paket'],
+                                        'mahasiswa_id' => $mahasiswa,
+                                        'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                        'keterangan_tagihan' => $paket[$i]['nama_paket'],
+                                        'status_tagihan' => 'belum_lunas',
+                                        'user_id' => 1
+                                    ]);
+                                    if ($tagihan != null) {
+                                        continue;
+                                    }
+                                }
+                            } else if (strpos($paket[0]['nama_paket'], 'D4') !== false || strpos($paket[0]['nama_paket'], 'D-IV') !== false) {
+                                for ($i = 0; $i < 8; $i++) {
+                                    // insert new tagihan 
+                                    $tagihan = $m_tagihan->insert([
+                                        'paket_id' => $paket[$i]['id_paket'],
+                                        'mahasiswa_id' => $mahasiswa,
+                                        'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                        'keterangan_tagihan' => $paket[$i]['nama_paket'],
+                                        'status_tagihan' => 'belum_lunas',
+                                        'user_id' => 1
+                                    ]);
+                                    if ($tagihan != null) {
+                                        continue;
+                                    }
+                                }
+                            } else if (strpos($paket[0]['nama_paket'], 'S1') !== false || strpos($paket[0]['nama_paket'], 'S1') !== false) {
+                                for ($i = 0; $i < 8; $i++) {
+                                    // insert new tagihan 
+                                    $tagihan = $m_tagihan->insert([
+                                        'paket_id' => $paket[$i]['id_paket'],
+                                        'mahasiswa_id' => $mahasiswa,
+                                        'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                        'keterangan_tagihan' => $paket[$i]['nama_paket'],
+                                        'status_tagihan' => 'belum_lunas',
+                                        'user_id' => 1
+                                    ]);
+                                    if ($tagihan != null) {
+                                        continue;
+                                    }
                                 }
                             }
+
+                            // foreach ($paket as $p) {
+                            //     // insert new tagihan 
+                            //     $tagihan = $m_tagihan->insert([
+                            //         'paket_id' => $p['id_paket'],
+                            //         'mahasiswa_id' => $mahasiswa,
+                            //         'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                            //         'keterangan_tagihan' => $p['nama_paket'],
+                            //         'status_tagihan' => 'belum_lunas',
+                            //         'user_id' => 1
+                            //     ]);
+                            //     if ($tagihan != null) {
+                            //         continue;
+                            //     }
+                            // }
                         }
                     }
                 }
@@ -195,7 +247,7 @@ class MasterMahasiswaController extends BaseController
                     ->with('success', 'File berhasil diupload, data berhasil diimport!');
             }
         } catch (\Throwable $th) {
-            return redirect()->to(base_url().'/master-mahasiswa')->with('error', $th->getMessage());
+            return redirect()->to(base_url() . '/master-mahasiswa')->with('error', $th->getMessage());
         }
     }
 }
