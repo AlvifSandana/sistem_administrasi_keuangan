@@ -162,7 +162,7 @@
             pembayaran_row += `
       <tr>
         <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(tanggal_pembayaran))}</td>
-        <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].nominal_pembayaran}</td>
+        <td>Rp ${numFormat.format(data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].nominal_pembayaran)}</td>
         <td>${data_tagihan[idx_detail_tagihan].detail_item_paket[idx_detail_item_paket].detail_pembayaran[i].keterangan_pembayaran}</td>
       </tr>
       `;

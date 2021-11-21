@@ -64,7 +64,7 @@
                                         <td><b>Summary</b></td>
                                     </tr>
                                     <tr>
-                                        <td>Total tagihan</td>
+                                        <td>Total Tagihan</td>
                                         <td>&emsp;=&emsp;</td>
                                         <td>Rp <span id="global-tagihan"></span></td>
                                     </tr>

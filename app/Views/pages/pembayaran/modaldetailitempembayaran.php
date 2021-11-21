@@ -19,7 +19,6 @@
                     </div>
                     <table class="table table-hover table-bordered" id="tbl_detail_pembayaran_per_item">
                         <thead class="text-center">
-                            <th>ID Pembayaran</th>
                             <th>Tanggal Pembayaran</th>
                             <th>Nominal Pembayaran</th>
                         </thead>
