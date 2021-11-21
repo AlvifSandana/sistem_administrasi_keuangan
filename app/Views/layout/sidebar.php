@@ -47,13 +47,13 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="<?php echo base_url() ?>/tagihan" class="nav-link<?php $uri_segment == "tagihan" ? print(" active") : print("") ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-file-invoice-dollar nav-icon"></i>
                                 <p>Tagihan</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?php echo base_url() ?>/pembayaran" class="nav-link<?php $uri_segment == "pembayaran" ? print(" active") : print("") ?>">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-receipt nav-icon"></i>
                                 <p>Pembayaran</p>
                             </a>
                         </li>
