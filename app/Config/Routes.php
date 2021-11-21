@@ -77,6 +77,9 @@ $routes->delete('/master-pendukung/delete/angkatan/(:any)', 'AngkatanController:
 $routes->delete('/master-pendukung/delete/progdi/(:any)', 'ProgdiController::deleteProgdi/$1', ['filter' => 'auth']);
 $routes->delete('/master-pendukung/delete/semester/(:any)', 'SemesterController::deleteSemester/$1', ['filter' => 'auth']);
 
+// route for master backup restore database
+$routes->get('/backup-restore', 'Master/BackupRestoreController::index', ['filter' => 'auth']);
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->post('/paket/create', 'PaketController::create_paket');
