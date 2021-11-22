@@ -15,4 +15,18 @@ class BackupRestoreController extends BaseController
         // return view
         return view('pages/master/backuprestore/index', $data);
     }
+
+    /**
+     * Backup database
+     * 
+     * @return file
+     */
+    public function backup()
+    {
+        try {
+                
+        } catch (\Throwable $th) {
+            
+        }
+    }
 }
