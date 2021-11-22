@@ -80,6 +80,9 @@ $routes->delete('/master-pendukung/delete/semester/(:any)', 'SemesterController:
 // route for master backup restore database
 $routes->get('/backup-restore', 'Master/BackupRestoreController::index', ['filter' => 'auth']);
 
+// route for laporan
+$routes->get('/laporan/(:any)', 'Master\LaporanController::generate_laporan_tagihan/$1');
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->post('/paket/create', 'PaketController::create_paket');
@@ -90,6 +93,8 @@ $routes->post('/itempaket/update/(:any)', 'ItemPaketController::update_item_pake
 $routes->delete('/itempaket/delete/(:any)', 'ItemPaketController::delete_item_paket/$1');
 $routes->post('/itempaket/create', 'ItemPaketController::add_item_paket');
 $routes->get('/itempaket/(:any)', 'ItemPaketController::get_all_item_by_id_paket/$1');
+
+
 
 /*
  * --------------------------------------------------------------------

@@ -119,7 +119,10 @@
                         <td>${nama}</td>
                         <td>${progdi}</td>
                         <td>${angkatan}</td>
-                        <td><button class="btn btn-primary btn-sm" onclick="showDetailTagihan()"><i class="fas fa-info"></i></button></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="showDetailTagihan()"><i class="fas fa-info"></i></button>
+                            <a class="btn btn-secondary btn-sm" href="/laporan/${nim}">Print</a>
+                        </td>
                         </tr>`;
         $('#list_tagihan').append(new_row);
         $('#search_result').css('visibility', 'visible');
