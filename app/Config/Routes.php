@@ -83,6 +83,10 @@ $routes->get('/backup-restore', 'Master/BackupRestoreController::index', ['filte
 // route for laporan
 $routes->get('/laporan/(:any)', 'Master\LaporanController::generate_laporan_tagihan/$1');
 
+// route for cetak tagihan
+$routes->get('/cetak-tagihan/by-nim/(:any)', 'CetakTagihan::byNIM/$1');
+$routes->get('/cetak-tagihan/by-nim-by-paket/(:any)/(:any)', 'CetakTagihan::byNimPaket/$1/$2');
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->post('/paket/create', 'PaketController::create_paket');
