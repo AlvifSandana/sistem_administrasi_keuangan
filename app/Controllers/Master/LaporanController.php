@@ -50,7 +50,7 @@ class LaporanController extends BaseController
                 // create title
                 $spreadsheet
                     ->setActiveSheetIndex(0)
-                    ->setCellValue('B1', 'DETAIL TAGIHAN MAHASISWA')
+                    ->setCellValue('B1', 'LAPORAN TAGIHAN MAHASISWA')
                     ->setCellValue('A2', 'NIM')
                     ->setCellValue('A3', 'NAMA')
                     ->setCellValue('B2', ':')
