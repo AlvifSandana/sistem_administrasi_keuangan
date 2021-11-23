@@ -82,6 +82,7 @@
                                                 <td>TOTAL</td>
                                                 <td>Rp ${numFormat.format(total_tagihan)}</td>
                                                 <td>Rp ${numFormat.format(total_terbayar)}</td>
+                                                <td class="text-center"><a href="/cetak-tagihan/by-nim-by-paket/${nim}/${detail_tagihan[index].detail_paket[0].id_paket}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -120,8 +121,8 @@
                         <td>${progdi}</td>
                         <td>${angkatan}</td>
                         <td>
+                            <a class="btn btn-secondary btn-sm" href="/cetak-tagihan/by-nim/${nim}"><i class="fas fa-print"></i></a>
                             <button class="btn btn-primary btn-sm" onclick="showDetailTagihan()"><i class="fas fa-info"></i></button>
-                            <a class="btn btn-secondary btn-sm" href="/laporan/${nim}">Print</a>
                         </td>
                         </tr>`;
         $('#list_tagihan').append(new_row);

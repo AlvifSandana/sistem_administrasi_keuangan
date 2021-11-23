@@ -23,6 +23,7 @@
 <?= $this->section('content-body') ?>
 <section class="content">
     <div class="container-fluid">
+    <?= $this->include('layout/flash') ?>
         <div class="row mb-2">
             <div class="col">
                 <div class="card">
