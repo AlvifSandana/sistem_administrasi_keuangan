@@ -161,6 +161,7 @@ class PembayaranController extends BaseController
                                 $total_terbayar += $p['nominal_pembayaran'];
                             }
                         }
+                        // dd($pembayaran);
                         $total_terbayar += $this->request->getPost('nominal_pembayaran');
                         if ($total_terbayar > $item_tagihan['nominal_item']) {
                             $result = [
@@ -178,7 +179,8 @@ class PembayaranController extends BaseController
                             foreach ($all_item_pembayaran as $aip) {
                                 $total_pembayaran += $aip['nominal_pembayaran'];
                             }
-                            $sisa_tagihan = $total_tagihan - ($total_terbayar + $total_pembayaran);
+                            $sisa_tagihan = $total_tagihan - ($this->request->getPost('nominal_pembayaran') + $total_pembayaran);
+                            // dd($sisa_tagihan, $total_tagihan, $total_terbayar, $total_pembayaran);
                             if ($sisa_tagihan == 0) {
                                 $paket_id = $this->request->getPost('paket_id');
                                 $mahasiswa_id = $this->request->getPost('mahasiswa_id');
