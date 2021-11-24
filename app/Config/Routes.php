@@ -87,6 +87,10 @@ $routes->get('/laporan/(:any)', 'Master\LaporanController::generate_laporan_tagi
 $routes->get('/cetak-tagihan/by-nim/(:any)', 'CetakTagihan::byNIM/$1');
 $routes->get('/cetak-tagihan/by-nim-by-paket/(:any)/(:any)', 'CetakTagihan::byNimPaket/$1/$2');
 
+// route for cetak pembayaran
+$routes->get('/cetak-pembayaran/by-nim/(:any)', 'CetakPembayaran::byNIM/$1');
+$routes->get('/cetak-pembayaran/by-nim-by-paket/(:any)/(:any)', 'CetakPembayaran::byNIMPaket/$1/$2');
+
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
 $routes->post('/paket/create', 'PaketController::create_paket');
