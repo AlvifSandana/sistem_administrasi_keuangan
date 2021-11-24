@@ -53,6 +53,7 @@
               <td>${data.data.mahasiswa.progdi}</td>
               <td>${data.data.mahasiswa.angkatan}</td>
               <td>
+                <a href="/cetak-pembayaran/by-nim/${data.data.mahasiswa.nim}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
                 <button class="btn btn-primary btn-sm" onclick="showDetail()" data-toggle="tooltip" data-placement="top" title="Lihat Detail"><i class="fas fa-info"></i></button>
               </td>
             </tr>
