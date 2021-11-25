@@ -23,6 +23,7 @@
 <?= $this->section('content-body') ?>
 <section class="content">
     <div class="container-fluid container-pembayaran">
+    <?= $this->include('layout/flash') ?>
         <!-- card search input -->
         <div class="row mb-2">
             <div class="col">
