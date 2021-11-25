@@ -324,6 +324,7 @@
         <tr>
         <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].tanggal_pembayaran))}</td>
         <td>Rp ${num_format.format(parseInt(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].nominal_pembayaran))}</td>
+        <td><a href="/cetak-pembayaran/by-pembayaran/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></button></td>
         </tr>`;
         }
         $("#tbl_detail_pembayaran_per_item > tbody").append(row_pembayaran);
