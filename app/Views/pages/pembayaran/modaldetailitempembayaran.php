@@ -21,6 +21,7 @@
                         <thead class="text-center">
                             <th>Tanggal Pembayaran</th>
                             <th>Nominal Pembayaran</th>
+                            <th>ACTION</th>
                         </thead>
                         <tbody class="text-center"></tbody>
                     </table>
