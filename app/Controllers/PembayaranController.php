@@ -143,7 +143,10 @@ class PembayaranController extends BaseController
                  * nominal pembayaran >= sisa tagihan ? pembayaran failed : pembayaran success
                  */
                 $item_tagihan = $m_itempaket->find($this->request->getPost('item_id'));
-                $pembayaran = $m_pembayaran->where('item_id', $this->request->getPost('item_id'))->findAll();
+                $pembayaran = $m_pembayaran
+                    ->where('item_id', $this->request->getPost('item_id'))
+                    ->where('mahasiswa_id', $this->request->getPost('mahasiswa_id'))
+                    ->findAll();
                 $all_item_tagihan = $m_itempaket->where('paket_id', $this->request->getPost('paket_id'))->findAll();
                 $all_item_pembayaran = $m_pembayaran->where('paket_id', $this->request->getPost('paket_id'))->where('mahasiswa_id', $this->request->getPost('mahasiswa_id'))->findAll();
                 if ($item_tagihan != null) {
@@ -163,6 +166,7 @@ class PembayaranController extends BaseController
                         }
                         // dd($pembayaran);
                         $total_terbayar += $this->request->getPost('nominal_pembayaran');
+                        // dd($total_terbayar, $item_tagihan['nominal_item'], $pembayaran, $this->request->getPost('mahasiswa_id'));
                         if ($total_terbayar > $item_tagihan['nominal_item']) {
                             $result = [
                                 "status" => "failed",
