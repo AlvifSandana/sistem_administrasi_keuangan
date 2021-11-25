@@ -90,6 +90,7 @@ $routes->get('/cetak-tagihan/by-nim-by-paket/(:any)/(:any)', 'CetakTagihan::byNi
 // route for cetak pembayaran
 $routes->get('/cetak-pembayaran/by-nim/(:any)', 'CetakPembayaran::byNIM/$1');
 $routes->get('/cetak-pembayaran/by-nim-by-paket/(:any)/(:any)', 'CetakPembayaran::byNIMPaket/$1/$2');
+$routes->get('/cetak-pembayaran/by-pembayaran/(:any)', 'CetakPembayaran::byIdPembayaran/$1');
 
 // route for paket
 $routes->get('/paket/all', 'PaketController::get_all_paket');
