@@ -9,6 +9,7 @@ use App\Models\PaketModel;
 use App\Models\PembayaranModel;
 use App\Models\SemesterModel;
 use App\Models\TagihanModel;
+use CodeIgniter\I18n\Time;
 use \PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CetakPembayaran extends BaseController
@@ -96,13 +97,40 @@ class CetakPembayaran extends BaseController
                             $tmp_nominal_tagihan = 0;
                         }
                     }
+                    // create db instance
+                    $db = \Config\Database::connect();
+                    // define db query
+                    $sql = 'SELECT id_pembayaran, mahasiswa.nim, mahasiswa.nama_mahasiswa, paket.nama_paket, item_paket.nama_item, tanggal_pembayaran, nominal_pembayaran FROM `pembayaran` INNER JOIN paket on pembayaran.paket_id = paket.id_paket INNER JOIN item_paket on pembayaran.item_id = item_paket.id_item INNER JOIN mahasiswa ON pembayaran.mahasiswa_id = mahasiswa.id_mahasiswa WHERE mahasiswa.nim = ' . $nim;
+                    $query = $db->query($sql);
+                    // get result
+                    $hasil = $query->getResultArray();
+                    if (count($hasil) > 0) {
+                        $col1 = 7;
+                        $spreadsheet
+                            ->setActiveSheetIndex(1)
+                            ->setCellValue('B3', $mahasiswa['nim'])
+                            ->setCellValue('B4', $mahasiswa['nama_mahasiswa']);
+                        // write to the second sheet
+                        foreach ($hasil as $h) {
+                            $tgl_bayar = new Time($h['tanggal_pembayaran'], 'Asia/Jakarta', 'id_ID');
+                            $spreadsheet
+                                ->setActiveSheetIndex(1)
+                                ->setCellValue('A' . $col1, $h['nama_paket'])
+                                ->setCellValue('B' . $col1, $h['nama_item'])
+                                ->setCellValue('C' . $col1, $h['nominal_pembayaran'])
+                                ->setCellValue('D' . $col1, $tgl_bayar->toLocalizedString('d MMMM yyyy'));
+                            $col1++;
+                        }
+                    } else {
+                        return redirect()->to(base_url() . '/pembayaran')->with('error', 'Data pembayaran tidak tersedia!');
+                    }
                 } else {
                     // redirect and show error message
-                    return redirect()->back()->with('error', 'Data tagihan tidak tersedia!');
+                    return redirect()->to(base_url() . '/pembayaran')->with('error', 'Data tagihan tidak tersedia!');
                 }
             } else {
                 // redirect and show error message
-                return redirect()->back()->with('error', 'Data mahasiswa tidak tersedia!');
+                return redirect()->to(base_url() . '/pembayaran')->with('error', 'Data mahasiswa tidak tersedia!');
             }
             // write spreadsheet to file
             $writer = new Xlsx($spreadsheet);
@@ -111,7 +139,53 @@ class CetakPembayaran extends BaseController
             header('Cache-Control: max-age=0');
             $writer->save('php://output');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', $th->getMessage());
+            return redirect()->to(base_url() . '/pembayaran')->with('error', $th->getMessage());
+        }
+    }
+
+    /**
+     * Cetak detail pembayaran by ID pembayaran
+     */
+    public function byIdPembayaran($id_pembayaran)
+    {
+        try {
+            // create db instance
+            $db = \Config\Database::connect();
+            // define db query
+            $sql = 'SELECT id_pembayaran, mahasiswa.nim, mahasiswa.nama_mahasiswa, paket.nama_paket, item_paket.nama_item, tanggal_pembayaran, nominal_pembayaran FROM `pembayaran` INNER JOIN paket on pembayaran.paket_id = paket.id_paket INNER JOIN item_paket on pembayaran.item_id = item_paket.id_item INNER JOIN mahasiswa ON pembayaran.mahasiswa_id = mahasiswa.id_mahasiswa WHERE id_pembayaran =' . $id_pembayaran;
+            $query = $db->query($sql);
+            // get result
+            $result = $query->getResultArray();
+            // dd($result);
+            if ($result == null) {
+                return redirect()->back()->with('error', 'Data Unavailable!');
+            } else {
+                // create spreadsheet instance
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                $spreadsheet = $reader->load(WRITEPATH . 'templates/template_cetak_pembayaran_by_item.xlsx');
+                // set spreadsheet styles
+                $spreadsheet->getDefaultStyle()->getFont()->setName('ARIAL');
+                $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+                // write data to cell
+                $tgl_bayar = new Time($result[0]['tanggal_pembayaran'], 'Asia/Jakarta', 'id_ID');
+                $spreadsheet
+                    ->setActiveSheetIndex(0)
+                    ->setCellValue('B3', $result[0]['nim'])
+                    ->setCellValue('B4', $result[0]['nama_mahasiswa'])
+                    ->setCellValue('A7', $result[0]['nama_paket'])
+                    ->setCellValue('B7', $result[0]['nama_item'])
+                    ->setCellValue('C7', $result[0]['nominal_pembayaran'])
+                    ->setCellValue('D7', $tgl_bayar->toLocalizedString('d MMMM yyyy'));
+
+                // write spreadsheet to file
+                $writer = new Xlsx($spreadsheet);
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename=' . $result[0]['nim'] . '_bukti_pembayaran.xlsx');
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->to(base_url() . '/pembayaran')->with('error', $th->getMessage());
         }
     }
 }
