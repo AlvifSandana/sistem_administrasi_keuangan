@@ -22,7 +22,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('content-body') ?>
-<section class="content">
+<section class="content" on>
     <div class="container-fluid">
         <?= $this->include('layout/flash') ?>
         <div class="row mb-2">
@@ -43,7 +43,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="h4">Restore Database</h4>
+                        <h4 class="h4 restore">Restore Database</h4>
                         <p>Pilih file .sql lalu tekan tombol <b class="text-primary">Restore</b>.</p>
                         <form action="<?php base_url() ?>/backup-restore/restore" method="post" enctype="multipart/form-data">
                             <div class="input-group">
@@ -64,6 +64,54 @@
 </section>
 <?= $this->endSection() ?>
 
+<?= $this->section('custom-styles') ?>
+<style>
+    @keyframes blink {
+        0% {
+            color: rgba(0, 0, 255, 0)
+        }
+
+        50% {
+            color: rgba(0, 0, 255, 0.5)
+        }
+
+        100% {
+            color: rgba(0, 0, 255, 1)
+        }
+    }
+
+    @-webkit-keyframes blink {
+        0% {
+            color: rgba(0, 0, 255, 0)
+        }
+
+        50% {
+            color: rgba(0, 0, 255, 0.5)
+        }
+
+        100% {
+            color: rgba(0, 0, 255, 1)
+        }
+    }
+
+    .penting {
+        -moz-transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        -moz-animation: blink normal 1.5s infinite ease-in-out;
+        /* Firefox */
+        -webkit-animation: blink normal 1.5s infinite ease-in-out;
+        /* Webkit */
+        -ms-animation: blink normal 1.5s infinite ease-in-out;
+        /* IE */
+        animation: blink normal 1.5s infinite ease-in-out;
+        /* Opera */
+    }
+</style>
+<?= $this->endSection() ?>
+
 <?= $this->section('custom-script') ?>
 <script>
     // show upload filename
@@ -71,5 +119,10 @@
         var filename = $(this).val();
         $(this).next('.custom-file-label').html(filename);
     });
+
+    var query = window.location.href.slice(window.location.href.indexOf('?') + 1).split('=');
+    if (query.length > 0 && query[1] === 'nodb') {
+        $('.restore').addClass('penting');
+    }
 </script>
 <?= $this->endSection() ?>

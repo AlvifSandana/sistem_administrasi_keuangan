@@ -78,7 +78,7 @@ $routes->delete('/master-pendukung/delete/progdi/(:any)', 'ProgdiController::del
 $routes->delete('/master-pendukung/delete/semester/(:any)', 'SemesterController::deleteSemester/$1', ['filter' => 'auth']);
 
 // route for master backup restore database
-$routes->get('/backup-restore', 'Master/BackupRestoreController::index', ['filter' => 'auth']);
+$routes->get('/backup-restore', 'Master/BackupRestoreController::index');
 $routes->get('/backup-restore/backup', 'Master/BackupRestoreController::backup', ['filter' => 'auth']);
 $routes->post('/backup-restore/restore', 'Master/BackupRestoreController::restore');
 
