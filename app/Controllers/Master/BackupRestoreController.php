@@ -19,19 +19,94 @@ class BackupRestoreController extends BaseController
     }
 
     /**
-     * Backup database
+     * Backup database to .sql file
      * 
      * @return file
      */
     public function backup()
     {
         try {
-            $filename = date('d-m-Y-H-i-s').'-db_keuangan.sql';
-            $command = 'mysqldump --user='.env('database.default.username').' --password='.env('database.default.password').' '.env('database.default.database').' > '.ROOTPATH.'public/'.$filename;
+            $filename = date('d-m-Y-H-i-s') . '-db_keuangan.sql';
+            $command = 'mysqldump --user=' . env('database.default.username') . ' --password=' . env('database.default.password') . ' ' . env('database.default.database') . ' > ' . ROOTPATH . 'public/' . $filename;
             system($command);
-            return redirect()->to(base_url().'/backup-restore')->with('success', 'Backup database berhasil! <a class="float-right" href="'.$filename.'"><i class="fas fa-download"></i> Download</a>');
+            return redirect()->to(base_url() . '/backup-restore')->with('success', 'Backup database berhasil! <a class="float-right" href="' . $filename . '"><i class="fas fa-download"></i> Download</a>');
         } catch (\Throwable $th) {
-            return redirect()->to(base_url().'/backup-restore')->with('error', $th->getMessage());
+            return redirect()->to(base_url() . '/backup-restore')->with('error', $th->getMessage());
+        }
+    }
+
+    /**
+     * Restore database from .sql file given
+     *
+     */
+    public function restore()
+    {
+        try {
+            // get file from POST requst
+            $file = $this->request->getFile('file_restore');
+            // validate uploaded file
+            if (!$file->isValid()) {
+                // throw error 
+                throw new \RuntimeException($file->getErrorString() . '(' . $file->getError() . ')');
+                return redirect()->to(base_url() . '/master-mahasiswa')
+                    ->with('error', $file->getErrorString() . '(' . $file->getError() . ')');
+            } else {
+                // random filename
+                $fn = $file->getRandomName();
+                // move file to uploaded folder
+                $path = $file->store('restore/', $fn);
+                // config for db connection 
+                $config = [
+                    'DSN'      => '',
+                    'hostname' => env('database.default.hostname', 'localhost'),
+                    'username' => env('database.default.username' , 'root'),
+                    'password' => env('database.default.password', ''),
+                    'database' => env('database.default.database', 'db_keuangan_test'),
+                    'DBDriver' => 'MySQLi',
+                    'DBPrefix' => '',
+                    'pConnect' => false,
+                    'DBDebug'  => (ENVIRONMENT !== 'production'),
+                    'charset'  => 'utf8',
+                    'DBCollat' => 'utf8_general_ci',
+                    'swapPre'  => '',
+                    'encrypt'  => false,
+                    'compress' => false,
+                    'strictOn' => false,
+                    'failover' => [],
+                    'port'     => 3306,
+                ];
+                $db = db_connect($config);
+                // temporary line
+                $tmp_line = '';
+                $error = '';
+                // get query lines from file
+                $lines = file(WRITEPATH.'uploads/'.$path);
+                // loop each line
+                foreach ($lines as $line) {
+                    // Skip it if it's a comment
+                    if (substr($line, 0, 2) == '--' || $line == '') {
+                        continue;
+                    }
+                    // Add this line to the current segment
+                    $tmp_line .= $line;
+                    // If it has a semicolon at the end, it's the end of the query
+                    if (substr(trim($line), -1, 1) == ';') {
+                        // Perform the query
+                        if (!$db->query($tmp_line)) {
+                            $error .= 'Error performing query "<b>' . $tmp_line . '</b>": ' . $db->error() . '<br /><br />';
+                        }
+                        // Reset temp variable to empty
+                        $tmp_line = '';
+                    }
+                }
+                if (!empty($error)) {
+                    return redirect()->to(base_url() . '/backup-restore')->with('error', $error);
+                } else {
+                    return redirect()->to(base_url() . '/backup-restore')->with('success', 'Restore database berhasil!');
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->to(base_url() . '/backup-restore')->with('error', $th->getMessage());
         }
     }
 }
