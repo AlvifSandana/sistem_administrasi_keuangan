@@ -80,6 +80,7 @@ $routes->delete('/master-pendukung/delete/semester/(:any)', 'SemesterController:
 // route for master backup restore database
 $routes->get('/backup-restore', 'Master/BackupRestoreController::index', ['filter' => 'auth']);
 $routes->get('/backup-restore/backup', 'Master/BackupRestoreController::backup', ['filter' => 'auth']);
+$routes->post('/backup-restore/restore', 'Master/BackupRestoreController::restore');
 
 // route for laporan
 $routes->get('/laporan/(:any)', 'Master\LaporanController::generate_laporan_tagihan/$1');
