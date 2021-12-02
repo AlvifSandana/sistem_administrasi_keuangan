@@ -8,9 +8,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?php base_url() ?>/pembayaran/create" method="post">
+                <form action="<?php base_url() ?>/pembayaran/create" method="post" id="form_create_pembayaran" enctype="multipart/form-data">
                     <input type="number" name="paket_id" id="add_paket_id" hidden>
                     <input type="number" name="mahasiswa_id" id="add_mahasiswa_id" hidden>
+                    <input type="number" name="user_id" id="add_mahasiswa_id" value="1" hidden>
                     <div class="form-group">
                         <label for="itempembayaran">ITEM PAKET</label>
                         <select class="form-control" name="item_id" id="add_item_id"></select>
@@ -31,8 +32,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" name="is_dokumen_pembayaran" id="is_fbp">
+                            <label class="" for="">DOKUMEN PEMBAYARAN</label>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="fbp" name="dokumen_pembayaran" disabled>
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file...</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-success"><i class="fas fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                    </div>
                     <p id="message"></p>
-                    <button class="btn btn-success float-right" id="btn_tambah_pembayaran" style="width: 200px;" onclick="createPembayaran()">Tambah Pembayaran</button>
+                    <button type="submit" class="btn btn-success float-right" id="btn_tambah_pembayaran" style="width: 200px;">Tambah Pembayaran</button>
                 </form>
             </div>
         </div>

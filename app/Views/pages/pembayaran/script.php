@@ -16,6 +16,14 @@
         }
     });
 
+    $('input[type="checkbox"]').click(function() {
+        if ($(this).is(":checked")) {
+            $('#fbp').prop('disabled', false);
+        } else if ($(this).is(":not(:checked)")) {
+            $('#fbp').prop('disabled', true);
+        }
+    });
+
     /**
      * search pembayaran by nim
      * and show result table
@@ -230,18 +238,23 @@
     function createPembayaran() {
         $("#btn_tambah_pembayaran").prop('disabled', true);
         $("#btn_tambah_pembayaran").html(`<div class="spinner-border text-light spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div>`);
+        var fbp = new FormData($('form#form_create_pembayaran')[0]);
         var mydata = {
             item_id: $("#add_item_id").val(),
             paket_id: $("#add_paket_id").val(),
             mahasiswa_id: $("#add_mahasiswa_id").val(),
             tanggal_pembayaran: $("#add_tanggal_pembayaran").val(),
             nominal_pembayaran: $("#add_nominal_pembayaran").val(),
-            user_id: 1
+            user_id: 1,
+            is_dokumen_pembayaran: $('#is_fbp').val(),
+            dokumen_pembayaran: fbp
         }
         $.ajax({
             url: "<?php base_url() ?>/pembayaran/create",
             type: "POST",
-            data: mydata,
+            contentType: false,
+            // processData: false,
+            data: mydata, //$('form#form_create_pembayaran').serialize(),
             dataType: 'JSON',
             success: function(res) {
                 var response = res;
@@ -324,10 +337,51 @@
         <tr>
         <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].tanggal_pembayaran))}</td>
         <td>Rp ${num_format.format(parseInt(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].nominal_pembayaran))}</td>
-        <td><a href="/cetak-pembayaran/by-pembayaran/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></button></td>
+        <td>
+            <a href="${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran == null ? '#': '/doc_pembayaran/' + data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran}" 
+               class="btn btn-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'danger':'success'} btn-sm">
+                <i class="fas fa-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'times':'check'}"></i>
+            </a>
+            <a href="/cetak-pembayaran/by-pembayaran/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
+            <a href="/pembayaran/delete/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+        </td>
         </tr>`;
         }
         $("#tbl_detail_pembayaran_per_item > tbody").append(row_pembayaran);
         // <td>${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}</td>
+    }
+
+    /**
+     * delete pembayaran by id
+     */
+    function deletePembayaran(id_pembayaran) {
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin menghapus data ini?',
+            text: "Tindakan ini tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Hapus'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?php base_url() ?>' + '/pembayaran/delete/' + id_pembayaran,
+                    type: 'DELETE',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if (data.status != 'success') {
+                            showSWAL('error', data.message);
+                        } else {
+                            showSWAL('success', data.message);
+                            // searchPembayaran();
+                        }
+                    },
+                    error: function(jqXHR) {
+                        showSWAL('error', jqXHR);
+                    }
+                });
+            }
+        });
     }
 </script>
