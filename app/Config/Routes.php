@@ -51,6 +51,8 @@ $routes->get('/pembayaran/search/(:any)', 'PembayaranController::search_pembayar
 $routes->get('/pembayaran/detail-item-tagihan/(:any)', 'PembayaranController::get_detail_item_tagihan_by_paket_id/$1');
 $routes->post('/pembayaran/create', 'PembayaranController::add_pembayaran');
 $routes->get('/pembayaran/detail/(:any)', 'PembayaranController::get_detail_pembayaran_by_nim/$1');
+$routes->get('/pembayaran/delete/(:any)', 'PembayaranController::delete_pembayaran/$1');
+$routes->post('/pembayaran/upload-doc-pembayaran', 'PembayaranController::upload_dokumen_pembayaran');
 
 // routes for mahasiswa
 $routes->get('/mahasiswa/get/(:any)', 'MahasiswaController::get_mahasiswa_by_id/$1');
