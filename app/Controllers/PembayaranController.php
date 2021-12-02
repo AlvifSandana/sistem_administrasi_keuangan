@@ -173,6 +173,7 @@ class PembayaranController extends BaseController
                                 "message" => "Validasi gagal. Total pembayaran melebihi sisa tagihan. Mohon isi nominal pembayaran yang sesuai!",
                                 "data" => []
                             ];
+                            return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
                         } else {
                             // change status tagihan when sisa tagihan = 0
                             $total_tagihan = 0;
@@ -193,6 +194,24 @@ class PembayaranController extends BaseController
                                     'status_tagihan' => 'Lunas'
                                 ]);
                             }
+                            // get dokumen pembayaran
+                            $is_dokumen_pembayaran = $this->request->getPost('is_dokumen_pembayaran');
+                            $dokumen_pembayaran = $this->request->getFile('dokumen_pembayaran');
+                            // validate dokumen pembayaran
+                            if (!$dokumen_pembayaran->isValid()) {
+                                // throw error 
+                                throw new \RuntimeException($dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')');
+                                $result = [
+                                    'status' => 'error',
+                                    'message' => $dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')',
+                                    'data' => []
+                                ];
+                                return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
+                            }
+                            // random filename
+                            $fn = $dokumen_pembayaran->getRandomName();
+                            // move file to uploaded folder
+                            $public_path = $dokumen_pembayaran->move(ROOTPATH . 'public/doc_pembayaran/', $fn);
                             // insert data 
                             $result = [
                                 "status" => "success",
@@ -204,9 +223,12 @@ class PembayaranController extends BaseController
                                     'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
                                     'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
                                     'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
-                                    'user_id' => $this->request->getPost('user_id')
+                                    'user_id' => $this->request->getPost('user_id'),
+                                    'is_dokumen_pembayaran' => $is_dokumen_pembayaran,
+                                    'dokumen_pembayaran' => $fn
                                 ])
                             ];
+                            return redirect()->to(base_url() . '/pembayaran')->with('success', $result['message']);
                         }
                     }
                 } else {
@@ -215,9 +237,10 @@ class PembayaranController extends BaseController
                         "message" => "Item tidak ditemukan!",
                         "data" => []
                     ];
+                    return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
                 }
                 // return JSON
-                return json_encode($result);
+                return redirect()->to(base_url() . '/pembayaran')->with('success', $result['message']);
             } else {
                 $result = [
                     "status" => "failed",
@@ -225,15 +248,15 @@ class PembayaranController extends BaseController
                     "data" => []
                 ];
                 // return JSON
-                return json_encode($result);
+                return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
             }
         } catch (\Throwable $th) {
             $result = [
                 "status" => "error",
-                "message" => $th->getMessage(),
-                "data" => []
+                "message" => $th->getMessage() . ' (' . $th->getCode() . ')',
+                "data" => $th->getTrace()
             ];
-            return json_encode($result);
+            return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
         }
     }
 
@@ -288,6 +311,69 @@ class PembayaranController extends BaseController
             $result['status'] = 'error';
             $result['message'] = $th->getMessage();
             return json_encode($result);
+        }
+    }
+
+    public function upload_dokumen_pembayaran()
+    {
+        try {
+            // get dokumen pembayaran
+            $is_dokumen_pembayaran = $this->request->getPost('is_dokumen_pembayaran');
+            $dokumen_pembayaran = $this->request->getFile('dokumen_pembayaran');
+            // validate dokumen pembayaran
+            if (!$dokumen_pembayaran->isValid()) {
+                // throw error 
+                throw new \RuntimeException($dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')');
+                return json_encode([
+                    'status' => 'error',
+                    'message' => $dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')',
+                    'data' => []
+                ]);
+            } else {
+                $m_tagihan = new TagihanModel();
+                // random filename
+                $fn = $dokumen_pembayaran->getRandomName();
+                // move file to uploaded folder
+                $uploaded_path = $dokumen_pembayaran->store('doc_pembayaran/', $fn);
+                $public_path = $dokumen_pembayaran->move(ROOTPATH . 'doc_pembayaran/', $fn);
+                // update table tagihan ()
+                $id_tagihan = $m_tagihan
+                    ->where('paket_id', $this->request->getPost('paket_id'))
+                    ->where('mahasiswa_id', $this->request->getPost('mahasiswa_id'))
+                    ->first();
+                $m_tagihan->update($id_tagihan, [
+                    'is_dokumen_pembayaran' => $is_dokumen_pembayaran,
+                    'dokumen_pembayaran' => ROOTPATH . 'doc_pembayaran/', $fn
+                ]);
+            }
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function delete_pembayaran($id_pembayaran)
+    {
+        try {
+            // create model instance
+            $m_pembayaran = new PembayaranModel();
+            $m_tagihan = new TagihanModel();
+            // get id_tagihan from pembayaran
+            $pembayaran = $m_pembayaran->find($id_pembayaran);
+            $id_paket = $pembayaran['paket_id'];
+            $id_mahasiswa = $pembayaran['mahasiswa_id'];
+            $tagihan = $m_tagihan->where('paket_id', $id_paket)->where('mahasiswa_id', $id_mahasiswa)->first();
+            // update status_tagihan to belum lunas
+            $m_tagihan->update($tagihan['id_tagihan'], [
+                'status_tagihan' => 'Belum Lunas'
+            ]);
+            // hapus pembayaran by given id
+            $hapus_pembayaran = $m_pembayaran->delete($id_pembayaran);
+            if ($hapus_pembayaran) {
+                return redirect()->to(base_url() . '/pembayaran')->with('success', 'Pembayaran dengan ID ' . $hapus_pembayaran . ' berhasil dihapus!');
+            } else {
+                return redirect()->to(base_url() . '/pembayaran')->with('error', 'Gagal menghapus data pembayaran!');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->to(base_url() . '/pembayaran')->with('error', $th->getMessage());
         }
     }
 }
