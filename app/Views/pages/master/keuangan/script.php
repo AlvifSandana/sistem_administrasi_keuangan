@@ -20,7 +20,6 @@
                     var numformat = Intl.NumberFormat();
                     for (let index = 0; index < response.data.length; index++) {
                         row_item_tagihan += `<tr>
-              <td>${response.data[index].id_item}</td>
               <td>${response.data[index].nama_item}</td>
               <td class="text-left">Rp. ${numformat.format(parseInt(response.data[index].nominal_item))}</td>
               <td>${response.data[index].keterangan_item}</td>
