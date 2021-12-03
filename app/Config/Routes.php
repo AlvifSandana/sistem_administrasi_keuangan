@@ -64,6 +64,7 @@ $routes->delete('/mahasiswa/delete/(:any)', 'MahasiswaController::delete_mahasis
 $routes->get('/master-mahasiswa', 'Master/MasterMahasiswaController::index', ['as' => 'admin.master_mahasiswa', 'filter' => 'auth']);
 $routes->post('/master-mahasiswa/create', 'Master/MasterMahasiswaController::create_mahasiswa');
 $routes->post('/master-mahasiswa/import/upload', 'Master/MasterMahasiswaController::import');
+$routes->post('/master-mahasiswa/update-tagihan', 'Master/MasterMahasiswaController::update_tagihan_by_nim');
 
 // route for master keuangan
 $routes->get('/master-keuangan', 'Master/MasterKeuanganController::index', ['filter' => 'auth']);
