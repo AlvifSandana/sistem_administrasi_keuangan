@@ -27,6 +27,11 @@
     <link rel="stylesheet" href="plugins/animatecss/animate.min.css" />
     <!-- select2 -->
     <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: black;
+        }
+    </style>
     <?= $this->renderSection('custom-styles') ?>
 </head>
 
