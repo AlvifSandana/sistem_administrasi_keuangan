@@ -8,7 +8,7 @@
 - [x] Fix import data dari ***.xlsx** (pembatasan insert new tagihan sesuai progdi => jika S1 maka generate tagihan hingga semester 8, dst.)
 - [x] Mengerjakan fitur export data ke **.sql** dan **.xlsx**
 - [ ] Halaman settings (konsep)
-- [x] Modul Master data pendukung00
+- [x] Modul Master data pendukung
 - [x] Event onKeyPress enter untuk pencarian tagihan dan pembayaran
 - [x] Show total tagihan dari semua semester
 - [x] Fix pembayaran (jika pembayaran melebihi nominal item tagihan, pembayaran ditolak)
@@ -16,3 +16,6 @@
 - [x] (optional) tambah dokumen bukti pembayaran
 - [x] indikator dokumen bukti pembayaran pada setiap item pembayaran
 - [x] delete pembayaran
+- [ ]  
+- [ ] 
+- [ ] 

@@ -197,37 +197,55 @@ class PembayaranController extends BaseController
                             // get dokumen pembayaran
                             $is_dokumen_pembayaran = $this->request->getPost('is_dokumen_pembayaran');
                             $dokumen_pembayaran = $this->request->getFile('dokumen_pembayaran');
-                            // validate dokumen pembayaran
-                            if (!$dokumen_pembayaran->isValid()) {
-                                // throw error 
-                                throw new \RuntimeException($dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')');
+                            // validate is dokumen pembayaran
+                            if ($is_dokumen_pembayaran != null) {
+                                // validate dokumen pembayaran
+                                if (!$dokumen_pembayaran->isValid()) {
+                                    // throw error 
+                                    throw new \RuntimeException($dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')');
+                                    $result = [
+                                        'status' => 'error',
+                                        'message' => $dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')',
+                                        'data' => []
+                                    ];
+                                    return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
+                                }
+                                // random filename
+                                $fn = $dokumen_pembayaran->getRandomName();
+                                // move file to uploaded folder
+                                $public_path = $dokumen_pembayaran->move(ROOTPATH . 'public/doc_pembayaran/', $fn);
+                                // insert data 
                                 $result = [
-                                    'status' => 'error',
-                                    'message' => $dokumen_pembayaran->getErrorString() . '(' . $dokumen_pembayaran->getError() . ')',
-                                    'data' => []
+                                    "status" => "success",
+                                    "message" => "Berhasil menambahkan pembayaran.",
+                                    "data" => $m_pembayaran->insert([
+                                        'paket_id' => $this->request->getPost('paket_id'),
+                                        'item_id' => $this->request->getPost('item_id'),
+                                        'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
+                                        'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
+                                        'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
+                                        'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
+                                        'user_id' => $this->request->getPost('user_id'),
+                                        'is_dokumen_pembayaran' => $is_dokumen_pembayaran,
+                                        'dokumen_pembayaran' => $fn
+                                    ])
                                 ];
-                                return redirect()->to(base_url() . '/pembayaran')->with('error', $result['message']);
+                            } else {
+                                // insert data 
+                                $result = [
+                                    "status" => "success",
+                                    "message" => "Berhasil menambahkan pembayaran.",
+                                    "data" => $m_pembayaran->insert([
+                                        'paket_id' => $this->request->getPost('paket_id'),
+                                        'item_id' => $this->request->getPost('item_id'),
+                                        'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
+                                        'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
+                                        'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
+                                        'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
+                                        'user_id' => $this->request->getPost('user_id'),
+                                    ])
+                                ];
                             }
-                            // random filename
-                            $fn = $dokumen_pembayaran->getRandomName();
-                            // move file to uploaded folder
-                            $public_path = $dokumen_pembayaran->move(ROOTPATH . 'public/doc_pembayaran/', $fn);
-                            // insert data 
-                            $result = [
-                                "status" => "success",
-                                "message" => "Berhasil menambahkan pembayaran.",
-                                "data" => $m_pembayaran->insert([
-                                    'paket_id' => $this->request->getPost('paket_id'),
-                                    'item_id' => $this->request->getPost('item_id'),
-                                    'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-                                    'tanggal_pembayaran' => $this->request->getPost('tanggal_pembayaran'),
-                                    'nominal_pembayaran' => $this->request->getPost('nominal_pembayaran'),
-                                    'keterangan_pembayaran' => $this->request->getPost('keterangan_pembayaran'),
-                                    'user_id' => $this->request->getPost('user_id'),
-                                    'is_dokumen_pembayaran' => $is_dokumen_pembayaran,
-                                    'dokumen_pembayaran' => $fn
-                                ])
-                            ];
                             return redirect()->to(base_url() . '/pembayaran')->with('success', $result['message']);
                         }
                     }
