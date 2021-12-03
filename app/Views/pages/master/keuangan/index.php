@@ -55,7 +55,6 @@
                         <h5 class="h5 mt-3 mb-4">Detail Item Paket <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddItemPaket"><i class="fas fa-plus"></i> Tambah Item Tagihan</button></h5>
                         <table class="table table-bordered tbl_master_paket" id="tbl_master_paket">
                             <thead class="text-center">
-                                <th>ID Item</th>
                                 <th>Nama Item Tagihan</th>
                                 <th>Nominal</th>
                                 <th>Keterangan</th>

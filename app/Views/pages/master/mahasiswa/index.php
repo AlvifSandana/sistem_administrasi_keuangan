@@ -52,14 +52,13 @@
                         <h5 class="h5 mb-4">Data Mahasiswa <button class="btn btn-success float-right" data-toggle="modal" data-target="#modalAddMahasiswa"><i class="fas fa-plus"></i> Tambah Data Mahasiswa</button></h5>
                         <table class="table table-hover table-bordered" id="tbl_list_mhs">
                             <thead class="text-center">
-                                <th>ID</th>
                                 <th>NIM</th>
                                 <th>NAMA MAHASISWA</th>
                                 <th>ACTION</th>
                             </thead>
                             <tbody class="text-center">
                                 <?php foreach ($data_mahasiswa as $m) {
-                                    echo '<tr data-idmhs="' . $m['id_mahasiswa'] . '"><td>' . $m['id_mahasiswa'] . '</td><td>' . $m['nim'] . '</td><td>' . $m['nama_mahasiswa'] . '</td><td><button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdateMahasiswa" onclick="fillModalUpdateForm(' . $m["id_mahasiswa"] . ')"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger mx-1" onclick="deleteMahasiswa(' . $m['id_mahasiswa'] . ')"><i class="fas fa-trash"></i></button></td></tr>';
+                                    echo '<tr data-idmhs="' . $m['id_mahasiswa'] . '"><td>' . $m['nim'] . '</td><td>' . $m['nama_mahasiswa'] . '</td><td><button class="btn btn-sm btn-success mx-1" data-toggle="modal" data-target="#modalUpdateTagihanMahasiswa" onclick="fillModalUpdateForm(' . $m["id_mahasiswa"] . ')"><i class="fas fa-dollar-sign"></i></button><button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalUpdateMahasiswa" onclick="fillModalUpdateForm(' . $m["id_mahasiswa"] . ')"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger mx-1" onclick="deleteMahasiswa(' . $m['id_mahasiswa'] . ')"><i class="fas fa-trash"></i></button></td></tr>';
                                 } ?>
                             </tbody>
                         </table>
@@ -72,6 +71,7 @@
 <!-- Modals -->
 <?= $this->include('pages/master/mahasiswa/modaladdmahasiswa') ?>
 <?= $this->include('pages/master/mahasiswa/modalupdatemahasiswa') ?>
+<?= $this->include('pages/master/mahasiswa/modalupdatetagihanmahasiswa') ?>
 <!-- ./Modals -->
 <?= $this->endSection() ?>
 
