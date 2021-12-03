@@ -44,6 +44,7 @@ $routes->add('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
 // route for tagihan
 $routes->get('/tagihan', 'TagihanController::index', ['filter' => 'auth']);
 $routes->get('/tagihan/search/(:any)', 'TagihanController::search_tagihan/$1');
+$routes->post('/tagihan/update/(:any)', 'TagihanController::update_by_nim/$1');
 
 // route for pembayaran
 $routes->get('/pembayaran', 'PembayaranController::index', ['filter' => 'auth']);
