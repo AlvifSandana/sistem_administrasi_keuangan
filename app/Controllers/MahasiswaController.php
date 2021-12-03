@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AngkatanModel;
 use App\Models\MahasiswaModel;
 use App\Models\ProgdiModel;
+use App\Models\TagihanModel;
 
 class MahasiswaController extends BaseController
 {
@@ -50,8 +51,11 @@ class MahasiswaController extends BaseController
         try {
             // create model instance
             $m_mahasiswa = new MahasiswaModel();
+            $m_tagihan = new TagihanModel();
             // get data
             $mahasiswa = $m_mahasiswa->find($id_mahasiswa);
+            $tagihan = $m_tagihan->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->findAll();
+            $mahasiswa['keuangan'] = $tagihan;
             if ($mahasiswa > 0) {
                 $result['status'] = 'success';
                 $result['message'] = 'Data available';
