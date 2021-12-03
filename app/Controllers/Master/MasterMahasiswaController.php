@@ -250,4 +250,67 @@ class MasterMahasiswaController extends BaseController
             return redirect()->to(base_url() . '/master-mahasiswa')->with('error', $th->getMessage());
         }
     }
+
+    /**
+     * update tagihan mahasiswa by nim
+     */
+    public function update_tagihan_by_nim($nim)
+    {
+        try {
+            // create validator
+            $validator = \Config\Services::validation();
+            // set validation rules
+            $validator->setRules([
+                'nim' => 'required'
+            ]);
+            // begin validation process
+            $isDataValid = $validator->withRequest($this->request)->run();
+            if ($isDataValid) {
+                // get post data
+                $nim = $this->request->getPost('nim');
+                $paket_tagihan = $this->request->getPost('paket_tagihan');
+                // create model instance
+                $m_mahasiswa = new MahasiswaModel();
+                $m_tagihan = new TagihanModel();
+                // get id_mahasiswa
+                $mahasiswa = $m_mahasiswa->where('nim', $nim)->first();
+                if ($mahasiswa != null) {
+                    // get current tagihan by id_mahasiswa
+                    $current_tagihan = $m_tagihan->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->findAll();
+                    /**
+                     * Update tagihan:
+                     * 
+                     * When N of current tagihan > 0 AND < N of paket_tagihan, 
+                     * insert new tagihan from paket_tagihan.
+                     * 
+                     * When N of current tagihan > 0 AND = N of paket_tagihan AND current tagihan != paket_tagihan, 
+                     * update each tagihan with paket_tagihan.
+                     * 
+                     * 
+                     */
+                    if (count($current_tagihan) > 0 && count($current_tagihan) < count($paket_tagihan)) {
+                        // iterate paket_tagihan and check when current tagihan item same as paket_tagihan
+                        for ($i=0; $i < count($paket_tagihan); $i++) { 
+                            // iterate current tagihan
+                            for ($j=0; $j < count($current_tagihan); $j++) { 
+                                if ($current_tagihan[$j]['paket_id'] == $paket_tagihan[$i]) {
+                                    continue;
+                                }
+                                // TODO - melanjutkan UPDATE TAGIHAN MAHASISWA - 2021/12/03
+                            }
+                        }
+                    } else {
+                        # code...
+                    }
+                } else {
+                    # code...
+                }
+            } else {
+                # code...
+            }
+            
+        } catch (\Throwable $th) {
+            
+        }
+    }
 }
