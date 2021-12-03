@@ -10,7 +10,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="nama_paket">NAMA PAKET</label>
-                    <input type="text" name="add_nama_paket" id="add_nama_paket" class="form-control">
+                    <select class="form-control" name="add_nama_paket" id="add_nama_paket">
+                        <?php 
+                        foreach ($data_progdi as $p ) {
+                            echo '<option value="' . $p['nama_progdi'] . '">' . $p['nama_progdi'] . '</option>';
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="semester">SEMESTER</label>
