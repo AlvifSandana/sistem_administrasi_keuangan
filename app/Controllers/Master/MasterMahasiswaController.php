@@ -47,6 +47,7 @@ class MasterMahasiswaController extends BaseController
             'data' => null,
         ];
         try {
+            $session = session();
             // create validator
             $validator = \Config\Services::validation();
             // set validator rules
@@ -84,7 +85,7 @@ class MasterMahasiswaController extends BaseController
                             'tanggal_tagihan' => $tanggal_tagihan,
                             'keterangan_tagihan' => '-',
                             'status_tagihan' => 'belum_lunas',
-                            'user_id' => 1,
+                            'user_id' => $session->get('id_user'),
                         ]);
                     }
                     $result['status'] = 'success';
@@ -122,6 +123,7 @@ class MasterMahasiswaController extends BaseController
             'data' => null,
         ];
         try {
+            $session = session();
             // get file from POST requst
             $file = $this->request->getFile('file_import');
             // validate uploaded file
@@ -187,7 +189,7 @@ class MasterMahasiswaController extends BaseController
                                         'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
                                         'keterangan_tagihan' => $paket[$i]['nama_paket'],
                                         'status_tagihan' => 'belum_lunas',
-                                        'user_id' => 1
+                                        'user_id' => $session->get('id_user')
                                     ]);
                                     if ($tagihan != null) {
                                         continue;
@@ -202,7 +204,7 @@ class MasterMahasiswaController extends BaseController
                                         'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
                                         'keterangan_tagihan' => $paket[$i]['nama_paket'],
                                         'status_tagihan' => 'belum_lunas',
-                                        'user_id' => 1
+                                        'user_id' => $session->get('id_user')
                                     ]);
                                     if ($tagihan != null) {
                                         continue;
@@ -217,7 +219,7 @@ class MasterMahasiswaController extends BaseController
                                         'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
                                         'keterangan_tagihan' => $paket[$i]['nama_paket'],
                                         'status_tagihan' => 'belum_lunas',
-                                        'user_id' => 1
+                                        'user_id' => $session->get('id_user')
                                     ]);
                                     if ($tagihan != null) {
                                         continue;
