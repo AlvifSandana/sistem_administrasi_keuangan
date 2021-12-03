@@ -67,20 +67,45 @@
                 } else {
                     // clear form
                     $('#id_mahasiswa').val('');
+                    $('#tid_mahasiswa').val('');
                     $('#update_nim').val('');
+                    $('#tupdate_nim').val('');
                     $('#update_nama_mahasiswa').val('');
+                    $('#tupdate_nama_mahasiswa').val('');
                     // fill data
                     $('#id_mahasiswa').val(data.data.id_mahasiswa);
+                    $('#tid_mahasiswa').val(data.data.id_mahasiswa);
                     $('#update_nim').val(data.data.nim);
+                    $('#tupdate_nim').val(data.data.nim);
                     $('#update_nama_mahasiswa').val(data.data.nama_mahasiswa);
+                    $('#tupdate_nama_mahasiswa').val(data.data.nama_mahasiswa);
                     $(`#update_progdi_id option[value="${data.data.progdi_id}"]`).prop('selected', true);
+                    $(`#tupdate_progdi_id option[value="${data.data.progdi_id}"]`).prop('selected', true);
                     $(`#update_angkatan_id option[value="${data.data.angkatan_id}"]`).prop('selected', true);
+                    $(`#tupdate_angkatan_id option[value="${data.data.angkatan_id}"]`).prop('selected', true);
+                    var tagihan = [];
+                    for (let i = 0; i < data.data.keuangan.length; i++) {
+                        tagihan.push(data.data.keuangan[i].paket_id.toString());
+                    }
+                    $(`#tupdate_tagihan`).val([...tagihan]);
+                    $('#tupdate_tagihan').trigger('change');
                 }
             },
             error: function(jqXHR) {
                 showSWAL('error', jqXHR);
             }
         });
+    }
+
+    /** 
+     * update tagihan mahasiswa
+     */
+    function updateTagihanMahasiswa(){
+        var data = {
+            // TODO - melanjutkan UPDATE TAGIHAN VIEW - 2021/12/03
+            paket_id: $('#tupdate_tagihan').val(),
+        }
+        console.log(data);
     }
 
     /** 
