@@ -20,6 +20,9 @@ class TagihanController extends BaseController
         return view('pages/tagihan/index', $data);
     }
 
+    /**
+     * search tagihan by nim
+     */
     public function search_tagihan($nim)
     {
         helper(['form', 'url']);
@@ -81,6 +84,18 @@ class TagihanController extends BaseController
             return json_encode($result);
         } catch (\Throwable $th) {
             return json_encode($th);
+        }
+    }
+
+    /**
+     * update tagihan by nim
+     */
+    public function update_by_nim($nim)
+    {
+        try {
+        // TODO - UPDATE TAGIHAN BY NIM - 2021/12/03
+        } catch (\Throwable $th) {
+            
         }
     }
 }
