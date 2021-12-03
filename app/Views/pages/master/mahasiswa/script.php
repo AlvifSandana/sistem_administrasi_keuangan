@@ -100,12 +100,32 @@
     /** 
      * update tagihan mahasiswa
      */
-    function updateTagihanMahasiswa(){
+    function updateTagihanMahasiswa() {
         var data = {
-            // TODO - melanjutkan UPDATE TAGIHAN VIEW - 2021/12/03
-            paket_id: $('#tupdate_tagihan').val(),
+            nim: $('#tupdate_nim').val(),
+            paket_tagihan: $('#tupdate_tagihan').val(),
         }
-        console.log(data);
+        $.ajax({
+            url: '<?php base_url() ?>' + '/master-mahasiswa/update-tagihan',
+            type: 'POST',
+            data: data,
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.status != 'success') {
+                    showSWAL('error', data.message);
+                    console.log(data.data);
+                } else {
+                    showSWAL('success', data.message);
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 4000);
+                }
+            },
+            error: function(jqXHR) {
+                showSWAL('error', jqXHR);
+                console.log(jqXHR)
+            }
+        })
     }
 
     /** 
