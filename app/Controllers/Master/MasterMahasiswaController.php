@@ -254,9 +254,10 @@ class MasterMahasiswaController extends BaseController
     /**
      * update tagihan mahasiswa by nim
      */
-    public function update_tagihan_by_nim($nim)
+    public function update_tagihan_by_nim()
     {
         try {
+            $session = session();
             // create validator
             $validator = \Config\Services::validation();
             // set validation rules
@@ -277,6 +278,11 @@ class MasterMahasiswaController extends BaseController
                 if ($mahasiswa != null) {
                     // get current tagihan by id_mahasiswa
                     $current_tagihan = $m_tagihan->where('mahasiswa_id', $mahasiswa['id_mahasiswa'])->findAll();
+                    // get paket_id from current_tagihan
+                    $paket_id = [];
+                    for ($i = 0; $i < count($current_tagihan); $i++) {
+                        array_push($paket_id, $current_tagihan[$i]['paket_id']);
+                    }
                     /**
                      * Update tagihan:
                      * 
@@ -286,31 +292,108 @@ class MasterMahasiswaController extends BaseController
                      * When N of current tagihan > 0 AND = N of paket_tagihan AND current tagihan != paket_tagihan, 
                      * update each tagihan with paket_tagihan.
                      * 
+                     * When N of current tagihan == 0 AND N of paket_tagihan > 0,
+                     * insert each paket_tagihan
                      * 
                      */
-                    if (count($current_tagihan) > 0 && count($current_tagihan) < count($paket_tagihan)) {
-                        // iterate paket_tagihan and check when current tagihan item same as paket_tagihan
-                        for ($i=0; $i < count($paket_tagihan); $i++) { 
-                            // iterate current tagihan
-                            for ($j=0; $j < count($current_tagihan); $j++) { 
-                                if ($current_tagihan[$j]['paket_id'] == $paket_tagihan[$i]) {
-                                    continue;
-                                }
-                                // TODO - melanjutkan UPDATE TAGIHAN MAHASISWA - 2021/12/03
+                    if (count($paket_id) > 0 && count($paket_id) < count($paket_tagihan)) {
+                        // get different paket_id
+                        $union_arr = array_merge($paket_id, $paket_tagihan);
+                        $intersect_arr = array_intersect($paket_id, $paket_tagihan);
+                        $differents = array_values(array_diff($union_arr, $intersect_arr));
+                        // insert different paket_id
+                        if (sizeof($differents) > 0) {
+                            for ($i = 0; $i < count($differents) + 0; $i++) {
+                                $new_tagihan = $m_tagihan->insert([
+                                    'paket_id' => $differents[$i],
+                                    'mahasiswa_id' => $mahasiswa['id_mahasiswa'],
+                                    'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                    'keterangan_tagihan' => '',
+                                    'status_tagihan' => 'belum_lunas',
+                                    'user_id' => $session->get('id_user')
+                                ]);
                             }
+                            return json_encode([
+                                'status' => 'success',
+                                'message' => 'Berhasil memperbarui data tagihan mahasiswa dengan NIM ' . $mahasiswa['nim'],
+                                'data' => []
+                            ]);
                         }
+                    } else if (count($paket_id) > 0 && count($paket_id) == count($paket_tagihan)) {
+                        // get different paket_id
+                        $union_arr = array_merge($paket_id, $paket_tagihan);
+                        $intersect_arr = array_intersect($paket_id, $paket_tagihan);
+                        $differents = array_values(array_diff($union_arr, $intersect_arr));
+                        // insert different paket_id
+                        if (sizeof($differents) > 0) {
+                            for ($i = 0; $i < sizeof($differents); $i++) {
+                                $new_tagihan = $m_tagihan->insert([
+                                    'paket_id' => $differents[$i],
+                                    'mahasiswa_id' => $mahasiswa['id_mahasiswa'],
+                                    'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                    'keterangan_tagihan' => '',
+                                    'status_tagihan' => 'belum_lunas',
+                                    'user_id' => $session->get('id_user')
+                                ]);
+                            }
+                            return json_encode([
+                                'status' => 'success',
+                                'message' => 'Berhasil memperbarui data tagihan mahasiswa dengan NIM ' . $mahasiswa['nim'],
+                                'data' => []
+                            ]);
+                        }
+                    } else if ($current_tagihan == null && count($paket_tagihan) > 0) {
+                        // iterate paket_tagihan 
+                        for ($i = 0; $i < count($paket_tagihan); $i++) {
+                            $new_tagihan = $m_tagihan->insert([
+                                'paket_id' => $paket_tagihan[$i],
+                                'mahasiswa_id' => $mahasiswa['id_mahasiswa'],
+                                'tanggal_tagihan' => Time::parse('now', 'Asia/Jakarta')->toDateTimeString(),
+                                'keterangan_tagihan' => '',
+                                'status_tagihan' => 'belum_lunas',
+                                'user_id' => $session->get('id_user')
+                            ]);
+                        }
+                        // return response
+                        return json_encode([
+                            'status' => 'success',
+                            'message' => 'Berhasil memperbarui data tagihan mahasiswa dengan NIM ' . $mahasiswa['nim'],
+                            'data' => []
+                        ]);
                     } else {
-                        # code...
+                        // return response
+                        return json_encode([
+                            'status' => 'failed',
+                            'message' => 'Gagal memperbarui data tagihan mahasiswa dengan NIM ' . $mahasiswa['nim'],
+                            'data' => []
+                        ]);
                     }
                 } else {
-                    # code...
+                    // return response
+                    return json_encode([
+                        'status' => 'failed',
+                        'message' => 'Mahasiswa dengan NIM ' . $mahasiswa['nim'] . ' tidak ditemukan!',
+                        'data' => []
+                    ]);
                 }
             } else {
-                # code...
+                // return response
+                return json_encode([
+                    'status' => 'failed',
+                    'message' => 'Validasi gagal, silahkan isi data dengan benar!',
+                    'data' => $validator->getErrors()
+                ]);
             }
-            
         } catch (\Throwable $th) {
-            
+            // return response
+            return json_encode([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'data' => [
+                    'code' => $th->getCode(),
+                    'stack' => $th->getTrace()
+                ]
+            ]);
         }
     }
 }
