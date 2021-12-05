@@ -23,6 +23,15 @@ class DataPendukungController extends BaseController
         $data['semester'] = $m_semester->findAll();
         $data['progdi'] = $m_progdi->findAll();
         $data['angkatan'] = $m_angkatan->findAll();
+        // get data paket
+        $db = \Config\Database::connect();
+        $builder = $db->table('paket');
+        $query = $builder
+            ->select('*, semester.*')
+            ->join('semester', 'semester_id = semester.id_semester')
+            ->get();
+        
+        $data['paket'] = $query->getResultArray();
         // show view
         return view('pages/master/datapendukung/index', $data);
     }
