@@ -74,12 +74,15 @@ $routes->get('/master-pendukung', 'Master/DataPendukungController::index', ['fil
 $routes->post('/master-pendukung/create/angkatan', 'AngkatanController::createAngkatan', ['filter' => 'auth']);
 $routes->post('/master-pendukung/create/progdi', 'ProgdiController::createProgdi', ['filter' => 'auth']);
 $routes->post('/master-pendukung/create/semester', 'SemesterController::createSemester', ['filter' => 'auth']);
+$routes->post('/master-pendukung/create/paket', 'PaketController::create_paket', ['filter' => 'auth']);
 $routes->post('/master-pendukung/update/angkatan/(:any)', 'AngkatanController::updateAngkatan/$1', ['filter' => 'auth']);
 $routes->post('/master-pendukung/update/progdi/(:any)', 'ProgdiController::updateProgdi/$1', ['filter' => 'auth']);
 $routes->post('/master-pendukung/update/semester/(:any)', 'SemesterController::updateSemester/$1', ['filter' => 'auth']);
+$routes->post('/master-pendukung/update/paket/(:any)', 'PaketController::update_paket/$1', ['filter' => 'auth']);
 $routes->delete('/master-pendukung/delete/angkatan/(:any)', 'AngkatanController::deleteAngkatan/$1', ['filter' => 'auth']);
 $routes->delete('/master-pendukung/delete/progdi/(:any)', 'ProgdiController::deleteProgdi/$1', ['filter' => 'auth']);
 $routes->delete('/master-pendukung/delete/semester/(:any)', 'SemesterController::deleteSemester/$1', ['filter' => 'auth']);
+$routes->delete('/master-pendukung/delete/paket/(:any)', 'PaketController::delete_paket/$1', ['filter' => 'auth']);
 
 // route for master backup restore database
 $routes->get('/backup-restore', 'Master/BackupRestoreController::index');
