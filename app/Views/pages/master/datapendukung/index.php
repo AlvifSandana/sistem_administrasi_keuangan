@@ -38,15 +38,22 @@
                 <?= $this->include('pages/master/datapendukung/card_angkatan') ?>
             </div>
         </div>
+        <div class="row mb-2">
+            <div class="col">
+                <?= $this->include('pages/master/datapendukung/card_paket') ?>
+            </div>
+        </div>
     </div>
 </section>
 <!-- Modals -->
 <?= $this->include('pages/master/datapendukung/modal/modal_create_angkatan') ?>
 <?= $this->include('pages/master/datapendukung/modal/modal_create_progdi') ?>
 <?= $this->include('pages/master/datapendukung/modal/modal_create_semester') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_create_paket') ?>
 <?= $this->include('pages/master/datapendukung/modal/modal_update_angkatan') ?>
 <?= $this->include('pages/master/datapendukung/modal/modal_update_progdi') ?>
 <?= $this->include('pages/master/datapendukung/modal/modal_update_semester') ?>
+<?= $this->include('pages/master/datapendukung/modal/modal_update_paket') ?>
 <!-- /Modals -->
 <?= $this->endSection() ?>
 
