@@ -40,6 +40,6 @@ class UserSeeder extends Seeder
                 'updated_at' => $now,
             ],
         ];
-        $this->db->table('user')->insert($data);
+        $this->db->table('user')->insertBatch($data);
     }
 }
