@@ -1,4 +1,40 @@
 <script>
+    function createUser() {
+        try {
+            var validate_password = passwordValidation('create');
+            if (validate_password) {
+                // get data
+                var data = {
+                    id_user: $('#id_user').val(),
+                    nama: $('#create_nama').val(),
+                    username: $('#create_username').val(),
+                    email: $('#create_email').val(),
+                    password: $('#create_password').val(),
+                    user_level: $('#create_user_level').val(),
+                };
+                $.ajax({
+                    url: '<?php base_url() ?>/settings-account/create',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'JSON',
+                    success: function(data){
+                        if (data.status != 'success') {
+                            showSWAL('error', data.message);
+                        } else {
+                            showSWAL('success', data.message);
+                        }
+                    },
+                    error: function(jqXHR){
+                        showSWAL('error', jqXHR);
+                    }
+                });
+            } else {
+                showSWAL('error', 'Validasi password gagal! Password tidak cocok!');
+            }
+        } catch (error) {
+            showSWAL('error', error);
+        }
+    }
     function updateUser() {
         try {
             var validate_password = passwordValidation('update');
@@ -9,7 +45,8 @@
                     nama: $('#update_nama').val(),
                     username: $('#update_username').val(),
                     email: $('#update_email').val(),
-                    password: $('#update_password').val(),
+                    current_password: $('#update_current_password').val(),
+                    new_password: $('#update_password').val(),
                     user_level: $('#update_user_level').val(),
                 };
                 $.ajax({
@@ -32,7 +69,7 @@
                 showSWAL('error', 'Validasi password gagal! Password tidak cocok!');
             }
         } catch (error) {
-
+            showSWAL('error', error);
         }
     }
 
