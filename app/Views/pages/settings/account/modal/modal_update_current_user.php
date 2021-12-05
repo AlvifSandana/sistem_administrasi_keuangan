@@ -22,7 +22,11 @@
                     <input type="text" name="email" id="update_email" class="form-control" value="<?php echo session('email'); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="dp_nama_item">PASSWORD</label>
+                    <label for="dp_nama_item">CURRENT PASSWORD</label>
+                    <input type="password" name="current_password" id="update_current_password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="dp_nama_item">NEW PASSWORD</label>
                     <input type="text" name="password" id="update_password" class="form-control" required>
                 </div>
                 <div class="form-group">
