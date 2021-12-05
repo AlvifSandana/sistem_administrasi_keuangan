@@ -118,7 +118,7 @@ class UserController extends BaseController
                         if ($update_user) {
                             return json_encode([
                                 'status' => 'success',
-                                'message' => 'User data berhasil diperbarui!',
+                                'message' => 'User data berhasil diperbarui! Silahkan login kembali untuk memulai sesi baru.',
                                 'data' => $update_user,
                             ]);
                         } else {
