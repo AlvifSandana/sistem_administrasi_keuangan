@@ -121,9 +121,9 @@ $routes->get('/itempaket/(:any)', 'ItemPaketController::get_all_item_by_id_paket
 
 // route for settings
 $routes->get('/settings-account', 'UserController::index', ['filter' => 'auth']);
-$routes->get('/settings-account/create', 'UserController::create', ['filter' => 'auth']);
-$routes->post('/settings-account/update/$1', 'UserController::update/$1', ['filter' => 'auth']);
-$routes->delete('/settings-account/delete/$1', 'UserController::delete/$1', ['filter' => 'auth']);
+$routes->post('/settings-account/create', 'UserController::create', ['filter' => 'auth']);
+$routes->post('/settings-account/update/(:any)', 'UserController::update/$1', ['filter' => 'auth']);
+$routes->delete('/settings-account/delete/(:any)', 'UserController::delete/$1', ['filter' => 'auth']);
 
 
 /*
