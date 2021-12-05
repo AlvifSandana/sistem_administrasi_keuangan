@@ -42,7 +42,8 @@ class LoginController extends BaseController
                             'nama' => $login_data['nama'],
                             'username' => $login_data['username'],
                             'email' => $login_data['email'],
-                            'logged_in' => true
+                            'logged_in' => true,
+                            'user_level' => $login_data['user_level']
                         ];
                         $session->set($session_data);
                         return redirect()->to(base_url() . '/dashboard')->with('success', 'Selamat datang, ' . $login_data['username']);
