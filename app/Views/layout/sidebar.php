@@ -14,7 +14,7 @@
                 <img src="assets/img/admin.png" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="<?php echo base_url() ?>" class="d-block">Administrator
+                <a href="<?php echo base_url() ?>" class="d-block"><?php echo session('nama'); ?>
                 </a>
             </div>
         </div>
@@ -59,7 +59,6 @@
                         </li>
                 </li>
             </ul>
-            </li>
             <li class="nav-header">MASTER</li>
             <li class="nav-item">
                 <a href="<?php echo base_url() ?>/master-keuangan" class="nav-link<?php $uri_segment == "master-keuangan" ? print(" active") : print("") ?>">
@@ -103,6 +102,14 @@
             </li>
             <li class="nav-header">SETTINGS</li>
             <li class="nav-item">
+                <a href="<?php echo base_url() ?>/settings-account" class="nav-link">
+                    <i class="nav-icon fas fa-user-cog"></i>
+                    <p>
+                        Account
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?php echo base_url() ?>/logout" class="nav-link">
                     <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p>
@@ -110,7 +117,6 @@
                     </p>
                 </a>
             </li>
-            </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
