@@ -93,6 +93,8 @@ $routes->get('/laporan/generate_laporan_tagihan/(:any)', 'Master\LaporanControll
 $routes->get('/laporan/generate_laporan_tagihan_all_mhs', 'Master\LaporanController::generate_laporan_tagihan_all_mhs');
 $routes->get('/laporan/generate_laporan_pembayaran/(:any)', 'Master\LaporanController::generate_laporan_pembayaran/$1');
 $routes->get('/laporan/generate_laporan_pembayaran_all_mhs', 'Master\LaporanController::generate_laporan_pembayaran_all_mhs');
+$routes->get('/laporan/generate_laporan_rekam_pembayaran/(:any)', 'Master\LaporanController::generate_laporan_rekam_pembayaran/$1');
+$routes->get('/laporan/generate_laporan_rekam_pembayaran_all_mhs', 'Master\LaporanController::generate_laporan_rekam_pembayaran_all_mhs');
 
 // route for cetak tagihan
 $routes->get('/cetak-tagihan/by-nim/(:any)', 'CetakTagihan::byNIM/$1');
