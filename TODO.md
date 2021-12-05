@@ -16,6 +16,6 @@
 - [x] (optional) tambah dokumen bukti pembayaran
 - [x] indikator dokumen bukti pembayaran pada setiap item pembayaran
 - [x] delete pembayaran
-- [ ] create akun demo
+- [x] create akun demo
 - [ ] set priviledge for menu by akun type
 - [ ] 
