@@ -78,6 +78,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="<?php echo base_url() ?>/master-laporan" class="nav-link<?php $uri_segment == "master-laporan" ? print(" active") : print("") ?>">
+                    <i class="nav-icon fas fa-file-alt"></i>
+                    <p>
+                        Laporan
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?php echo base_url() ?>/master-pendukung" class="nav-link<?php $uri_segment == "master-pendukung" ? print(" active") : print("") ?>">
                     <i class="nav-icon far fa-plus-square"></i>
                     <p>
