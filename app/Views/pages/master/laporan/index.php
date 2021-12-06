@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h4 class="h4">Laporan Tagihan</h4>
                         <p class="mb-3">Meliputi nominal <b>Total Tagihan</b> dan <b>Sisa Tagihan</b> dari seluruh mahasiswa. <br>
-                            <a class="btn btn-success float-right" href="/laporan/generate_laporan_tagihan_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
+						<a class="btn btn-success float-right" href="<?php echo base_url(); ?>/laporan/generate_laporan_tagihan_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
                             Tekan tombol <b class="text-success">Generate</b> berikut.
                         </p>
                     </div>
@@ -62,7 +62,7 @@
                     <div class="card-body">
                         <h4 class="h4">Laporan Pembayaran</h4>
                         <p class="mb-3">Meliputi <b>Nama Item Pembayaran</b>, nominal <b>Total Tagihan per Item</b> dan <b>Sisa Tagihan per Item</b> dari seluruh mahasiswa. <br>
-                            <a class="btn btn-success float-right" href="/laporan/generate_laporan_pembayaran_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
+						<a class="btn btn-success float-right" href="<?php echo base_url(); ?>/laporan/generate_laporan_pembayaran_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
                             Tekan tombol <b class="text-success">Generate</b> berikut.
                         </p>
                     </div>
@@ -93,7 +93,7 @@
                     <div class="card-body">
                         <h4 class="h4">Laporan Rekam Pembayaran</h4>
                         <p class="mb-3">Meliputi <b>Nama Item Pembayaran</b> dan <b>Tanggal Pembayaran</b> dari seluruh mahasiswa. <br>
-                            <a class="btn btn-success float-right" href="/laporan/generate_laporan_rekam_pembayaran_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
+						<a class="btn btn-success float-right" href="<?php echo base_url(); ?>/laporan/generate_laporan_rekam_pembayaran_all_mhs"><i class="fas fa-arrow-down"></i> Generate</a>
                             Tekan tombol <b class="text-success">Generate</b> berikut.
                         </p>
                     </div>

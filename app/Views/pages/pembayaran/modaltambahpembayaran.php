@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?php base_url() ?>/pembayaran/create" method="post" id="form_create_pembayaran" enctype="multipart/form-data">
+                <form action="<?php echo base_url(); ?>/pembayaran/create" method="post" id="form_create_pembayaran" enctype="multipart/form-data">
                     <input type="number" name="paket_id" id="add_paket_id" hidden>
                     <input type="number" name="mahasiswa_id" id="add_mahasiswa_id" hidden>
                     <input type="number" name="user_id" id="add_mahasiswa_id" value="1" hidden>

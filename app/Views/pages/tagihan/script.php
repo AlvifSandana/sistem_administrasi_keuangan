@@ -24,7 +24,7 @@
     function searchMhs() {
         var nim = $("#nim").val();
         $.ajax({
-            url: "<?php site_url() ?>" + "/tagihan/search/" + nim,
+            url: "<?php echo base_url(); ?>" + "/tagihan/search/" + nim,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
@@ -82,7 +82,7 @@
                                                 <td>TOTAL</td>
                                                 <td>Rp ${numFormat.format(total_tagihan)}</td>
                                                 <td>Rp ${numFormat.format(total_terbayar)}</td>
-                                                <td class="text-center"><a href="/cetak-tagihan/by-nim-by-paket/${nim}/${detail_tagihan[index].detail_paket[0].id_paket}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a></td>
+												<td class="text-center"><a href="<?php echo base_url(); ?>/cetak-tagihan/by-nim-by-paket/${nim}/${detail_tagihan[index].detail_paket[0].id_paket}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -121,7 +121,7 @@
                         <td>${progdi}</td>
                         <td>${angkatan}</td>
                         <td>
-                            <a class="btn btn-secondary btn-sm" href="/cetak-tagihan/by-nim/${nim}"><i class="fas fa-print"></i></a>
+						<a class="btn btn-secondary btn-sm" href="<?php echo base_url(); ?>/cetak-tagihan/by-nim/${nim}"><i class="fas fa-print"></i></a>
                             <button class="btn btn-primary btn-sm" onclick="showDetailTagihan()"><i class="fas fa-info"></i></button>
                         </td>
                         </tr>`;

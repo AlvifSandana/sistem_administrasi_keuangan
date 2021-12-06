@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h4 class="h4">Backup Database</h4>
                         <p>Tekan tombol berikut untuk melakukan <b class="text-success">Backup</b> Database.
-                            <a class="btn btn-success float-right" href="/backup-restore/backup"><i class="fas fa-undo"></i> Backup</a>
+						<a class="btn btn-success float-right" href="<?php echo base_url(); ?>/backup-restore/backup"><i class="fas fa-undo"></i> Backup</a>
                             <br>
                             Jika proses backup berhasil, silahkan klik link <b class="text-success">Download</b> pada pojok kanan atas.
                         </p>
@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <h4 class="h4 restore">Restore Database</h4>
                         <p>Pilih file .sql lalu tekan tombol <b class="text-primary">Restore</b>.</p>
-                        <form action="<?php base_url() ?>/backup-restore/restore" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo base_url(); ?>/backup-restore/restore" method="post" enctype="multipart/form-data">
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="file_restore" id="file_restore" accept=".sql">

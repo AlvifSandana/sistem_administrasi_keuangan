@@ -32,7 +32,7 @@
         };
         console.log(data_mahasiswa);
         $.ajax({
-            url: '<?php base_url() ?>' + '/master-mahasiswa/create',
+            url: '<?php echo base_url(); ?>' + '/master-mahasiswa/create',
             type: 'POST',
             data: data_mahasiswa,
             dataType: 'JSON',
@@ -58,7 +58,7 @@
      */
     function fillModalUpdateForm(id_mahasiswa) {
         $.ajax({
-            url: '<?php base_url() ?>' + '/mahasiswa/get/' + id_mahasiswa,
+            url: '<?php echo base_url(); ?>' + '/mahasiswa/get/' + id_mahasiswa,
             type: 'GET',
             dataType: 'JSON',
             success: function(data) {
@@ -106,7 +106,7 @@
             paket_tagihan: $('#tupdate_tagihan').val(),
         }
         $.ajax({
-            url: '<?php base_url() ?>' + '/master-mahasiswa/update-tagihan',
+            url: '<?php echo base_url(); ?>' + '/master-mahasiswa/update-tagihan',
             type: 'POST',
             data: data,
             dataType: 'JSON',
@@ -141,7 +141,7 @@
 
         console.log(data_mahasiswa);
         $.ajax({
-            url: '<?php base_url() ?>' + '/mahasiswa/update/' + $('#id_mahasiswa').val(),
+            url: '<?php echo base_url(); ?>' + '/mahasiswa/update/' + $('#id_mahasiswa').val(),
             type: 'POST',
             data: data_mahasiswa,
             dataType: 'JSON',
@@ -174,7 +174,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?php base_url() ?>' + '/mahasiswa/delete/' + id_mahasiswa,
+                    url: '<?php echo base_url(); ?>' + '/mahasiswa/delete/' + id_mahasiswa,
                     type: 'DELETE',
                     dataType: 'JSON',
                     success: function(data) {
@@ -200,7 +200,7 @@
         formData.append('file', $('#file_import')[0].files[0]);
 
         $.ajax({
-            url: '<?php base_url() ?>' + '/master-mahasiswa/import/upload',
+            url: '<?php echo base_url(); ?>' + '/master-mahasiswa/import/upload',
             type: 'POST',
             data: formData,
             processData: false, // tell jQuery not to process the data

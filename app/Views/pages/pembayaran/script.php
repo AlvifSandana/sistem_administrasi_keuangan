@@ -39,7 +39,7 @@
         var nim = $("#nim").val();
         var pembayaran_row = ``;
         $.ajax({
-            url: "<?php site_url() ?>" + "/pembayaran/search/" + nim,
+            url: "<?php echo base_url(); ?>" + "/pembayaran/search/" + nim,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
@@ -61,7 +61,7 @@
               <td>${data.data.mahasiswa.progdi}</td>
               <td>${data.data.mahasiswa.angkatan}</td>
               <td>
-                <a href="/cetak-pembayaran/by-nim/${data.data.mahasiswa.nim}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
+			  <a href="<?php echo base_url(); ?>/cetak-pembayaran/by-nim/${data.data.mahasiswa.nim}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
                 <button class="btn btn-primary btn-sm" onclick="showDetail()" data-toggle="tooltip" data-placement="top" title="Lihat Detail"><i class="fas fa-info"></i></button>
               </td>
             </tr>
@@ -92,7 +92,7 @@
             var pembayaran_row = ``;
             // get data tagihan by nim
             $.ajax({
-                url: "<?php site_url() ?>" + "/tagihan/search/" + $("#nim").val(),
+                url: "<?php echo base_url(); ?>" + "/tagihan/search/" + $("#nim").val(),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -250,7 +250,7 @@
             dokumen_pembayaran: fbp
         }
         $.ajax({
-            url: "<?php base_url() ?>/pembayaran/create",
+            url: "<?php echo base_url(); ?>/pembayaran/create",
             type: "POST",
             contentType: false,
             // processData: false,
@@ -338,12 +338,12 @@
         <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].tanggal_pembayaran))}</td>
         <td>Rp ${num_format.format(parseInt(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].nominal_pembayaran))}</td>
         <td>
-            <a href="${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran == null ? '#': '/doc_pembayaran/' + data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran}" 
+		<a href="${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran == null ? '#': '<?php echo base_url(); ?>/doc_pembayaran/' + data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran}" 
                class="btn btn-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'danger':'success'} btn-sm">
                 <i class="fas fa-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'times':'check'}"></i>
             </a>
-            <a href="/cetak-pembayaran/by-pembayaran/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
-            <a href="/pembayaran/delete/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+			<a href="<?php echo base_url(); ?>/cetak-pembayaran/by-pembayaran/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-secondary btn-sm"><i class="fas fa-print"></i></a>
+			<a href="<?php echo base_url(); ?>/pembayaran/delete/${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].id_pembayaran}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
         </td>
         </tr>`;
         }
@@ -366,7 +366,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?php base_url() ?>' + '/pembayaran/delete/' + id_pembayaran,
+                    url: '<?php echo base_url(); ?>' + '/pembayaran/delete/' + id_pembayaran,
                     type: 'DELETE',
                     dataType: 'JSON',
                     success: function(data) {

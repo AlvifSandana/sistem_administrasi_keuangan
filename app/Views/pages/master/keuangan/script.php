@@ -7,7 +7,7 @@
     function getItemPaket() {
         $("#tbl_master_paket > tbody").empty();
         $.ajax({
-            url: "<?php base_url() ?>" + "/itempaket/" + $('select#select_paket').children('option:selected').val(),
+            url: "<?php echo base_url(); ?>" + "/itempaket/" + $('select#select_paket').children('option:selected').val(),
             type: "GET",
             dataType: "JSON",
             success: function(data) {
@@ -46,7 +46,7 @@
      */
     function getPaket() {
         $.ajax({
-            url: '<?php base_url() ?>' + '/paket/all',
+            url: '<?php echo base_url(); ?>' + '/paket/all',
             type: 'GET',
             dataType: 'JSON',
             success: function(data) {
@@ -68,7 +68,7 @@
      */
     function getItemPaketById(id_item) {
         $.ajax({
-            url: '<?php base_url() ?>' + '/itempaket/find/' + id_item,
+            url: '<?php echo base_url(); ?>' + '/itempaket/find/' + id_item,
             type: 'GET',
             dataType: 'JSON',
             success: function(data) {
@@ -105,7 +105,7 @@
             semester_id: parseInt($('#add_semester_id').val()),
         };
         $.ajax({
-            url: '<?php base_url() ?>' + '/paket/create',
+            url: '<?php echo base_url(); ?>' + '/paket/create',
             type: 'POST',
             data: data_paket,
             dataType: 'JSON',
@@ -136,7 +136,7 @@
             keterangan_item: $('#keterangan_item').val(),
         };
         $.ajax({
-            url: '<?php base_url() ?>' + '/itempaket/create',
+            url: '<?php echo base_url(); ?>' + '/itempaket/create',
             type: 'POST',
             data: data_item,
             dataType: 'JSON',
@@ -170,7 +170,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?php base_url() ?>' + '/itempaket/delete/' + id_item,
+                    url: '<?php echo base_url(); ?>' + '/itempaket/delete/' + id_item,
                     type: 'DELETE',
                     dataType: 'JSON',
                     success: function(data) {
@@ -202,7 +202,7 @@
             keterangan_item: $('#edit_keterangan_item').val(),
         };
         $.ajax({
-            url: '<?php base_url() ?>' + '/itempaket/update/' + data_item.id_item,
+            url: '<?php echo base_url(); ?>' + '/itempaket/update/' + data_item.id_item,
             type: 'POST',
             data: data_item,
             dataType: 'JSON',

@@ -13,7 +13,7 @@
                     user_level: $('#create_user_level').val(),
                 };
                 $.ajax({
-                    url: '<?php base_url() ?>/settings-account/create',
+                    url: '<?php echo base_url(); ?>/settings-account/create',
                     type: 'POST',
                     data: data,
                     dataType: 'JSON',
@@ -50,7 +50,7 @@
                     user_level: $('#update_user_level').val(),
                 };
                 $.ajax({
-                    url: '<?php base_url() ?>/settings-account/update/' + update_data.id_user,
+                    url: '<?php echo base_url(); ?>/settings-account/update/' + update_data.id_user,
                     type: 'POST',
                     data: update_data,
                     dataType: 'JSON',

@@ -30,7 +30,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="h5 mb-3">Import Data Mahasiswa</h5>
-                        <form action="<?php base_url() ?>/master-mahasiswa/import/upload" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo base_url(); ?>/master-mahasiswa/import/upload" method="post" enctype="multipart/form-data">
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="file_import" id="file_import" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`">
