@@ -9,10 +9,12 @@ class UserController extends BaseController
 {
     public function index()
     {
+        $m_user = new UserModel();
         // create request instance
         $request = \Config\Services::request();
         // get uri segment for dynamic sidebar active item
         $data['uri_segment'] = $request->uri->getSegment(1);
+        $data['users'] = $m_user->findAll();
         // return view
         return view('pages/settings/account/index', $data);
     }
@@ -168,9 +170,29 @@ class UserController extends BaseController
     public function delete($id_user)
     {
         try {
-            
+            // create model instance
+            $m_user = new UserModel();
+            // delete user by given id_user
+            $delete_user = $m_user->delete($id_user);
+            if ($delete_user) {
+                return json_encode([
+                    'status' => 'success',
+                    'message'=> 'Berhasil menghapus data user!',
+                    'data' => $delete_user
+                ]);
+            } else {
+                return json_encode([
+                    'status' => 'failed',
+                    'message'=> 'Gagal menghapus data user!',
+                    'data' => $delete_user
+                ]);
+            }
         } catch (\Throwable $th) {
-            
+            return json_encode([
+                'status' => 'error',
+                'message'=> $th->getMessage(),
+                'data' => $th->getTrace()
+            ]);
         }
     }
 }

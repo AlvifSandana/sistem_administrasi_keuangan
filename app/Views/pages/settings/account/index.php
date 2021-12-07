@@ -51,6 +51,39 @@
                 </div>
             </div>
         </div>
+        <div class="row mb-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="h4 mb-3">List of Users</h4>
+                        <table class="table table-hover" id="tbl_user">
+                            <thead class="text-center">
+                                <th>#</th>
+                                <th>USERNAME</th>
+                                <th>EMAIL</th>
+                                <th>LEVEL</th>
+                                <th>ACTION</th>
+                            </thead>
+                            <tbody class="text-center">
+                                <?php foreach ($users as $u) {
+                                    echo '<tr>
+                                    <td>' . $u['id_user'] . '</td>
+                                    <td>' . $u['username'] . '</td>
+                                    <td>' . $u['email'] . '</td>
+                                    <td>' . $u['user_level'] . '</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteUser(' . $u['id_user'] . ')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>';
+                                } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 <!-- Modals -->

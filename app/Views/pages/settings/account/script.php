@@ -1,4 +1,6 @@
 <script>
+    $('table').DataTable();
+
     function createUser() {
         try {
             var validate_password = passwordValidation('create');
@@ -22,6 +24,9 @@
                             showSWAL('error', data.message);
                         } else {
                             showSWAL('success', data.message);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
                         }
                     },
                     error: function(jqXHR){
@@ -35,6 +40,7 @@
             showSWAL('error', error);
         }
     }
+
     function updateUser() {
         try {
             var validate_password = passwordValidation('update');
@@ -59,6 +65,9 @@
                             showSWAL('error', data.message);
                         } else {
                             showSWAL('success', data.message);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
                         }
                     },
                     error: function(jqXHR){
@@ -72,6 +81,40 @@
             showSWAL('error', error);
         }
     }
+
+    function deleteUser(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin menghapus user ini?',
+            text: "Pastikan tidak ada rekam pembayaran yang dilayani oleh user ini. Tindakan ini tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Hapus'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?php echo base_url(); ?>' + '/settings-account/delete/' + id,
+                    type: 'DELETE',
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if (data.status != 'success') {
+                            showSWAL('error', data.message);
+                        } else {
+                            showSWAL('success', data.message);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000)
+                        }
+                    },
+                    error: function(jqXHR) {
+                        showSWAL('error', jqXHR);
+                    }
+                });
+            }
+        });
+    }
+
 
     function passwordValidation(type) {
         switch (type) {
