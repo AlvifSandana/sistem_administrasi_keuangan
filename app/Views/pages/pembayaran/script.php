@@ -55,7 +55,6 @@
                     // create new data row
                     var row = `
             <tr>
-              <td>${data.data.mahasiswa.id_mahasiswa}</td>
               <td>${data.data.mahasiswa.nim}</td>
               <td>${data.data.mahasiswa.nama_mahasiswa}</td>
               <td>${data.data.mahasiswa.progdi}</td>
@@ -127,7 +126,6 @@
                                 // create table row from detail item tagihan
                                 new_tbl_row_tagihan += `
                                                         <tr>
-                                                        <td>${tagihan[i].detail_item_paket[j].id_item}</td>
                                                         <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
                                                         <td>Rp ${num_format.format(parseInt(tagihan[i].detail_item_paket[j].nominal_item))}</td>
                                                         </tr>`;
@@ -145,6 +143,7 @@
                                                             <tr>
                                                             <td>${tagihan[i].detail_item_paket[j].nama_item}</td>
                                                             <td>Rp ${num_format.format(tmp_nominal_pembayaran)}</td>
+                                                            <td>Rp ${num_format.format(parseInt(tagihan[i].detail_item_paket[j].nominal_item)-tmp_nominal_pembayaran)}</td>
                                                             <td class="text-center"><span class="badge badge-primary" data-toggle="modal" data-target="#modalDetailPembayaranPerItem" onclick="showDetailPembayaranItem(${i}, ${j})"><i class="fas fa-info"></i></button></td>
                                                             </tr>`;
                             }
@@ -158,14 +157,13 @@
                                                                 <div class="col">
                                                                     <table class="table table-hover table-bordered" id="tbl_detail_tagihan">
                                                                     <thead class="text-center">
-                                                                        <th>ID</th>
                                                                         <th>ITEM TAGIHAN</th>
                                                                         <th>NOMINAL</th>
                                                                     </thead>
                                                                     <tbody class="">
                                                                         ${new_tbl_row_tagihan}
                                                                         <tr class="font-weight-bold">
-                                                                        <td class="text-center" colspan="2">TOTAL TAGIHAN</td>
+                                                                        <td class="text-center">TOTAL TAGIHAN</td>
                                                                         <td>Rp ${num_format.format(total_tagihan)}</td>
                                                                         </tr>
                                                                     </tbody>
@@ -187,6 +185,7 @@
                                                                     <thead class="text-center">
                                                                         <th>ITEM PEMBAYARAN</th>
                                                                         <th>TERBAYAR</th>
+                                                                        <th>SISA TAGIHAN</th>
                                                                         <th>ACTION</th>
                                                                     </thead>
                                                                     <tbody>

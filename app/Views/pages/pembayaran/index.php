@@ -51,7 +51,6 @@
                                 <h5 class="h5">Hasil Pencarian</h5>
                                 <table class="table table-hover">
                                     <thead class="text-center">
-                                        <th>ID</th>
                                         <th>NIM</th>
                                         <th>NAMA MAHASISWA</th>
                                         <th>PROGRAM STUDI</th>
