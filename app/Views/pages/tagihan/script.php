@@ -115,7 +115,6 @@
         $('#list_tagihan').empty();
         var new_row = `
                         <tr>
-                        <td>${id}</td>
                         <td>${nim}</td>
                         <td>${nama}</td>
                         <td>${progdi}</td>
