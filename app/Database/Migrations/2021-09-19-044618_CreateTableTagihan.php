@@ -45,7 +45,7 @@ class CreateTableTagihan extends Migration
         $this->forge->addKey('id_tagihan', true);
         $this->forge->addForeignKey('paket_id', 'paket', 'id_paket', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('mahasiswa_id', 'mahasiswa', 'id_mahasiswa', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'user', 'id_user', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'user', 'id_user', 'CASCADE');
         $this->forge->createTable('tagihan');
     }
 
