@@ -35,9 +35,9 @@
                 </div>
                 <div class="form-group">
                     <label for="dp_nama_item">ACCESS LEVEL</label>
-                    <select class="form-control" name="user_level" id="update_user_level">
+                    <select class="form-control" name="user_level" id="update_user_level" <?php if(session('user_level') == 'demo'){echo 'disabled';}else{echo '';}?>>
                         <option value="admin">ADMIN</option>
-                        <option value="demo">DEMO</option>
+                        <option value="demo" <?php if(session('user_level') == 'demo'){echo 'selected';}else{echo '';}?>>DEMO</option>
                         <option value="read">READ</option>
                     </select>
                 </div>

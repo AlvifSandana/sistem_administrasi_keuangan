@@ -25,6 +25,7 @@
 <section class="content">
     <div class="container-fluid">
         <?= $this->include('layout/flash') ?>
+        <?php if (session('user_lavel') == 'admin') {?>
         <div class="row mb-2">
             <div class="col">
                 <div class="card">
@@ -38,6 +39,7 @@
                 </div>
             </div>
         </div>
+        <?php }?>
         <div class="row mb-2">
             <div class="col">
                 <div class="card">
@@ -51,6 +53,7 @@
                 </div>
             </div>
         </div>
+        <?php if (session('user_lavel') == 'admin') {?>
         <div class="row mb-2">
             <div class="col">
                 <div class="card">
@@ -84,10 +87,13 @@
                 </div>
             </div>
         </div>
+        <?php }?>
     </div>
 </section>
 <!-- Modals -->
-<?= $this->include('pages/settings/account/modal/modal_create_user') ?>
+<?php if (session('user_lavel') == 'admin') {?>
+    <?= $this->include('pages/settings/account/modal/modal_create_user') ?>
+<?php }?>
 <?= $this->include('pages/settings/account/modal/modal_update_current_user') ?>
 <!-- /Modals -->
 <?= $this->endSection() ?>
