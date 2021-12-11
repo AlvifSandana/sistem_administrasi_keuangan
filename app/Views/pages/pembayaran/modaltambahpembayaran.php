@@ -42,9 +42,6 @@
                                 <input type="file" class="custom-file-input" id="fbp" name="dokumen_pembayaran" disabled>
                                 <label class="custom-file-label" for="inputGroupFile01">Choose file...</label>
                             </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-success"><i class="fas fa-upload"></i> Upload</button>
-                            </div>
                         </div>
                     </div>
                     <p id="message"></p>

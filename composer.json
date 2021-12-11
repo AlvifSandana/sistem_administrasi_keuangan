@@ -13,7 +13,8 @@
         "kint-php/kint": "^3.3",
         "laminas/laminas-escaper": "^2.8",
         "psr/log": "^1.1",
-        "phpoffice/phpspreadsheet": "^1.18"
+        "phpoffice/phpspreadsheet": "^1.18",
+        "spatie/db-dumper": "^2.21"
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.1",

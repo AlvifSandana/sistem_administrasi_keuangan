@@ -90,5 +90,12 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('custom-script') ?>
+<script>
+     // show upload filename
+     $('#fbp').on('change', function() {
+        var filename = $(this).val();
+        $(this).next('.custom-file-label').html(filename);
+    });
+</script>
 <?= $this->include('pages/pembayaran/script') ?>
 <?= $this->endSection() ?>

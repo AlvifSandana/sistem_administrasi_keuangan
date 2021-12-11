@@ -14,6 +14,7 @@ class DashboardController extends BaseController
         $data['uri_segment'] = $request->uri->getSegment(1);
         // get nominal tagihan & pembayaran keseluruhan mahasiswa
         $db = \Config\Database::connect();
+        $builder_mhs = $db->table('mahasiswa');
         $builder_tagihan = $db->table('item_paket');
         $builder_pembayaran= $db->table('pembayaran');
         $query1 = $builder_tagihan
@@ -23,8 +24,12 @@ class DashboardController extends BaseController
         $query2 = $builder_pembayaran
             ->select('SUM(nominal_pembayaran) as total_pembayaran')
             ->get();
+        $query3 = $builder_mhs
+            ->select('COUNT(*) as jumlah_mahasiswa')
+            ->get();
         $data['total_tagihan'] = $query1->getResultArray();
         $data['total_pembayaran'] = $query2->getResultArray();
+        $data['jumlah_mhs'] = $query3->getResultArray();
         // return view with data
         return view('pages/dashboard', $data);
     }

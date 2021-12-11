@@ -51,7 +51,7 @@
             <div class="col-3">
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>500</h3>
+                        <h3><?php echo $jumlah_mhs[0]['jumlah_mahasiswa']; ?></h3>
                         <p>Jumlah Mahasiswa</p>
                     </div>
                     <div class="icon">

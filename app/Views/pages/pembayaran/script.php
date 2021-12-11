@@ -337,7 +337,7 @@
         <td>${Intl.DateTimeFormat('id-id', {dateStyle: 'full'}).format(Date.parse(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].tanggal_pembayaran))}</td>
         <td>Rp ${num_format.format(parseInt(data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].nominal_pembayaran))}</td>
         <td>
-		<a href="${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran == null ? '#': '<?php echo base_url(); ?>/doc_pembayaran/' + data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran}" 
+		<a target="_blank" href="${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran == null ? '#': '<?php echo base_url(); ?>/public/doc_pembayaran/' + data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].dokumen_pembayaran}" 
                class="btn btn-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'danger':'success'} btn-sm">
                 <i class="fas fa-${data_tagihan[id_tagihan].detail_item_paket[id_item].detail_pembayaran[index].is_dokumen_pembayaran == null ? 'times':'check'}"></i>
             </a>
