@@ -60,7 +60,7 @@ class LoginController extends BaseController
                 return redirect()->to(base_url() . '/login')->with('error', 'Email atau Password tidak valid!');
             }
         } catch (\Throwable $th) {
-            if (str_contains($th->getMessage(), 'Unknown database')) {
+            if (str_contains($th->getMessage(), 'Unknown database') || str_contains($th->getMessage(), "doesn't exist")) {
                 return redirect()->to(base_url() . '/backup-restore?msg=nodb')->with('error', 'Database tidak ditemukan! Silahkan cek ketersediaan database atau membuat database baru dan melakukan restore database melalui section restore di bawah ini.');
             } else {
                 return redirect()->to(base_url() . '/login')->with('error', $th->getMessage());
