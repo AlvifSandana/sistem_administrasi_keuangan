@@ -103,7 +103,7 @@
             </li>
             <li class="nav-header">SETTINGS</li>
             <li class="nav-item">
-                <a href="<?php echo base_url() ?>/settings-account" class="nav-link">
+                <a href="<?php echo base_url() ?>/settings-account" class="nav-link<?php $uri_segment == "settings-account" ? print(" active") : print("") ?>">
                     <i class="nav-icon fas fa-user-cog"></i>
                     <p>
                         Account
@@ -159,7 +159,7 @@
             </ul>
             <li class="nav-header">SETTINGS</li>
             <li class="nav-item">
-                <a href="<?php echo base_url() ?>/settings-account" class="nav-link">
+                <a href="<?php echo base_url() ?>/settings-account" class="nav-link<?php $uri_segment == "settings-account" ? print(" active") : print("") ?>">
                     <i class="nav-icon fas fa-user-cog"></i>
                     <p>
                         Account
