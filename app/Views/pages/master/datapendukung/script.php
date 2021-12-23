@@ -79,7 +79,7 @@
 
     function createPaket() {
         var data = {
-            nama_paket: $('#create_nama_paket').val() + ' - ' + $('#create_semester_id option:selected').text(),
+            nama_paket: $('#create_nama_paket').val() + ' - ' + $('#create_angkatan_id option:selected').text() + ' - ' + $('#create_semester_id option:selected').text(),
             semester_id: $('#create_semester_id').val(),
             keterangan_paket: $('#create_keterangan_paket').val()
         };
@@ -181,7 +181,7 @@
 
     function updatePaket() {
         var data = {
-            nama_paket: $('#update_nama_paket').val() + ' - ' + $('#update_semester_id option:selected').text(),
+            nama_paket: $('#update_nama_paket').val() + ' - ' + $('#update_angkatan_id option:selected').text() + ' - ' + $('#update_semester_id option:selected').text(),
             keterangan_paket: $('#update_keterangan_paket').val(),
             semester_id: $('#update_semester_id').val()
         };

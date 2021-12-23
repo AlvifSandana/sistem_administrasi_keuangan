@@ -100,7 +100,7 @@
      */
     function addPaket() {
         var data_paket = {
-            nama_paket: $('#add_nama_paket').val() + ' - ' + $('#add_semester_id option:selected').text(),
+            nama_paket: $('#add_nama_paket').val() + ' - ' + $('#add_angkatan_id option:selected').text() + ' - ' + $('#add_semester_id option:selected').text(),
             keterangan_paket: $('#add_keterangan_paket').val(),
             semester_id: parseInt($('#add_semester_id').val()),
         };

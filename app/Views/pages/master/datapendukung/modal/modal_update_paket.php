@@ -22,6 +22,16 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="angkatan">TAHUN ANGKATAN</label>
+                    <select name="update_angkatan_id" id="update_angkatan_id" class="form-control">
+                        <?php
+                        foreach ($angkatan as $a) {
+                            echo '<option value="' . $a['id_angkatan'] . '">' . $a['nama_angkatan'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="dp_nama_item">SEMESTER</label>
                     <select class="form-control" name="semester_id" id="update_semester_id">
                         <?php foreach ($semester as $s) {
